@@ -15,6 +15,7 @@ public class ProductRepo {
         productList.add(new Product(2, "T-Shirt", 1650, 3, "CLTH0001"));
         productList.add(new Product(3, "tandenpasta", 675, 2, "CLNG0001"));
         productList.add(new Product(4, "appel", 125, 4, "FDDK0001"));
+        productList.add(new Product(5, "computer onderhoud", 750, 4, "PSAC0001"));
     }
 
     public List<Product> getProducts() {

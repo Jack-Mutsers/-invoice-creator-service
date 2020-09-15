@@ -23,13 +23,13 @@ public class UserRepo {
     }
 
     public List<User> getUsersByCity(String city) {
-        List<User> filetered = new ArrayList<>();
+        List<User> filtered = new ArrayList<>();
         for (User user : userList) {
             if (user.getCity().equals(city)) {
-                filetered.add(user);
+                filtered.add(user);
             }
         }
-        return filetered;
+        return filtered;
     }
 
     public User getUser(int id) {
