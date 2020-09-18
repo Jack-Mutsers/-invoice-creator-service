@@ -1,6 +1,5 @@
 package api.service.repository;
 
-import api.service.model.Customer;
 import api.service.model.User;
 
 import java.net.UnknownServiceException;
