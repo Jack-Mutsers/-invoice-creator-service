@@ -27,11 +27,16 @@ public class UserAccountResources {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/login")
     public Response login(UserAccount account) {
-        UserAccountDTO user = accountRepo.getByLogin(account.getUsername(), account.getPassword());
-        if (user == null) {
+        try{
+            UserAccountDTO user = accountRepo.getByLogin(account.getUsername(), account.getPassword());
+            if (user == null) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Login credentials were incorrect!").build();
+            } else {
+                return Response.ok(user).build();
+            }
+        }
+        catch (Exception ex){
             return Response.status(Response.Status.BAD_REQUEST).entity("Login credentials were incorrect!").build();
-        } else {
-            return Response.ok(user).build();
         }
     }
 
@@ -39,25 +44,30 @@ public class UserAccountResources {
     @Consumes({MediaType.APPLICATION_JSON})
     @Path("{id}")
     public Response deleteUser(@PathParam("id") int id, UserAccount account) {
-        UserAccountDTO userAccount = accountRepo.getByLogin(account.getUsername(), account.getPassword());
-        if (userAccount == null) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("The user you are trying to delete does not exist.").build();
-        } else {
-            if (userAccount.getId() == id) {
-                accountRepo.delete(id);
-                userRepo.delete(userAccount.getUser().getId());
-
-                // Idempotent method. Always return the same response (even if the resource has already been deleted before).
-                return Response.noContent().build();
+        try{
+            UserAccountDTO userAccount = accountRepo.getByLogin(account.getUsername(), account.getPassword());
+            if (userAccount == null) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("The user you are trying to delete does not exist.").build();
             } else {
-                return Response.status(Response.Status.BAD_REQUEST).entity("Please login with the account you are trying to delete.").build();
+                if (userAccount.getId() == id) {
+                    accountRepo.delete(id);
+                    userRepo.delete(userAccount.getUser().getId());
+
+                    // Idempotent method. Always return the same response (even if the resource has already been deleted before).
+                    return Response.noContent().build();
+                } else {
+                    return Response.status(Response.Status.BAD_REQUEST).entity("Please login with the account you are trying to delete.").build();
+                }
             }
+        }
+        catch (Exception ex){
+            return Response.status(Response.Status.BAD_REQUEST).entity("Please login with the account you are trying to delete.").build();
         }
     }
 
     @POST //POST at http://localhost:XXXX/customers/
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createUser(UserAccount user) {
+    public Response createUser(UserAccount user) throws Exception {
         if (!accountRepo.add(user)){
             return Response.status(Response.Status.CONFLICT).entity("Username has already been taken.").build();
         } else {

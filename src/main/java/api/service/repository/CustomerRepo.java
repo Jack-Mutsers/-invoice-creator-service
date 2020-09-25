@@ -21,13 +21,13 @@ public class CustomerRepo {
     }
 
     public List<Customer> getCustomersByCity(String city) {
-        List<Customer> filetered = new ArrayList<>();
+        List<Customer> filtered = new ArrayList<>();
         for (Customer customer : customerList) {
             if (customer.getCity().equals(city)) {
-                filetered.add(customer);
+                filtered.add(customer);
             }
         }
-        return filetered;
+        return filtered;
     }
 
     public Customer getCustomer(int id) {
