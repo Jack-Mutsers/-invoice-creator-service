@@ -48,11 +48,12 @@ public class CustomerResources {
     @POST //POST at http://localhost:XXXX/customers/
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createCustomer(Customer customer) {
-        if (!repo.add(customer)){
-            String entity =  "Customer with customer id " + customer.getId() + " already exists.";
+        int identifier = repo.add(customer);
+        if (identifier == 0){
+            String entity =  "Customer with customer id " + identifier + " already exists.";
             return Response.status(Response.Status.CONFLICT).entity(entity).build();
         } else {
-            String url = uriInfo.getAbsolutePath() + "/" + customer.getId(); // url of the created student
+            String url = uriInfo.getAbsolutePath() + "/" + identifier; // url of the created student
             URI uri = URI.create(url);
             return Response.created(uri).build();
         }

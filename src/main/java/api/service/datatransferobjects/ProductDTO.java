@@ -4,6 +4,9 @@ import api.service.model.Product;
 import api.service.model.ProductCategory;
 import api.service.repository.ProductCategoryRepo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ProductDTO {
     private int id;
     private String name;
@@ -35,6 +38,16 @@ public class ProductDTO {
 
     }
 
+    public List<ProductDTO> getProductList(List<Product> products){
+        List<ProductDTO> productList = new ArrayList<>();
+        for (Product product : products)
+        {
+            productList.add( new ProductDTO(product) );
+        }
+
+        return productList;
+    }
+
     public int getId(){
         return id;
     }
@@ -59,11 +72,11 @@ public class ProductDTO {
         this.price = price;
     }
 
-    public ProductCategory getCategoryId(){
+    public ProductCategory getCategory(){
         return category;
     }
 
-    public void setCategoryId(ProductCategory category){
+    public void setCategory(ProductCategory category){
         this.category = category;
     }
 

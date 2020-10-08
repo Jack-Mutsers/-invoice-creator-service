@@ -47,7 +47,7 @@ public class CustomerRepo {
         return customerList.remove(customer);
     }
 
-    public boolean add(Customer customer) {
+    public int add(Customer customer) {
         if(customer.getId() == 0){
             int oldId = 0;
             for (Customer customer1 : customerList){
@@ -67,10 +67,10 @@ public class CustomerRepo {
         }
 
         if (this.getCustomer(customer.getId()) != null){
-            return false;
+            return 0;
         }
         customerList.add(customer);
-        return true;
+        return customer.getId();
     }
 
     public boolean update(int id, Customer customer) {
