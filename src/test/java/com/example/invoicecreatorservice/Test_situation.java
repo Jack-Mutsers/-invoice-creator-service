@@ -10,8 +10,8 @@ public class Test_situation {
 
     @Test
     public void Test_case(){
-        String greeting = "Hallo";
+        String greeting = "Hello";
 
-        assertEquals("Hallo", greeting);
+        assertEquals("Hello", greeting);
     }
 }
