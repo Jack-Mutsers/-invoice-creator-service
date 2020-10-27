@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>demo</artifactId>
+    <artifactId>invoice-creator-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>invoiceCreatorService</name>
+    <name>invoice-creator-service</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
