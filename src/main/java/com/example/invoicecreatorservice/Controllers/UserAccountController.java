@@ -68,6 +68,7 @@ public class UserAccountController {
 
     @PostMapping(path="")
     public @ResponseBody ResponseEntity<UserAccountDTO> createUser(@RequestBody UserAccount user) throws Exception {
+        user.setPassword(PasswordEncoder.getSaltedHash(user.getPassword()));
         UserAccount newObject = userAccountRepo.save(user);
         if (newObject.equals(null)){
             return new ResponseEntity("The account can not be created", HttpStatus.CONFLICT);

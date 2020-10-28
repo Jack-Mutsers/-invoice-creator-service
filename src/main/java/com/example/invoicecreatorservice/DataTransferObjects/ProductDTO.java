@@ -14,15 +14,15 @@ public class ProductDTO {
 
     private int id;
     private String name;
-    private int price;
+    private Double price;
     private ProductCategory category;
     private String productCode;
 
-    public ProductDTO(int id, String name, float price, int categoryId, String productCode){
+    public ProductDTO(int id, String name, double price, int categoryId, String productCode){
 
         this.id = id;
         this.name = name;
-        this.price = (int)Math.round(price * 100.0);
+        this.price = (double)Math.round(price * 100.0);
         this.category = productCategoryRepo.findById(categoryId);
         this.productCode = productCode;
     }
@@ -66,11 +66,11 @@ public class ProductDTO {
         this.name = name;
     }
 
-    public int getPrice(){
+    public double getPrice(){
         return price;
     }
 
-    public void setPrice(int price){
+    public void setPrice(double price){
         this.price = price;
     }
 

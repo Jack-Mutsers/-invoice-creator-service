@@ -19,7 +19,7 @@ public class Product {
     private int categoryId;
     private String productCode;
 
-    public Product(int id, String name, float price, int categoryId, String productCode){
+    public Product(int id, String name, double price, int categoryId, String productCode){
         this.id = id;
         this.name = name;
         this.price = (int)Math.round(price * 100.0);
@@ -47,12 +47,13 @@ public class Product {
         this.name = name;
     }
 
-    public int getPrice(){
-        return price;
+    public double getPrice(){
+        double val = price / 100.0;
+        return val;
     }
 
-    public void setPrice(int price){
-        this.price = price;
+    public void setPrice(double price){
+        this.price = (int)Math.round(price * 100.0);
     }
 
     public int getCategoryId(){

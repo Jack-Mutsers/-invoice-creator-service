@@ -17,15 +17,13 @@ public class User {
     private String address;
     private String zipcode;
     private String city;
-    private String po_box;
 
-    public User(int id, String name, String address, String zipcode, String city, String po_box) {
+    public User(int id, String name, String address, String zipcode, String city) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.zipcode = zipcode;
         this.city = city;
-        this.po_box = po_box;
     }
 
     public User(){
@@ -69,25 +67,6 @@ public class User {
 
     public void setCity(String city) {
         this.city = city;
-    }
-
-    public String getPo_box() {
-        return po_box;
-    }
-
-    public void setPo_box(String po_box) {
-        this.po_box = po_box;
-    }
-
-    public String getMailAddress(){
-        if(this.address.equals(null)){
-            if(this.po_box.equals(null)) {
-                return "";
-            }
-            return this.po_box;
-        }
-
-        return this.address;
     }
 
 //    @Override
