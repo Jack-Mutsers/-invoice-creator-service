@@ -1,4 +1,4 @@
-package com.example.invoicecreatorservice;
+package com.example.invoicecreatorservice.Services;
 
 import org.apache.tomcat.util.codec.binary.Base64;
 

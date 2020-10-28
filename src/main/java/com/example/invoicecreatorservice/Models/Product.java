@@ -31,6 +31,20 @@ public class Product {
 
     }
 
+    public boolean validateProduct(){
+        if(
+            this.id == 0 ||
+            this.name == null ||
+            this.price == 0 ||
+            this.categoryId == 0 ||
+            this.productCode == null
+        ){
+            return false;
+        }
+
+        return true;
+    }
+
     public int getId(){
         return id;
     }
