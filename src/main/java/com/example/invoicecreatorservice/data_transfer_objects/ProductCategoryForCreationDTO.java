@@ -14,7 +14,7 @@ public class ProductCategoryForCreationDTO {
     }
 
     public boolean validateProductCategory(){
-        return !( this.name == null || this.btw == 0 );
+        return ( this.name == null || this.btw == 0 );
     }
 
     public String getName(){

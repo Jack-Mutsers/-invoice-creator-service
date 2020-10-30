@@ -18,7 +18,7 @@ public class CustomerForCreationDTO {
     }
 
     public boolean validateCustomer(){
-        return !(this.name == null || this.address == null || this.zipcode == null || this.city == null);
+        return (this.name == null || this.address == null || this.zipcode == null || this.city == null);
     }
 
     public String getName() {

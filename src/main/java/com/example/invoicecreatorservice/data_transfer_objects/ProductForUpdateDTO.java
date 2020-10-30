@@ -21,7 +21,7 @@ public class ProductForUpdateDTO {
     }
 
     public boolean validateProduct(){
-        return !( this.id == 0 || this.name == null || this.price == 0 || this.categoryId == 0 || this.productCode == null );
+        return ( this.id == 0 || this.name == null || this.price == 0 || this.categoryId == 0 || this.productCode == null );
     }
 
     public int getId(){

@@ -18,7 +18,7 @@ public class ProductForCreationDTO {
     }
 
     public boolean validateProduct(){
-        return !( this.name == null || this.price == 0 || this.categoryId == 0 || this.productCode == null );
+        return ( this.name == null || this.price == 0 || this.categoryId == 0 || this.productCode == null );
     }
 
     public String getName(){

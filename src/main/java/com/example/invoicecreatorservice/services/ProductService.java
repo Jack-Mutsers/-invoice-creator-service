@@ -41,7 +41,7 @@ public class ProductService {
     }
 
     public ProductDTO createProduct(ProductForCreationDTO productDTO) {
-        if (!productDTO.validateProduct()) {
+        if (productDTO.validateProduct()) {
             return null;
         }
 
@@ -55,7 +55,7 @@ public class ProductService {
     }
 
     public boolean updateProduct(ProductForUpdateDTO productDTO) {
-        if (!productDTO.validateProduct()) {
+        if (productDTO.validateProduct()) {
             return false;
         }
 
