@@ -1,7 +1,6 @@
 package com.example.invoicecreatorservice.data_transfer_objects;
 
 public class ProductCategoryForCreationDTO {
-    private int id;
     private String name;
     private int btw;
 
@@ -15,14 +14,7 @@ public class ProductCategoryForCreationDTO {
     }
 
     public boolean validateProductCategory(){
-        if(
-            this.name == null ||
-            this.btw == 0
-        ){
-            return false;
-        }
-
-        return true;
+        return !( this.name == null || this.btw == 0 );
     }
 
     public String getName(){

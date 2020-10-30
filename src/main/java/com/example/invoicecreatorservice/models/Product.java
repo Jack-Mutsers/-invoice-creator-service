@@ -50,20 +50,6 @@ public class Product {
 
     }
 
-    public boolean validateProduct(){
-        if(
-            this.id == 0 ||
-            this.name == null ||
-            this.price == 0 ||
-            this.categoryId == 0 ||
-            this.productCode == null
-        ){
-            return false;
-        }
-
-        return true;
-    }
-
     public int getId(){
         return id;
     }
@@ -76,13 +62,12 @@ public class Product {
         return name;
     }
 
-    public void setName(String Name){
+    public void setName(String name){
         this.name = name;
     }
 
     public double getPrice(){
-        double val = price / 100.0;
-        return val;
+        return price / 100.0;
     }
 
     public void setPrice(double price){

@@ -16,15 +16,7 @@ public class UserAccountForCreationDTO {
     }
 
     public boolean validateUserAccount(){
-        if(
-            this.username == null ||
-            this.password == null ||
-            this.userId == 0
-        ){
-            return false;
-        }
-
-        return true;
+        return !( this.username == null || this.password == null || this.userId == 0 );
     }
 
     public String getUsername() {

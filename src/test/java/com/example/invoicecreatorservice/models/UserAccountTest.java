@@ -6,9 +6,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-public class UserAccountTest {
+class UserAccountTest {
     @Test
-    public void instantiateEntity(){
+    void instantiateEntity(){
         int id = 2;
         String username = "henk";
         String password = "Password1!";
@@ -29,7 +29,7 @@ public class UserAccountTest {
 
 
     @Test
-    public void instantiateEmptyEntity(){
+    void instantiateEmptyEntity(){
         int id = 0;
         String username = null;
         String password = null;

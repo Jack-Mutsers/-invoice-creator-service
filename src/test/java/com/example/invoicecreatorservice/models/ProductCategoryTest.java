@@ -6,9 +6,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-public class ProductCategoryTest {
+class ProductCategoryTest {
     @Test
-    public void instantiateEntity(){
+    void instantiateEntity(){
         int id = 5;
         String name = "healthcare";
         int btw = 23;
@@ -26,7 +26,7 @@ public class ProductCategoryTest {
 
 
     @Test
-    public void instantiateEmptyEntity(){
+    void instantiateEmptyEntity(){
         int id = 0;
         String name = null;
         int btw = 0;

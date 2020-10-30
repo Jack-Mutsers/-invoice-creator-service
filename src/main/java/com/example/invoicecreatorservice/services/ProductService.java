@@ -6,9 +6,11 @@ import com.example.invoicecreatorservice.data_transfer_objects.ProductForUpdateD
 import com.example.invoicecreatorservice.models.Product;
 import com.example.invoicecreatorservice.repositories.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ProductService {
 
     @Autowired
@@ -17,18 +19,14 @@ public class ProductService {
     public ProductDTO getProduct(int id) {
         Product product = productRepo.findById(id);
 
-        if (!product.validateProduct()) {
-            return null;
-        }
-
         return new ProductDTO(product);
     }
 
     public Iterable<ProductDTO> getAllProducts() {
-        ProductDTO Dto = new ProductDTO();
-        List<ProductDTO> products = Dto.getProductList((List<Product>) productRepo.findAll());
+        ProductDTO productDTO = new ProductDTO();
+        List<ProductDTO> products = productDTO.getProductList((List<Product>) productRepo.findAll());
 
-        if(products.size() == 0){ return null; }
+        if(products.isEmpty()){ return null; }
 
         return products;
     }
@@ -43,6 +41,10 @@ public class ProductService {
     }
 
     public ProductDTO createProduct(ProductForCreationDTO productDTO) {
+        if (!productDTO.validateProduct()) {
+            return null;
+        }
+
         try{
             Product product = new Product(productDTO);
             Product newObject = productRepo.save(product);
@@ -53,6 +55,10 @@ public class ProductService {
     }
 
     public boolean updateProduct(ProductForUpdateDTO productDTO) {
+        if (!productDTO.validateProduct()) {
+            return false;
+        }
+
         try {
             Product product = new Product(productDTO);
             productRepo.save(product);

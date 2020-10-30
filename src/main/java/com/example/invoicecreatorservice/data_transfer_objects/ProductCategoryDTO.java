@@ -23,18 +23,6 @@ public class ProductCategoryDTO {
 
     }
 
-    public boolean validateProductCategory(){
-        if(
-            this.id == 0 ||
-            this.name == null ||
-            this.btw == 0
-        ){
-            return false;
-        }
-
-        return true;
-    }
-
     public int getId(){
         return id;
     }

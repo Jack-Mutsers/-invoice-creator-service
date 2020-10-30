@@ -6,9 +6,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-public class ProductTest {
+class ProductTest {
+
     @Test
-    public void instantiateEntity(){
+    void instantiateEntity(){
         int id = 5;
         String name = "toothpast";
         double price = 13.6;
@@ -23,16 +24,16 @@ public class ProductTest {
             productCode
         );
 
-        assertTrue(id == product.getId());
+        assertEquals(id, product.getId());
         assertEquals(name, product.getName());
         double getPrice = product.getPrice();
-        assertTrue(price == product.getPrice());
-        assertTrue(categoryId == product.getCategoryId());
+        assertEquals(price, product.getPrice());
+        assertEquals(categoryId, product.getCategoryId());
         assertEquals(productCode, product.getProductCode());
     }
 
     @Test
-    public void instantiateEmptyEntity(){
+    void instantiateEmptyEntity(){
         int id = 0;
         String name = null;
         float price = 0;

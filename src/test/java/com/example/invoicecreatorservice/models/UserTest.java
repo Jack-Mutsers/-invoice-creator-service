@@ -6,10 +6,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-public class UserTest {
+class UserTest {
 
     @Test
-    public void instantiateEntity(){
+    void instantiateEntity(){
         int id = 2;
         String name = "henk";
         String address = "testlane 64";
@@ -33,7 +33,7 @@ public class UserTest {
 
 
     @Test
-    public void instantiateEmptyEntity(){
+    void instantiateEmptyEntity(){
         int id = 0;
         String name = null;
         String address = null;

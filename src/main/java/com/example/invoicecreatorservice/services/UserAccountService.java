@@ -9,7 +9,9 @@ import com.example.invoicecreatorservice.models.UserAccount;
 import com.example.invoicecreatorservice.repositories.UserAccountRepo;
 import com.example.invoicecreatorservice.repositories.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserAccountService {
 
     @Autowired
@@ -60,11 +62,11 @@ public class UserAccountService {
     }
 
     public UserAccountDTO createUserAccount(UserAccountForCreationDTO accountDTO) throws Exception {
-
-        UserAccount user = new UserAccount(accountDTO);
-        if(user.validateUserAccount()){
+        if(accountDTO.validateUserAccount()){
             return null;
         }
+
+        UserAccount user = new UserAccount(accountDTO);
 
         try{
             String saltedPassword = PasswordEncoder.getSaltedHash(user.getPassword());
@@ -79,6 +81,10 @@ public class UserAccountService {
     }
 
     public boolean updateUserAccount(UserAccountForUpdateDTO accountDTO) {
+        if(accountDTO.validateUserAccount()){
+            return false;
+        }
+
         try{
             UserAccount account = new UserAccount(accountDTO);
             userAccountRepo.save(account);

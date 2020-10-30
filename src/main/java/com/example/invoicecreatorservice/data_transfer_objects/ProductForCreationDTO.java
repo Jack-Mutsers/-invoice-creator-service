@@ -17,11 +17,15 @@ public class ProductForCreationDTO {
 
     }
 
+    public boolean validateProduct(){
+        return !( this.name == null || this.price == 0 || this.categoryId == 0 || this.productCode == null );
+    }
+
     public String getName(){
         return name;
     }
 
-    public void setName(String Name){
+    public void setName(String name){
         this.name = name;
     }
 
@@ -30,7 +34,7 @@ public class ProductForCreationDTO {
     }
 
     public void setPrice(double price){
-        this.price = (int)Math.round(price * 100.0);;
+        this.price = (int)Math.round(price * 100.0);
     }
 
     public int getCategoryId(){

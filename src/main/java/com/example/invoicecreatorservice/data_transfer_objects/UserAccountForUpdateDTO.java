@@ -18,16 +18,7 @@ public class UserAccountForUpdateDTO {
     }
 
     public boolean validateUserAccount(){
-        if(
-            this.id == 0 ||
-            this.username == null ||
-            this.password == null ||
-            this.userId == 0
-        ){
-            return false;
-        }
-
-        return true;
+        return !( this.id == 0 ||  this.username == null ||  this.password == null ||  this.userId == 0 );
     }
 
     public int getId() {

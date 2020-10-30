@@ -30,17 +30,7 @@ public class CustomerForUpdateDTO {
     }
 
     public boolean validateCustomer(){
-        if(
-            this.id > 0 ||
-            this.name == null ||
-            this.address == null ||
-            this.zipcode == null ||
-            this.city == null
-        ){
-            return false;
-        }
-
-        return true;
+        return !( this.id > 0 || this.name == null || this.address == null || this.zipcode == null || this.city == null );
     }
 
     public int getId() {

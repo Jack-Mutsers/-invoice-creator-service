@@ -45,19 +45,6 @@ public class UserAccount {
 
     }
 
-    public boolean validateUserAccount(){
-        if(
-            this.id == 0 ||
-            this.username == null ||
-            this.password == null ||
-            this.userId == 0
-        ){
-            return false;
-        }
-
-        return true;
-    }
-
     public int getId() {
         return id;
     }

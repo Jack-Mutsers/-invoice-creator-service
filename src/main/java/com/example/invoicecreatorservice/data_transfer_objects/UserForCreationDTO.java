@@ -18,16 +18,7 @@ public class UserForCreationDTO {
     }
 
     public boolean validateUser(){
-        if(
-            this.name == null ||
-            this.address == null ||
-            this.zipcode == null ||
-            this.city == null
-        ){
-            return false;
-        }
-
-        return true;
+        return !( this.name == null || this.address == null || this.zipcode == null || this.city == null );
     }
 
     public String getName() {

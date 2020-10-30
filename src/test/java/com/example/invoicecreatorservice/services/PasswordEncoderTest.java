@@ -6,10 +6,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-public class PasswordEncoderTest {
+class PasswordEncoderTest {
 
     @Test
-    public void passwordValidationSuccessful() {
+    void passwordValidationSuccessful() {
         String accountPassword = "HrLULWgjBCAnyhtFxsBljMJtWQhl++50A++Yij/1wUI=$0U2bjzl1Nik9emOoMlRkUkfUHRUXskHnqJE9FTCcCfs=";
         String password = "Password1!";
 
@@ -23,7 +23,7 @@ public class PasswordEncoderTest {
     }
 
     @Test
-    public void passwordValidationFailure() {
+    void passwordValidationFailure() {
         String accountPassword = "HrLULWgjBCAnyhtFxsBljMJtWQhl++50A++Yij/1wUI=$0U2bjzl1Nik9emOoMlRkUkfUHRUXskHnqJE9FTCcCfs=";
         String password = "Wr0ngP@s$w0rd1!";
 
@@ -37,7 +37,7 @@ public class PasswordEncoderTest {
     }
 
     @Test
-    public void passwordValidationException() {
+    void passwordValidationException() {
         String accountPassword = "Password1!";
         String password = "Password1!";
 
@@ -52,14 +52,15 @@ public class PasswordEncoderTest {
     }
 
     @Test
-    public void passwordEncryption() {
+    void passwordEncryption() {
         String password = "Password1!";
         String newPassword = "";
 
         try {
             newPassword = PasswordEncoder.getSaltedHash(password);
 
-            assertFalse(password.equals(newPassword));
+            assertNotEquals("", newPassword);
+            assertNotEquals(password, newPassword);
             assertFalse(newPassword.contains(password));
         } catch (Exception e) {
             e.printStackTrace();
@@ -67,7 +68,7 @@ public class PasswordEncoderTest {
     }
 
     @Test
-    public void emptyPasswordEncryptionException() {
+    void emptyPasswordEncryptionException() {
         String password = "";
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {

@@ -29,29 +29,16 @@ public class CustomerDTO {
 
     }
 
-    public boolean validateCustomer(){
-        if(
-                this.id > 0 ||
-                        this.name == null ||
-                        this.address == null ||
-                        this.zipcode == null ||
-                        this.city == null
-        ){
-            return false;
-        }
-
-        return true;
-    }
-
     public int getId() {
-        return id;
+        return this.id;
     }
+
     public void setId(int id) {
         this.id = id;
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
@@ -59,7 +46,7 @@ public class CustomerDTO {
     }
 
     public String getAddress() {
-        return address;
+        return this.address;
     }
 
     public void setAddress(String address) {
@@ -67,7 +54,7 @@ public class CustomerDTO {
     }
 
     public String getZipcode() {
-        return zipcode;
+        return this.zipcode;
     }
 
     public void setZipcode(String zipcode) {
@@ -75,7 +62,7 @@ public class CustomerDTO {
     }
 
     public String getCity() {
-        return city;
+        return this.city;
     }
 
     public void setCity(String city) {

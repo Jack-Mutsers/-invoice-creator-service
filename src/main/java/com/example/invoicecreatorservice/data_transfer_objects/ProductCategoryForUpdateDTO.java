@@ -24,15 +24,7 @@ public class ProductCategoryForUpdateDTO {
     }
 
     public boolean validateProductCategory(){
-        if(
-                this.id == 0 ||
-                        this.name == null ||
-                        this.btw == 0
-        ){
-            return false;
-        }
-
-        return true;
+        return !( this.id == 0 || this.name == null || this.btw == 0 );
     }
 
     public int getId(){

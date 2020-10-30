@@ -19,18 +19,8 @@ public class UserForUpdateDTO {
 
     }
 
-    public boolean validateUser(){
-        if(
-            this.id == 0 ||
-            this.name == null ||
-            this.address == null ||
-            this.zipcode == null ||
-            this.city == null
-        ){
-            return false;
-        }
-
-        return true;
+    public boolean validateUser() {
+        return !(this.id == 0 || this.name == null || this.address == null || this.zipcode == null || this.city == null);
     }
 
     public int getId() {
