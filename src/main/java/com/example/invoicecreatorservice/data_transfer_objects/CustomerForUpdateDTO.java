@@ -17,14 +17,6 @@ public class CustomerForUpdateDTO {
         this.city = city;
     }
 
-    public CustomerForUpdateDTO(Customer customer) {
-        this.id = customer.getId();
-        this.name = customer.getName();
-        this.address = customer.getAddress();
-        this.zipcode = customer.getZipcode();
-        this.city = customer.getCity();
-    }
-
     public CustomerForUpdateDTO(){
 
     }

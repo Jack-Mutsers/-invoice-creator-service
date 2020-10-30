@@ -52,7 +52,7 @@ public class CustomerService {
         }
     }
 
-    public Boolean updateCustomer(CustomerForUpdateDTO customerDTO) {
+    public boolean updateCustomer(CustomerForUpdateDTO customerDTO) {
         if(customerDTO.validateCustomer()){
             return false;
         }

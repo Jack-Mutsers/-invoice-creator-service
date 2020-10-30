@@ -13,12 +13,6 @@ public class ProductCategoryForUpdateDTO {
         this.btw = btw;
     }
 
-    public ProductCategoryForUpdateDTO(ProductCategory productCategory){
-        this.id = productCategory.getId();
-        this.name = productCategory.getName();
-        this.btw = productCategory.getBtw();
-    }
-
     public ProductCategoryForUpdateDTO(){
 
     }
