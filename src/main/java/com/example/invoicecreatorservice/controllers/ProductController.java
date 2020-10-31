@@ -62,8 +62,8 @@ public class ProductController {
         return new ResponseEntity<>(newObject, HttpStatus.CREATED);
     }
 
-    @PutMapping(path ="/{id}")
-    public @ResponseBody ResponseEntity<String> updateProduct(@PathVariable int id, @RequestBody ProductForUpdateDTO product) {
+    @PutMapping(path ="")
+    public @ResponseBody ResponseEntity<String> updateProduct(@RequestBody ProductForUpdateDTO product) {
         boolean success = service.updateProduct(product);
 
         if (!success){

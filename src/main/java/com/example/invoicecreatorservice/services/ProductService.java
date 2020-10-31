@@ -16,15 +16,25 @@ public class ProductService {
     @Autowired
     private ProductRepo productRepo;
 
+    @Autowired
+    private ProductCategoryService categoryService = new ProductCategoryService();
+
     public ProductDTO getProduct(int id) {
         Product product = productRepo.findById(id);
 
-        return new ProductDTO(product);
+        ProductDTO newProductDTO = new ProductDTO(product);
+        newProductDTO.setCategory(categoryService.getCategory(product.getCategoryId()));
+        return newProductDTO;
     }
 
     public Iterable<ProductDTO> getAllProducts() {
         ProductDTO productDTO = new ProductDTO();
         List<ProductDTO> products = productDTO.getProductList((List<Product>) productRepo.findAll());
+
+        for (ProductDTO product : products)
+        {
+            product.setCategory(categoryService.getCategory(product.getCategoryId()));
+        }
 
         if(products.isEmpty()){ return null; }
 
@@ -48,7 +58,10 @@ public class ProductService {
         try{
             Product product = new Product(productDTO);
             Product newObject = productRepo.save(product);
-            return new ProductDTO(newObject);
+            ProductDTO newProductDTO = new ProductDTO(newObject);
+
+            newProductDTO.setCategory(categoryService.getCategory(newObject.getCategoryId()));
+            return newProductDTO;
         }catch (Exception ex){
             return null;
         }

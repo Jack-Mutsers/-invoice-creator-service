@@ -5,13 +5,14 @@ import com.example.invoicecreatorservice.data_transfer_objects.UserForCreationDT
 import com.example.invoicecreatorservice.data_transfer_objects.UserForUpdateDTO;
 import com.example.invoicecreatorservice.models.User;
 import com.example.invoicecreatorservice.repositories.UserRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class UserService {
-    // this has to be static because the service is stateless:
+    @Autowired
     private UserRepo userRepo;
 
     public UserDTO getUser(int id) {

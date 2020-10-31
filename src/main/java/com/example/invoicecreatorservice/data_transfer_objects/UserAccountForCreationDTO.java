@@ -3,12 +3,12 @@ package com.example.invoicecreatorservice.data_transfer_objects;
 public class UserAccountForCreationDTO {
     private String username;
     private String password;
-    private int userId;
+    private UserForCreationDTO user;
 
-    public UserAccountForCreationDTO(String username, String password, int userId) {
+    public UserAccountForCreationDTO(String username, String password, UserForCreationDTO user) {
         this.username = username;
         this.password = password;
-        this.userId = userId;
+        this.user = user;
     }
 
     public UserAccountForCreationDTO(){
@@ -16,7 +16,7 @@ public class UserAccountForCreationDTO {
     }
 
     public boolean validateUserAccount(){
-        return ( this.username == null || this.password == null || this.userId == 0 );
+        return ( this.username == null || this.password == null || this.user == null );
     }
 
     public String getUsername() {
@@ -34,11 +34,11 @@ public class UserAccountForCreationDTO {
         this.password = password;
     }
 
-    public int getUserId() {
-        return userId;
+    public UserForCreationDTO getUser() {
+        return user;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUser(UserForCreationDTO user) {
+        this.user = user;
     }
 }

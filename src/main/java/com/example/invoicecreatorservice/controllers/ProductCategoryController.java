@@ -57,14 +57,14 @@ public class ProductCategoryController {
         ProductCategoryDTO newObject = service.createCategory(category);
 
         if (newObject == null){
-            return new ResponseEntity<>("The user can not be added because it is not complete", HttpStatus.CONFLICT);
+            return new ResponseEntity<>("The product has not been added", HttpStatus.CONFLICT);
         }
 
         return new ResponseEntity<>(newObject, HttpStatus.CREATED);
     }
 
-    @PutMapping(path ="/{id}")
-    public @ResponseBody ResponseEntity<String> updateCategory(@PathVariable int id, @RequestBody ProductCategoryForUpdateDTO category) {
+    @PutMapping(path ="")
+    public @ResponseBody ResponseEntity<String> updateCategory(@RequestBody ProductCategoryForUpdateDTO category) {
         boolean success = service.updateCategory(category);
 
         if (!success){

@@ -1,9 +1,6 @@
 package com.example.invoicecreatorservice.services;
 
-import com.example.invoicecreatorservice.data_transfer_objects.UserAccountDTO;
-import com.example.invoicecreatorservice.data_transfer_objects.UserAccountForCreationDTO;
-import com.example.invoicecreatorservice.data_transfer_objects.UserAccountForDeletionDTO;
-import com.example.invoicecreatorservice.data_transfer_objects.UserAccountForUpdateDTO;
+import com.example.invoicecreatorservice.data_transfer_objects.*;
 import com.example.invoicecreatorservice.models.User;
 import com.example.invoicecreatorservice.models.UserAccount;
 import com.example.invoicecreatorservice.repositories.UserAccountRepo;
@@ -20,13 +17,19 @@ public class UserAccountService {
     @Autowired
     private UserRepo userRepo;
 
+    @Autowired
+    private UserService userService = new UserService();
+
     public UserAccountDTO login(UserAccountForCreationDTO account) {
         try{
             UserAccount userAccount = userAccountRepo.findByUsername(account.getUsername());
             boolean validPassword = PasswordEncoder.check(account.getPassword(), userAccount.getPassword());
 
             if (validPassword) {
-                return new UserAccountDTO(userAccount);
+                UserAccountDTO accountDTO = new UserAccountDTO(userAccount);
+                accountDTO.setUser(userService.getUser(userAccount.getUserId()));
+
+                return accountDTO;
             } else {
                 return null;
             }
@@ -66,14 +69,18 @@ public class UserAccountService {
             return null;
         }
 
-        UserAccount user = new UserAccount(accountDTO);
-
         try{
-            String saltedPassword = PasswordEncoder.getSaltedHash(user.getPassword());
-            user.setPassword(saltedPassword);
-            UserAccount newObject = userAccountRepo.save(user);
+            User user = new User(accountDTO.getUser());
+            user = userRepo.save(user);
 
-            return new UserAccountDTO(newObject);
+            UserAccount userAccount = new UserAccount(accountDTO, user.getId());
+            String saltedPassword = PasswordEncoder.getSaltedHash(userAccount.getPassword());
+            userAccount.setPassword(saltedPassword);
+
+            UserAccountDTO newAccountDTO = new UserAccountDTO(userAccountRepo.save(userAccount));
+            newAccountDTO.setUser(userService.getUser(userAccount.getUserId()));
+
+            return newAccountDTO;
 
         }catch (Exception ex){
             return null;

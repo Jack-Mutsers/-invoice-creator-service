@@ -22,7 +22,7 @@ public class CustomerForUpdateDTO {
     }
 
     public boolean validateCustomer(){
-        return ( this.id > 0 || this.name == null || this.address == null || this.zipcode == null || this.city == null );
+        return ( this.id == 0 || this.name == null || this.address == null || this.zipcode == null || this.city == null );
     }
 
     public int getId() {

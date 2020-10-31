@@ -6,23 +6,19 @@ import com.example.invoicecreatorservice.repositories.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class UserAccountDTO {
-    @Autowired
-    UserRepo userRepo;
-
     private int id;
     private String username;
-    private User user;
+    private UserDTO userDTO;
 
-    public UserAccountDTO(int id, String username, int userId) {
+    public UserAccountDTO(int id, String username, UserDTO userDTO) {
         this.id = id;
         this.username = username;
-        this.user = userRepo.findById(userId);
+        this.userDTO = userDTO;
     }
 
     public UserAccountDTO(UserAccount userAccount) {
         this.id = userAccount.getId();
         this.username = userAccount.getUsername();
-        this.user = userRepo.findById(userAccount.getUserId());
     }
 
     public UserAccountDTO(){
@@ -44,12 +40,12 @@ public class UserAccountDTO {
         this.username = username;
     }
 
-    public User getUser() {
-        return user;
+    public UserDTO getUser() {
+        return userDTO;
     }
 
-    public void setUser(int userId) {
-        this.user = userRepo.findById(userId);
+    public void setUser(UserDTO userDTO) {
+        this.userDTO = userDTO;
     }
 
 }

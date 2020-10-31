@@ -19,8 +19,8 @@ public class Product {
     private int id;
     private String name;
     private int price;
-    private int categoryId;
     private String productCode;
+    private int categoryId;
 
     public Product(int id, String name, double price, int categoryId, String productCode){
         this.id = id;

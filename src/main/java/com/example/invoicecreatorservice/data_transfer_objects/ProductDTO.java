@@ -3,27 +3,27 @@ package com.example.invoicecreatorservice.data_transfer_objects;
 import com.example.invoicecreatorservice.models.Product;
 import com.example.invoicecreatorservice.models.ProductCategory;
 import com.example.invoicecreatorservice.repositories.ProductCategoryRepo;
+import com.example.invoicecreatorservice.services.ProductCategoryService;
+import com.example.invoicecreatorservice.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProductDTO {
-    @Autowired
-    ProductCategoryRepo productCategoryRepo;
-
     private int id;
     private String name;
     private Double price;
-    private ProductCategory category;
+    private int categoryId;
+    private ProductCategoryDTO category;
     private String productCode;
 
     public ProductDTO(int id, String name, double price, int categoryId, String productCode){
 
         this.id = id;
         this.name = name;
+        this.categoryId = categoryId;
         this.price = (double)Math.round(price * 100.0);
-        this.category = productCategoryRepo.findById(categoryId);
         this.productCode = productCode;
     }
 
@@ -32,7 +32,7 @@ public class ProductDTO {
         this.id = product.getId();
         this.name = product.getName();
         this.price = product.getPrice();
-        this.category = productCategoryRepo.findById(product.getCategoryId());
+        this.categoryId = product.getCategoryId();
         this.productCode = product.getProductCode();
     }
 
@@ -74,11 +74,19 @@ public class ProductDTO {
         this.price = price;
     }
 
-    public ProductCategory getCategory(){
+    public int getCategoryId(){
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId){
+        this.categoryId = categoryId;
+    }
+
+    public ProductCategoryDTO getCategory(){
         return category;
     }
 
-    public void setCategory(ProductCategory category){
+    public void setCategory(ProductCategoryDTO category){
         this.category = category;
     }
 

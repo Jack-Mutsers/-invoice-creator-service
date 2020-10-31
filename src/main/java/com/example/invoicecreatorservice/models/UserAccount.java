@@ -27,11 +27,11 @@ public class UserAccount {
         this.userId = userId;
     }
 
-    public UserAccount(UserAccountForCreationDTO accountDTO) {
+    public UserAccount(UserAccountForCreationDTO accountDTO, int userId) {
         this.id = 0;
         this.username = accountDTO.getUsername();
         this.password = accountDTO.getPassword();
-        this.userId = accountDTO.getUserId();
+        this.userId = userId;
     }
 
     public UserAccount(UserAccountForUpdateDTO accountDTO) {

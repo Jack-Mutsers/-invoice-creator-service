@@ -56,8 +56,8 @@ public class UserAccountController {
         return new ResponseEntity<>(newObject, HttpStatus.CREATED);
     }
 
-    @PutMapping(path ="/{id}")
-    public @ResponseBody ResponseEntity<String> updateUserAccount(@PathVariable int id, @RequestBody UserAccountForUpdateDTO account) {
+    @PutMapping(path ="")
+    public @ResponseBody ResponseEntity<String> updateUserAccount(@RequestBody UserAccountForUpdateDTO account) {
         boolean success = service.updateUserAccount(account);
 
         if (!success){

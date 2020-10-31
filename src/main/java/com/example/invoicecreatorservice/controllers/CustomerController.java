@@ -41,7 +41,7 @@ public class CustomerController {
     }
 
     @DeleteMapping(path = "/{id}")
-    public @ResponseBody ResponseEntity<String> deleteCustomer(@RequestParam int id) {
+    public @ResponseBody ResponseEntity<String> deleteCustomer(@PathVariable int id) {
         boolean success = service.deleteCustomer(id);
 
         if(!success){
@@ -62,8 +62,8 @@ public class CustomerController {
         return new ResponseEntity<>(newObject, HttpStatus.CREATED);
     }
 
-    @PutMapping(path ="/{id}")
-    public @ResponseBody ResponseEntity<String> updateCustomer(@PathVariable int id, @RequestBody CustomerForUpdateDTO customer) {
+    @PutMapping(path ="")
+    public @ResponseBody ResponseEntity<String> updateCustomer(@RequestBody CustomerForUpdateDTO customer) {
         Boolean success = service.updateCustomer(customer);
 
         if (Boolean.FALSE.equals(success)){
