@@ -3,6 +3,8 @@ package com.example.invoicecreatorservice.services;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.InvalidPropertiesFormatException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -41,7 +43,7 @@ class PasswordEncoderTest {
         String accountPassword = "Password1!";
         String password = "Password1!";
 
-        Exception exception = assertThrows(IllegalStateException.class, () -> {
+        Exception exception = assertThrows(InvalidPropertiesFormatException.class, () -> {
             boolean validPassword = PasswordEncoder.check(password, accountPassword);
         });
 
@@ -65,6 +67,20 @@ class PasswordEncoderTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    void emptyPasswordEncryptionException() {
+        String password = "";
+
+        Exception exception = assertThrows(InvalidPropertiesFormatException.class, () -> {
+            PasswordEncoder.getSaltedHash(password);
+        });
+
+        String expectedMessage = "Empty passwords are not supported.";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
     }
 
 }

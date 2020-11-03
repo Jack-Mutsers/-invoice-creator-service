@@ -8,6 +8,7 @@ import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
+import java.util.InvalidPropertiesFormatException;
 
 public class PasswordEncoder {
 
@@ -23,7 +24,7 @@ public class PasswordEncoder {
     /** Computes a salted PBKDF2 hash of given plaintext password
      suitable for storing in a database.
      Empty passwords are not supported. */
-    public static String getSaltedHash(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public static String getSaltedHash(String password) throws InvalidPropertiesFormatException, NoSuchAlgorithmException, InvalidKeySpecException {
         byte[] salt = SecureRandom.getInstance("SHA1PRNG").generateSeed(SALT_LENGTH);
         // store the salt with the password
         return Base64.encodeBase64String(salt) + "$" + hash(password, salt);
@@ -31,16 +32,18 @@ public class PasswordEncoder {
 
     /** Checks whether given plaintext password corresponds
      to a stored salted hash of the password. */
-    public static boolean check(String password, String stored) throws IllegalStateException, NoSuchAlgorithmException, InvalidKeySpecException{
+    public static boolean check(String password, String stored) throws InvalidPropertiesFormatException, NoSuchAlgorithmException, InvalidKeySpecException{
         String[] saltAndHash = stored.split("\\$");
         if (saltAndHash.length != 2) {
-            throw new IllegalStateException("The stored password must have the form 'salt$hash'");
+            throw new InvalidPropertiesFormatException("The stored password must have the form 'salt$hash'");
         }
         String hashOfInput = hash(password, Base64.decodeBase64(saltAndHash[0]));
         return hashOfInput.equals(saltAndHash[1]);
     }
 
-    private static String hash(String password, byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    private static String hash(String password, byte[] salt) throws InvalidPropertiesFormatException, NoSuchAlgorithmException, InvalidKeySpecException {
+         if (password == null || password.length() == 0)
+         throw new InvalidPropertiesFormatException("Empty passwords are not supported.");
 
         SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
         SecretKey key = f.generateSecret(new PBEKeySpec(
