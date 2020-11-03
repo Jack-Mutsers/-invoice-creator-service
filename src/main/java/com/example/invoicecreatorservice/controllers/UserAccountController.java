@@ -1,9 +1,7 @@
 package com.example.invoicecreatorservice.controllers;
 
 import com.example.invoicecreatorservice.data_transfer_objects.UserAccountDTO;
-import com.example.invoicecreatorservice.data_transfer_objects.UserAccountForCreationDTO;
-import com.example.invoicecreatorservice.data_transfer_objects.UserAccountForDeletionDTO;
-import com.example.invoicecreatorservice.data_transfer_objects.UserAccountForUpdateDTO;
+import com.example.invoicecreatorservice.data_transfer_objects.UserAccountForAlterationDTO;
 import com.example.invoicecreatorservice.services.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +18,7 @@ public class UserAccountController {
     private final UserAccountService service = new UserAccountService();
 
     @PostMapping(path="/login")
-    public @ResponseBody ResponseEntity<Object> login(@RequestBody UserAccountForCreationDTO account) {
+    public @ResponseBody ResponseEntity<Object> login(@RequestBody UserAccountForAlterationDTO account) {
         UserAccountDTO userAccount = service.login(account);
 
         if (userAccount == null) {
@@ -31,7 +29,7 @@ public class UserAccountController {
     }
 
     @DeleteMapping(path = "/{id}")
-    public @ResponseBody ResponseEntity<String> deleteUser(@PathVariable int id, @RequestBody UserAccountForDeletionDTO account) {
+    public @ResponseBody ResponseEntity<String> deleteUser(@PathVariable int id, @RequestBody UserAccountForAlterationDTO account) {
         boolean success = service.deleteUser(id, account);
 
         if (!success) {
@@ -46,7 +44,7 @@ public class UserAccountController {
     }
 
     @PostMapping(path="")
-    public @ResponseBody ResponseEntity<Object> createUserAccount(@RequestBody UserAccountForCreationDTO user) throws Exception {
+    public @ResponseBody ResponseEntity<Object> createUserAccount(@RequestBody UserAccountForAlterationDTO user) {
         UserAccountDTO newObject = service.createUserAccount(user);
 
         if (newObject == null){
@@ -57,7 +55,7 @@ public class UserAccountController {
     }
 
     @PutMapping(path ="")
-    public @ResponseBody ResponseEntity<String> updateUserAccount(@RequestBody UserAccountForUpdateDTO account) {
+    public @ResponseBody ResponseEntity<String> updateUserAccount(@RequestBody UserAccountForAlterationDTO account) {
         boolean success = service.updateUserAccount(account);
 
         if (!success){

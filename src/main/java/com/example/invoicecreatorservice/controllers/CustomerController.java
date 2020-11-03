@@ -1,8 +1,7 @@
 package com.example.invoicecreatorservice.controllers;
 
 import com.example.invoicecreatorservice.data_transfer_objects.CustomerDTO;
-import com.example.invoicecreatorservice.data_transfer_objects.CustomerForCreationDTO;
-import com.example.invoicecreatorservice.data_transfer_objects.CustomerForUpdateDTO;
+import com.example.invoicecreatorservice.data_transfer_objects.CustomerForAlterationDTO;
 import com.example.invoicecreatorservice.models.Customer;
 import com.example.invoicecreatorservice.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +51,7 @@ public class CustomerController {
     }
 
     @PostMapping(path="")
-    public @ResponseBody ResponseEntity<Object> createCustomer(@RequestBody CustomerForCreationDTO customer) {
+    public @ResponseBody ResponseEntity<Object> createCustomer(@RequestBody CustomerForAlterationDTO customer) {
         CustomerDTO newObject = service.createCustomer(customer);
 
         if (newObject == null){
@@ -63,7 +62,7 @@ public class CustomerController {
     }
 
     @PutMapping(path ="")
-    public @ResponseBody ResponseEntity<String> updateCustomer(@RequestBody CustomerForUpdateDTO customer) {
+    public @ResponseBody ResponseEntity<String> updateCustomer(@RequestBody CustomerForAlterationDTO customer) {
         Boolean success = service.updateCustomer(customer);
 
         if (Boolean.FALSE.equals(success)){

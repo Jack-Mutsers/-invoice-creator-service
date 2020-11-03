@@ -1,11 +1,6 @@
 package com.example.invoicecreatorservice.data_transfer_objects;
 
 import com.example.invoicecreatorservice.models.Product;
-import com.example.invoicecreatorservice.models.ProductCategory;
-import com.example.invoicecreatorservice.repositories.ProductCategoryRepo;
-import com.example.invoicecreatorservice.services.ProductCategoryService;
-import com.example.invoicecreatorservice.services.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;

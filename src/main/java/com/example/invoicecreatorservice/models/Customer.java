@@ -1,7 +1,6 @@
 package com.example.invoicecreatorservice.models;
 
-import com.example.invoicecreatorservice.data_transfer_objects.CustomerForCreationDTO;
-import com.example.invoicecreatorservice.data_transfer_objects.CustomerForUpdateDTO;
+import com.example.invoicecreatorservice.data_transfer_objects.CustomerForAlterationDTO;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,15 +28,7 @@ public class Customer {
         this.city = city;
     }
 
-    public Customer(CustomerForCreationDTO customerDTO) {
-        this.id = 0;
-        this.name = customerDTO.getName();
-        this.address = customerDTO.getAddress();
-        this.zipcode = customerDTO.getZipcode();
-        this.city = customerDTO.getCity();
-    }
-
-    public Customer(CustomerForUpdateDTO customerDTO) {
+    public Customer(CustomerForAlterationDTO customerDTO) {
         this.id = customerDTO.getId();
         this.name = customerDTO.getName();
         this.address = customerDTO.getAddress();

@@ -1,8 +1,7 @@
 package com.example.invoicecreatorservice.controllers;
 
 import com.example.invoicecreatorservice.data_transfer_objects.ProductCategoryDTO;
-import com.example.invoicecreatorservice.data_transfer_objects.ProductCategoryForCreationDTO;
-import com.example.invoicecreatorservice.data_transfer_objects.ProductCategoryForUpdateDTO;
+import com.example.invoicecreatorservice.data_transfer_objects.ProductCategoryForAlterationDTO;
 import com.example.invoicecreatorservice.models.ProductCategory;
 import com.example.invoicecreatorservice.services.ProductCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +52,7 @@ public class ProductCategoryController {
     }
 
     @PostMapping(path="")
-    public @ResponseBody ResponseEntity<Object> createCategory(@RequestBody ProductCategoryForCreationDTO category) {
+    public @ResponseBody ResponseEntity<Object> createCategory(@RequestBody ProductCategoryForAlterationDTO category) {
         ProductCategoryDTO newObject = service.createCategory(category);
 
         if (newObject == null){
@@ -64,7 +63,7 @@ public class ProductCategoryController {
     }
 
     @PutMapping(path ="")
-    public @ResponseBody ResponseEntity<String> updateCategory(@RequestBody ProductCategoryForUpdateDTO category) {
+    public @ResponseBody ResponseEntity<String> updateCategory(@RequestBody ProductCategoryForAlterationDTO category) {
         boolean success = service.updateCategory(category);
 
         if (!success){

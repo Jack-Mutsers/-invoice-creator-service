@@ -20,7 +20,11 @@ public class UserAccountService {
     @Autowired
     private UserService userService = new UserService();
 
-    public UserAccountDTO login(UserAccountForCreationDTO account) {
+    public UserAccountDTO login(UserAccountForAlterationDTO account) {
+        if(account.validateForUpdate()){
+            return null;
+        }
+
         try{
             UserAccount userAccount = userAccountRepo.findByUsername(account.getUsername());
             boolean validPassword = PasswordEncoder.check(account.getPassword(), userAccount.getPassword());
@@ -39,7 +43,11 @@ public class UserAccountService {
         }
     }
 
-    public boolean deleteUser(int id, UserAccountForDeletionDTO account) {
+    public boolean deleteUser(int id, UserAccountForAlterationDTO account) {
+        if(account.validateForUpdate()){
+            return false;
+        }
+
         try{
             UserAccount userAccount = userAccountRepo.findByUsername(account.getUsername());
             boolean validPassword = PasswordEncoder.check(account.getPassword(), userAccount.getPassword());
@@ -64,8 +72,8 @@ public class UserAccountService {
         }
     }
 
-    public UserAccountDTO createUserAccount(UserAccountForCreationDTO accountDTO) throws Exception {
-        if(accountDTO.validateUserAccount()){
+    public UserAccountDTO createUserAccount(UserAccountForAlterationDTO accountDTO) {
+        if(accountDTO.validateForCreation()){
             return null;
         }
 
@@ -73,7 +81,9 @@ public class UserAccountService {
             User user = new User(accountDTO.getUser());
             user = userRepo.save(user);
 
-            UserAccount userAccount = new UserAccount(accountDTO, user.getId());
+            UserAccount userAccount = new UserAccount(accountDTO);
+            userAccount.setUserId(user.getId());
+
             String saltedPassword = PasswordEncoder.getSaltedHash(userAccount.getPassword());
             userAccount.setPassword(saltedPassword);
 
@@ -87,8 +97,8 @@ public class UserAccountService {
         }
     }
 
-    public boolean updateUserAccount(UserAccountForUpdateDTO accountDTO) {
-        if(accountDTO.validateUserAccount()){
+    public boolean updateUserAccount(UserAccountForAlterationDTO accountDTO) {
+        if(accountDTO.validateForUpdate()){
             return false;
         }
 

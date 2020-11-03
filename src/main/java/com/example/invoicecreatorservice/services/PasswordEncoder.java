@@ -5,7 +5,9 @@ import org.apache.tomcat.util.codec.binary.Base64;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
 
 public class PasswordEncoder {
 
@@ -21,7 +23,7 @@ public class PasswordEncoder {
     /** Computes a salted PBKDF2 hash of given plaintext password
      suitable for storing in a database.
      Empty passwords are not supported. */
-    public static String getSaltedHash(String password) throws Exception {
+    public static String getSaltedHash(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
         byte[] salt = SecureRandom.getInstance("SHA1PRNG").generateSeed(SALT_LENGTH);
         // store the salt with the password
         return Base64.encodeBase64String(salt) + "$" + hash(password, salt);
@@ -29,7 +31,7 @@ public class PasswordEncoder {
 
     /** Checks whether given plaintext password corresponds
      to a stored salted hash of the password. */
-    public static boolean check(String password, String stored) throws Exception{
+    public static boolean check(String password, String stored) throws IllegalStateException, NoSuchAlgorithmException, InvalidKeySpecException{
         String[] saltAndHash = stored.split("\\$");
         if (saltAndHash.length != 2) {
             throw new IllegalStateException("The stored password must have the form 'salt$hash'");
@@ -38,9 +40,8 @@ public class PasswordEncoder {
         return hashOfInput.equals(saltAndHash[1]);
     }
 
-    private static String hash(String password, byte[] salt) throws Exception {
-        if (password == null || password.length() == 0)
-            throw new IllegalArgumentException("Empty passwords are not supported.");
+    private static String hash(String password, byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
+
         SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
         SecretKey key = f.generateSecret(new PBEKeySpec(
                 password.toCharArray(), salt, ITERATIONS, DESIRED_LENGTH));

@@ -1,7 +1,6 @@
 package com.example.invoicecreatorservice.models;
 
-import com.example.invoicecreatorservice.data_transfer_objects.UserAccountForCreationDTO;
-import com.example.invoicecreatorservice.data_transfer_objects.UserAccountForUpdateDTO;
+import com.example.invoicecreatorservice.data_transfer_objects.UserAccountForAlterationDTO;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,18 +26,14 @@ public class UserAccount {
         this.userId = userId;
     }
 
-    public UserAccount(UserAccountForCreationDTO accountDTO, int userId) {
-        this.id = 0;
-        this.username = accountDTO.getUsername();
-        this.password = accountDTO.getPassword();
-        this.userId = userId;
-    }
-
-    public UserAccount(UserAccountForUpdateDTO accountDTO) {
+    public UserAccount(UserAccountForAlterationDTO accountDTO) {
         this.id = accountDTO.getId();
         this.username = accountDTO.getUsername();
         this.password = accountDTO.getPassword();
-        this.userId = accountDTO.getUserId();
+
+        if(accountDTO.getUser() != null){
+            this.userId = accountDTO.getUser().getId();
+        }
     }
 
     public UserAccount(){

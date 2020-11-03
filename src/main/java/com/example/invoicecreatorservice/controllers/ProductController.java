@@ -1,8 +1,7 @@
 package com.example.invoicecreatorservice.controllers;
 
 import com.example.invoicecreatorservice.data_transfer_objects.ProductDTO;
-import com.example.invoicecreatorservice.data_transfer_objects.ProductForCreationDTO;
-import com.example.invoicecreatorservice.data_transfer_objects.ProductForUpdateDTO;
+import com.example.invoicecreatorservice.data_transfer_objects.ProductForAlterationDTO;
 import com.example.invoicecreatorservice.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -52,7 +51,7 @@ public class ProductController {
     }
 
     @PostMapping(path="")
-    public @ResponseBody ResponseEntity<Object> createProduct(@RequestBody ProductForCreationDTO product) {
+    public @ResponseBody ResponseEntity<Object> createProduct(@RequestBody ProductForAlterationDTO product) {
         ProductDTO newObject = service.createProduct(product);
 
         if (newObject == null){
@@ -63,7 +62,7 @@ public class ProductController {
     }
 
     @PutMapping(path ="")
-    public @ResponseBody ResponseEntity<String> updateProduct(@RequestBody ProductForUpdateDTO product) {
+    public @ResponseBody ResponseEntity<String> updateProduct(@RequestBody ProductForAlterationDTO product) {
         boolean success = service.updateProduct(product);
 
         if (!success){

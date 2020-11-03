@@ -1,8 +1,6 @@
 package com.example.invoicecreatorservice.data_transfer_objects;
 
-import com.example.invoicecreatorservice.models.Message;
-
-public class MessageDTO {
+public class MessageForAlterationDTO {
     private int id;
     private int userId;
     private String contactCode;
@@ -10,7 +8,7 @@ public class MessageDTO {
     private String type;
     private boolean done;
 
-    public MessageDTO(int id, int userId, String contactCode, String messageBody, String type, boolean done){
+    public MessageForAlterationDTO(int id, int userId, String contactCode, String messageBody, String type, boolean done){
         this.id = id;
         this.userId = userId;
         this.contactCode = contactCode;
@@ -19,17 +17,23 @@ public class MessageDTO {
         this.done = done;
     }
 
-    public MessageDTO(Message message) {
-        this.id = message.getId();
-        this.userId = message.getUserId();
-        this.contactCode = message.getContactCode();
-        this.messageBody = message.getMessageBody();
-        this.type = message.getType();
-        this.done = message.getDone();
+    public MessageForAlterationDTO(int userId, String contactCode, String messageBody, String type){
+        this.userId = userId;
+        this.contactCode = contactCode;
+        this.messageBody = messageBody;
+        this.type = type;
     }
 
-    public MessageDTO(){
+    public MessageForAlterationDTO(){
 
+    }
+
+    public boolean validateForUpdate(){
+        return (this.id == 0 || this.userId == 0 || this.contactCode == null || this.messageBody == null || this.type == null);
+    }
+
+    public boolean validateForCreation(){
+        return (this.userId == 0 || this.contactCode == null || this.messageBody == null || this.type == null);
     }
 
     public int getId() {
@@ -55,11 +59,11 @@ public class MessageDTO {
         this.contactCode = contactCode;
     }
 
-    public String getmessageBody() {
+    public String getMessageBody() {
         return messageBody;
     }
 
-    public void setmessageBody(String messageBody) {
+    public void setMessageBody(String messageBody) {
         this.messageBody = messageBody;
     }
 

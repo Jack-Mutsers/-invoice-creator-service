@@ -1,24 +1,37 @@
 package com.example.invoicecreatorservice.data_transfer_objects;
 
-public class UserForCreationDTO {
+public class UserForAlterationDTO {
+    private int id;
     private String name;
     private String address;
     private String zipcode;
     private String city;
 
-    public UserForCreationDTO(String name, String address, String zipcode, String city) {
+    public UserForAlterationDTO(int id, String name, String address, String zipcode, String city) {
+        this.id = id;
         this.name = name;
         this.address = address;
         this.zipcode = zipcode;
         this.city = city;
     }
 
-    public UserForCreationDTO(){
+    public UserForAlterationDTO(){
 
     }
 
-    public boolean validateUser(){
+    public boolean validateForUpdate() {
+        return (this.id == 0 || this.name == null || this.address == null || this.zipcode == null || this.city == null);
+    }
+
+    public boolean validateForCreation(){
         return ( this.name == null || this.address == null || this.zipcode == null || this.city == null );
+    }
+
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {

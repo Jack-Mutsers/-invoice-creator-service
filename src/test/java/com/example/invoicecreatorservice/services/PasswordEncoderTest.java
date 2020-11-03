@@ -67,17 +67,4 @@ class PasswordEncoderTest {
         }
     }
 
-    @Test
-    void emptyPasswordEncryptionException() {
-        String password = "";
-
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            PasswordEncoder.getSaltedHash(password);
-        });
-
-        String expectedMessage = "Empty passwords are not supported.";
-        String actualMessage = exception.getMessage();
-
-        assertTrue(actualMessage.contains(expectedMessage));
-    }
 }

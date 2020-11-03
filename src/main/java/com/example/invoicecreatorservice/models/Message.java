@@ -1,9 +1,6 @@
 package com.example.invoicecreatorservice.models;
 
-import com.example.invoicecreatorservice.data_transfer_objects.CustomerForCreationDTO;
-import com.example.invoicecreatorservice.data_transfer_objects.CustomerForUpdateDTO;
-import com.example.invoicecreatorservice.data_transfer_objects.MessageForCreationDTO;
-import com.example.invoicecreatorservice.data_transfer_objects.MessageForUpdateDTO;
+import com.example.invoicecreatorservice.data_transfer_objects.MessageForAlterationDTO;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,31 +17,26 @@ public class Message {
     private int id;
     private int userId;
     private String contactCode;
-    private String message;
+    private String messageBody;
     private String type;
+    private boolean done;
 
-    public Message(int id, int userId, String contactCode, String message, String type){
+    public Message(int id, int userId, String contactCode, String messageBody, String type, boolean done){
         this.id = id;
         this.userId = userId;
         this.contactCode = contactCode;
-        this.message = message;
+        this.messageBody = messageBody;
         this.type = type;
+        this.done = done;
     }
 
-    public Message(MessageForCreationDTO messageDTO) {
-        this.id = 0;
-        this.userId = messageDTO.getUserId();
-        this.contactCode = messageDTO.getContactCode();
-        this.message = messageDTO.getMessage();
-        this.type = messageDTO.getType();
-    }
-
-    public Message(MessageForUpdateDTO messageDTO) {
+    public Message(MessageForAlterationDTO messageDTO) {
         this.id = messageDTO.getId();
         this.userId = messageDTO.getUserId();
         this.contactCode = messageDTO.getContactCode();
-        this.message = messageDTO.getMessage();
+        this.messageBody = messageDTO.getMessageBody();
         this.type = messageDTO.getType();
+        this.done = messageDTO.getDone();
     }
 
     public Message(){
@@ -74,12 +66,12 @@ public class Message {
         this.contactCode = contactCode;
     }
 
-    public String getMessage() {
-        return message;
+    public String getMessageBody() {
+        return messageBody;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMessageBody(String messageBody) {
+        this.messageBody = messageBody;
     }
 
     public String getType() {
@@ -88,5 +80,13 @@ public class Message {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public boolean getDone(){
+        return done;
+    }
+
+    public void setDone(boolean done){
+        this.done = done;
     }
 }

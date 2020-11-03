@@ -1,8 +1,7 @@
 package com.example.invoicecreatorservice.services;
 
 import com.example.invoicecreatorservice.data_transfer_objects.ProductDTO;
-import com.example.invoicecreatorservice.data_transfer_objects.ProductForCreationDTO;
-import com.example.invoicecreatorservice.data_transfer_objects.ProductForUpdateDTO;
+import com.example.invoicecreatorservice.data_transfer_objects.ProductForAlterationDTO;
 import com.example.invoicecreatorservice.models.Product;
 import com.example.invoicecreatorservice.repositories.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,8 +49,8 @@ public class ProductService {
         }
     }
 
-    public ProductDTO createProduct(ProductForCreationDTO productDTO) {
-        if (productDTO.validateProduct()) {
+    public ProductDTO createProduct(ProductForAlterationDTO productDTO) {
+        if (productDTO.validateForCreation()) {
             return null;
         }
 
@@ -67,8 +66,8 @@ public class ProductService {
         }
     }
 
-    public boolean updateProduct(ProductForUpdateDTO productDTO) {
-        if (productDTO.validateProduct()) {
+    public boolean updateProduct(ProductForAlterationDTO productDTO) {
+        if (productDTO.validateForUpdate()) {
             return false;
         }
 

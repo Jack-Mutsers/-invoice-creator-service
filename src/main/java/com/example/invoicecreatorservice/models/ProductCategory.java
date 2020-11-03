@@ -1,7 +1,6 @@
 package com.example.invoicecreatorservice.models;
 
-import com.example.invoicecreatorservice.data_transfer_objects.ProductCategoryForCreationDTO;
-import com.example.invoicecreatorservice.data_transfer_objects.ProductCategoryForUpdateDTO;
+import com.example.invoicecreatorservice.data_transfer_objects.ProductCategoryForAlterationDTO;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -25,13 +24,7 @@ public class ProductCategory {
         this.btw = btw;
     }
 
-    public ProductCategory(ProductCategoryForCreationDTO productDTO){
-        this.id = 0;
-        this.name = productDTO.getName();
-        this.btw = productDTO.getBtw();
-    }
-
-    public ProductCategory(ProductCategoryForUpdateDTO productDTO){
+    public ProductCategory(ProductCategoryForAlterationDTO productDTO){
         this.id = productDTO.getId();
         this.name = productDTO.getName();
         this.btw = productDTO.getBtw();

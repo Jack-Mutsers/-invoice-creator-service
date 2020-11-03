@@ -1,9 +1,6 @@
 package com.example.invoicecreatorservice.data_transfer_objects;
 
-import com.example.invoicecreatorservice.models.User;
 import com.example.invoicecreatorservice.models.UserAccount;
-import com.example.invoicecreatorservice.repositories.UserRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class UserAccountDTO {
     private int id;

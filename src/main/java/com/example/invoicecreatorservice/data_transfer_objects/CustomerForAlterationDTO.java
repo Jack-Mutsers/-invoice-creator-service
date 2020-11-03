@@ -1,13 +1,13 @@
 package com.example.invoicecreatorservice.data_transfer_objects;
 
-public class UserForUpdateDTO {
+public class CustomerForAlterationDTO {
     private int id;
     private String name;
     private String address;
     private String zipcode;
     private String city;
 
-    public UserForUpdateDTO(int id, String name, String address, String zipcode, String city) {
+    public CustomerForAlterationDTO(int id, String name, String address, String zipcode, String city) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -15,12 +15,16 @@ public class UserForUpdateDTO {
         this.city = city;
     }
 
-    public UserForUpdateDTO(){
+    public CustomerForAlterationDTO(){
 
     }
 
-    public boolean validateUser() {
-        return (this.id == 0 || this.name == null || this.address == null || this.zipcode == null || this.city == null);
+    public boolean validateForUpdate(){
+        return ( this.id == 0 || this.name == null || this.address == null || this.zipcode == null || this.city == null );
+    }
+
+    public boolean validateForCreation(){
+        return (this.name == null || this.address == null || this.zipcode == null || this.city == null);
     }
 
     public int getId() {
@@ -61,4 +65,5 @@ public class UserForUpdateDTO {
     public void setCity(String city) {
         this.city = city;
     }
+
 }

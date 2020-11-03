@@ -1,8 +1,7 @@
 package com.example.invoicecreatorservice.services;
 
 import com.example.invoicecreatorservice.data_transfer_objects.CustomerDTO;
-import com.example.invoicecreatorservice.data_transfer_objects.CustomerForCreationDTO;
-import com.example.invoicecreatorservice.data_transfer_objects.CustomerForUpdateDTO;
+import com.example.invoicecreatorservice.data_transfer_objects.CustomerForAlterationDTO;
 import com.example.invoicecreatorservice.models.Customer;
 import com.example.invoicecreatorservice.repositories.CustomerRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +37,8 @@ public class CustomerService {
         }
     }
 
-    public CustomerDTO createCustomer(CustomerForCreationDTO customerDTO) {
-        if(customerDTO.validateCustomer()){
+    public CustomerDTO createCustomer(CustomerForAlterationDTO customerDTO) {
+        if(customerDTO.validateForCreation()){
             return null;
         }
 
@@ -52,8 +51,8 @@ public class CustomerService {
         }
     }
 
-    public boolean updateCustomer(CustomerForUpdateDTO customerDTO) {
-        if(customerDTO.validateCustomer()){
+    public boolean updateCustomer(CustomerForAlterationDTO customerDTO) {
+        if(customerDTO.validateForUpdate()){
             return false;
         }
 

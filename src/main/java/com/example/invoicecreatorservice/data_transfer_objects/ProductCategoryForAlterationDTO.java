@@ -1,24 +1,26 @@
 package com.example.invoicecreatorservice.data_transfer_objects;
 
-import com.example.invoicecreatorservice.models.ProductCategory;
-
-public class ProductCategoryForUpdateDTO {
+public class ProductCategoryForAlterationDTO {
     private int id;
     private String name;
     private int btw;
 
-    public ProductCategoryForUpdateDTO(int id, String name, int btw){
+    public ProductCategoryForAlterationDTO(int id, String name, int btw){
         this.id = id;
         this.name = name;
         this.btw = btw;
     }
 
-    public ProductCategoryForUpdateDTO(){
+    public ProductCategoryForAlterationDTO(){
 
     }
 
-    public boolean validateProductCategory(){
+    public boolean validateForUpdate(){
         return ( this.id == 0 || this.name == null || this.btw == 0 );
+    }
+
+    public boolean validateForCreation(){
+        return ( this.name == null || this.btw == 0 );
     }
 
     public int getId(){

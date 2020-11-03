@@ -1,14 +1,11 @@
 package com.example.invoicecreatorservice.services;
 
-import com.example.invoicecreatorservice.data_transfer_objects.MessageForCreationDTO;
-import com.example.invoicecreatorservice.data_transfer_objects.MessageForUpdateDTO;
+import com.example.invoicecreatorservice.data_transfer_objects.MessageDTO;
+import com.example.invoicecreatorservice.data_transfer_objects.MessageForAlterationDTO;
 import com.example.invoicecreatorservice.models.Message;
 import com.example.invoicecreatorservice.repositories.MessageRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,23 +14,66 @@ public class MessageService {
     @Autowired
     private MessageRepo messageRepo;
 
-    public Iterable<Message> getNotifications(int userId) {
-        return null;
+    public Iterable<MessageDTO> getNotifications(String contactCode) {
+        String type = "notification";
+
+        List<MessageDTO> messages = messageRepo.findByContactCodeAndTypeAndDone(contactCode, type, false);
+
+        if(messages.isEmpty()){ return null; }
+
+        return messages;
     }
 
-    public ResponseEntity<Object> getOutgoingRequests(int userId) {
-        return null;
+    public Iterable<MessageDTO> getOutgoingRequests(int userId) {
+        String type = "request";
+
+        List<MessageDTO> messages = messageRepo.findByUserIdAndTypeAndDone(userId, type, false);
+
+        if(messages.isEmpty()){ return null; }
+
+        return messages;
     }
 
-    public ResponseEntity<Object> getIncomingRequests(int userId) {
-        return null;
+    public Iterable<MessageDTO> getIncomingRequests(String contactCode) {
+        String type = "request";
+
+        List<MessageDTO> messages = messageRepo.findByContactCodeAndTypeAndDone(contactCode, type, false);
+
+        if(messages.isEmpty()){ return null; }
+
+        return messages;
     }
 
-    public ResponseEntity<Object> createMessage(MessageForCreationDTO messageDTO) {
-        return null;
+    public boolean createMessage(MessageForAlterationDTO messageDTO) {
+        if(messageDTO.validateForCreation()){
+            return false;
+        }
+
+        try{
+            Message message = new Message(messageDTO);
+            message.setDone(false);
+
+            messageRepo.save(message);
+
+            return true;
+        }catch (Exception ex){
+            return false;
+        }
     }
 
-    public Boolean UpdateRequest(MessageForUpdateDTO messageDTO){
-        return true;
+    public Boolean updateRequest(MessageForAlterationDTO messageDTO){
+        if(messageDTO.validateForUpdate()){
+            return false;
+        }
+
+        try{
+            Message message = new Message(messageDTO);
+
+            messageRepo.save(message);
+
+            return true;
+        }catch (Exception ex){
+            return false;
+        }
     }
 }
