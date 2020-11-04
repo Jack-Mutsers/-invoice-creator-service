@@ -45,6 +45,10 @@ public class UserAccountController {
 
     @PostMapping(path="")
     public @ResponseBody ResponseEntity<Object> createUserAccount(@RequestBody UserAccountForAlterationDTO user) {
+        if(user.getContactCode() == null){
+            user.generateContactCode();
+        }
+
         UserAccountDTO newObject = service.createUserAccount(user);
 
         if (newObject == null){

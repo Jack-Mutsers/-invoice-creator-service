@@ -18,18 +18,24 @@ public class UserAccount {
     private String username;
     private String password;
     private int userId;
+    private String contactCode;
+    private int companyId;
 
-    public UserAccount(int id, String username, String password, int userId) {
+    public UserAccount(int id, String username, String password, int userId, String contactCode, int companyId) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.userId = userId;
+        this.contactCode = contactCode;
+        this.companyId = companyId;
     }
 
     public UserAccount(UserAccountForAlterationDTO accountDTO) {
         this.id = accountDTO.getId();
         this.username = accountDTO.getUsername();
         this.password = accountDTO.getPassword();
+        this.contactCode = accountDTO.getContactCode();
+        this.companyId = accountDTO.getCompanyId();
 
         if(accountDTO.getUser() != null){
             this.userId = accountDTO.getUser().getId();
@@ -68,5 +74,21 @@ public class UserAccount {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public String getContactCode(){
+        return this.contactCode;
+    }
+
+    public void setContactCode(String contactCode){
+        this.contactCode = contactCode;
+    }
+
+    public int getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(int companyId) {
+        this.companyId = companyId;
     }
 }

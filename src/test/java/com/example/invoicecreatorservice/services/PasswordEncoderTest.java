@@ -1,5 +1,6 @@
 package com.example.invoicecreatorservice.services;
 
+import com.example.invoicecreatorservice.tools.PasswordEncoder;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 

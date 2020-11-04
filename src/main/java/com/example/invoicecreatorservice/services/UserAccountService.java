@@ -1,10 +1,9 @@
 package com.example.invoicecreatorservice.services;
 
 import com.example.invoicecreatorservice.data_transfer_objects.*;
-import com.example.invoicecreatorservice.models.User;
 import com.example.invoicecreatorservice.models.UserAccount;
 import com.example.invoicecreatorservice.repositories.UserAccountRepo;
-import com.example.invoicecreatorservice.repositories.UserRepo;
+import com.example.invoicecreatorservice.tools.PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +14,15 @@ public class UserAccountService {
     private UserAccountRepo userAccountRepo;
 
     @Autowired
-    private UserRepo userRepo;
+    private CompanyService companyService = new CompanyService();
 
     @Autowired
     private UserService userService = new UserService();
+
+    public UserAccountDTO getUserAccount(int id){
+        UserAccountDTO accountDTO = new UserAccountDTO(userAccountRepo.findById(id));
+        return accountDTO;
+    }
 
     public UserAccountDTO login(UserAccountForAlterationDTO account) {
         if(account.validateForUpdate()){
@@ -32,6 +36,10 @@ public class UserAccountService {
             if (validPassword) {
                 UserAccountDTO accountDTO = new UserAccountDTO(userAccount);
                 accountDTO.setUser(userService.getUser(userAccount.getUserId()));
+
+                if(accountDTO.getCompanyId() > 0){
+                    accountDTO.setCompany(companyService.getCompany(accountDTO.getCompanyId(), account.getId()));
+                }
 
                 return accountDTO;
             } else {
@@ -54,10 +62,10 @@ public class UserAccountService {
 
             if (validPassword) {
                 if (userAccount.getId() == id) {
-                    User user = userRepo.findById(userAccount.getUserId());
+                    UserDTO user = userService.getUser(userAccount.getUserId());
 
                     userAccountRepo.deleteById(id);
-                    userRepo.deleteById(user.getId());
+                    userService.deleteUser(user.getId());
 
                     return true;
                 } else {
@@ -78,8 +86,7 @@ public class UserAccountService {
         }
 
         try{
-            User user = new User(accountDTO.getUser());
-            user = userRepo.save(user);
+            UserDTO user = userService.createUser(accountDTO.getUser());
 
             UserAccount userAccount = new UserAccount(accountDTO);
             userAccount.setUserId(user.getId());
@@ -89,6 +96,10 @@ public class UserAccountService {
 
             UserAccountDTO newAccountDTO = new UserAccountDTO(userAccountRepo.save(userAccount));
             newAccountDTO.setUser(userService.getUser(userAccount.getUserId()));
+
+            if(newAccountDTO.getCompanyId() > 0){
+                newAccountDTO.setCompany(companyService.getCompany(newAccountDTO.getCompanyId(), newAccountDTO.getId()));
+            }
 
             return newAccountDTO;
 

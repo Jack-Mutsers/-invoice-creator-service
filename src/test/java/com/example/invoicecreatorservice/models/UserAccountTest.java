@@ -13,18 +13,23 @@ class UserAccountTest {
         String username = "henk";
         String password = "Password1!";
         int userId = 2;
+        String contactCode = "123456";
+        int companyId = 1;
 
         UserAccount userAccount = new UserAccount(
                 id,
                 username,
                 password,
-                userId
+                userId,
+                contactCode,
+                companyId
         );
 
         assertEquals(id, userAccount.getId());
         assertEquals(username, userAccount.getUsername());
         assertEquals(password, userAccount.getPassword());
         assertEquals(userId, userAccount.getUserId());
+        assertEquals(contactCode, userAccount.getContactCode());
     }
 
 

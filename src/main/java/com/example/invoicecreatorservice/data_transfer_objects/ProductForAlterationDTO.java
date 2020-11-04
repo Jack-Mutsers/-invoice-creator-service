@@ -32,39 +32,20 @@ public class ProductForAlterationDTO {
         return id;
     }
 
-    public void setId(int id){
-        this.id = id;
-    }
-
     public String getName(){
         return name;
-    }
-
-    public void setName(String name){
-        this.name = name;
     }
 
     public int getPrice(){
         return price;
     }
 
-    public void setPrice(double price){
-        this.price = (int)Math.round(price * 100.0);
-    }
-
     public int getCategoryId(){
         return categoryId;
-    }
-
-    public void setCategoryId(int categoryId){
-        this.categoryId = categoryId;
     }
 
     public String getProductCode(){
         return productCode;
     }
 
-    public void setProductCode(String productCode){
-        this.productCode = productCode;
-    }
 }

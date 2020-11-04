@@ -47,39 +47,20 @@ public class MessageForAlterationDTO {
         return userId;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
     public String getContactCode() {
         return contactCode;
-    }
-
-    public void setContactCode(String contactCode) {
-        this.contactCode = contactCode;
     }
 
     public String getMessageBody() {
         return messageBody;
     }
 
-    public void setMessageBody(String messageBody) {
-        this.messageBody = messageBody;
-    }
-
     public String getType() {
         return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public boolean getDone(){
         return done;
     }
 
-    public void setDone(boolean done){
-        this.done = done;
-    }
 }

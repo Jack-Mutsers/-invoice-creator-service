@@ -1,4 +1,4 @@
-package com.example.invoicecreatorservice.services;
+package com.example.invoicecreatorservice.tools;
 
 import org.apache.tomcat.util.codec.binary.Base64;
 
@@ -42,8 +42,8 @@ public class PasswordEncoder {
     }
 
     private static String hash(String password, byte[] salt) throws InvalidPropertiesFormatException, NoSuchAlgorithmException, InvalidKeySpecException {
-         if (password == null || password.length() == 0)
-         throw new InvalidPropertiesFormatException("Empty passwords are not supported.");
+        if (password == null || password.length() == 0)
+            throw new InvalidPropertiesFormatException("Empty passwords are not supported.");
 
         SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
         SecretKey key = f.generateSecret(new PBEKeySpec(
