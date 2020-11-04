@@ -19,11 +19,10 @@ public class UserAccountForAlterationDTO {
         this.companyId = companyId;
     }
 
-    public UserAccountForAlterationDTO(String username, String password, UserForAlterationDTO user, int companyId) {
+    public UserAccountForAlterationDTO(String username, String password, UserForAlterationDTO user) {
         this.username = username;
         this.password = password;
         this.user = user;
-        this.companyId = companyId;
 
         this.generateContactCode();
     }
@@ -38,6 +37,10 @@ public class UserAccountForAlterationDTO {
 
     public boolean validateForCreation(){
         return ( this.username == null || this.password == null || this.user == null );
+    }
+
+    public boolean validateLoginData(){
+        return ( this.username == null || this.password == null);
     }
 
     public int getId() {

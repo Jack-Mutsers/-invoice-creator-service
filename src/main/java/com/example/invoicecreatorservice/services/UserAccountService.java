@@ -24,7 +24,7 @@ public class UserAccountService {
     }
 
     public UserAccountDTO login(UserAccountForAlterationDTO account) {
-        if(account.validateForUpdate()){
+        if(account.validateLoginData()){
             return null;
         }
 
@@ -38,8 +38,8 @@ public class UserAccountService {
                 UserAccountDTO accountDTO = new UserAccountDTO(userAccount);
                 accountDTO.setUser(userService.getUser(userAccount.getUserId()));
 
-                if(accountDTO.getCompanyId() > 0){
-                    accountDTO.setCompany(companyService.getCompany(accountDTO.getCompanyId(), account.getId()));
+                if(accountDTO.getCompany() != null && accountDTO.getCompany().getId() > 0){
+                    accountDTO.setCompany(companyService.getCompany(accountDTO.getCompany().getId(), account.getId()));
                 }
 
                 return accountDTO;
@@ -97,10 +97,6 @@ public class UserAccountService {
 
             UserAccountDTO newAccountDTO = new UserAccountDTO(userAccountRepo.save(userAccount));
             newAccountDTO.setUser(userService.getUser(userAccount.getUserId()));
-
-            if(newAccountDTO.getCompanyId() > 0){
-                newAccountDTO.setCompany(companyService.getCompany(newAccountDTO.getCompanyId(), newAccountDTO.getId()));
-            }
 
             return newAccountDTO;
 

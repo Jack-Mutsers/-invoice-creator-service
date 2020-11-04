@@ -21,7 +21,7 @@ public class CompanyService {
 
         UserAccountDTO accountDTO = userAccountService.getUserAccount(userId);
 
-        if(accountDTO.getCompanyId() != companyId){
+        if(accountDTO.getCompany().getId() != companyId){
             return null;
         }
 
@@ -72,7 +72,7 @@ public class CompanyService {
             userAccountService = new UserAccountService();
             UserAccountDTO accountDTO = userAccountService.getUserAccount(userId);
 
-            if(accountDTO.getCompanyId() != companyDTO.getId()){
+            if(accountDTO.getCompany().getId() != companyDTO.getId()){
                 return false;
             }
 
