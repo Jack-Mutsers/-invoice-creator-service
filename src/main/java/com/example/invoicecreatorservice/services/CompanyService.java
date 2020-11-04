@@ -8,6 +8,9 @@ import com.example.invoicecreatorservice.repositories.CompanyRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class CompanyService {
     @Autowired
@@ -26,7 +29,17 @@ public class CompanyService {
         }
 
         Company company = companyRepo.findById(companyId);
-        return new CompanyDTO(company);
+        CompanyDTO companyDTO = new CompanyDTO(company);
+        companyDTO.setOwnerId(userId);
+        return companyDTO;
+    }
+
+    public Iterable<CompanyDTO> getAllCompanies(){
+        List<Company> companies = (List) companyRepo.findAll();
+
+        if(companies.isEmpty()){ return null; }
+
+        return this.convertListToDTO(companies);
     }
 
     public boolean deleteCompany(int companyId, int userId) {
@@ -56,8 +69,11 @@ public class CompanyService {
         try{
             Company company = new Company(companyDTO);
             company.setOwnerId(userId);
+
             Company newObject = companyRepo.save(company);
-            return new CompanyDTO(newObject);
+            CompanyDTO newObjectDTO = new CompanyDTO(newObject);
+            newObjectDTO.setOwnerId(userId);
+            return newObjectDTO;
         }catch (Exception ex){
             return null;
         }
@@ -82,5 +98,15 @@ public class CompanyService {
         }catch (Exception ex){
             return false;
         }
+    }
+
+    private List<CompanyDTO> convertListToDTO(List<Company> list){
+        List<CompanyDTO> companyDTOS = new ArrayList<>();
+
+        for(Company company : list){
+            companyDTOS.add(new CompanyDTO(company));
+        }
+
+        return companyDTOS;
     }
 }

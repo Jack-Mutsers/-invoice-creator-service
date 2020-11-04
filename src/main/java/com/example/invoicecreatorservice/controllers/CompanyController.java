@@ -16,6 +16,17 @@ public class CompanyController {
     @Autowired
     private final CompanyService service = new CompanyService();
 
+    @GetMapping(path="")
+    public  @ResponseBody ResponseEntity<Object> getAllCompanies() {
+        Iterable<CompanyDTO> companies = service.getAllCompanies();
+
+        if(companies == null){
+            return new ResponseEntity<>("There are currently no companies available", HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(companies, HttpStatus.OK);
+    }
+
     @GetMapping(path="/{companyId}/{userId}")
     public @ResponseBody ResponseEntity<Object> getCompany(@PathVariable int companyId, @PathVariable int userId) {
         CompanyDTO company = service.getCompany(companyId, userId);
