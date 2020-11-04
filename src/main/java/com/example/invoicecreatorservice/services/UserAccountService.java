@@ -14,7 +14,7 @@ public class UserAccountService {
     private UserAccountRepo userAccountRepo;
 
     @Autowired
-    private CompanyService companyService = new CompanyService();
+    private CompanyService companyService;
 
     @Autowired
     private UserService userService = new UserService();
@@ -30,6 +30,8 @@ public class UserAccountService {
         }
 
         try{
+            companyService = new CompanyService();
+
             UserAccount userAccount = userAccountRepo.findByUsername(account.getUsername());
             boolean validPassword = PasswordEncoder.check(account.getPassword(), userAccount.getPassword());
 

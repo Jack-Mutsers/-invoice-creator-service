@@ -14,9 +14,11 @@ public class CompanyService {
     private CompanyRepo companyRepo;
 
     @Autowired
-    private UserAccountService userAccountService = new UserAccountService();
+    private UserAccountService userAccountService;
 
     public CompanyDTO getCompany(int companyId, int userId){
+        userAccountService = new UserAccountService();
+
         UserAccountDTO accountDTO = userAccountService.getUserAccount(userId);
 
         if(accountDTO.getCompanyId() != companyId){
@@ -67,6 +69,7 @@ public class CompanyService {
         }
 
         try {
+            userAccountService = new UserAccountService();
             UserAccountDTO accountDTO = userAccountService.getUserAccount(userId);
 
             if(accountDTO.getCompanyId() != companyDTO.getId()){
