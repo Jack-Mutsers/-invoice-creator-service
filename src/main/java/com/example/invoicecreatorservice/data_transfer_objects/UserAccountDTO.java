@@ -71,4 +71,8 @@ public class UserAccountDTO {
     public void setCompany(CompanyDTO company) {
         this.company = company;
     }
+
+    public CompanyDTO getCompany() {
+        return company;
+    }
 }

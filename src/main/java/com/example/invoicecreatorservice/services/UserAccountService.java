@@ -20,8 +20,7 @@ public class UserAccountService {
     private UserService userService = new UserService();
 
     public UserAccountDTO getUserAccount(int id){
-        UserAccountDTO accountDTO = new UserAccountDTO(userAccountRepo.findById(id));
-        return accountDTO;
+        return new UserAccountDTO(userAccountRepo.findById(id));
     }
 
     public UserAccountDTO login(UserAccountForAlterationDTO account) {
