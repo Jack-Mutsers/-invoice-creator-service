@@ -1,9 +1,7 @@
 package com.example.invoicecreatorservice.data_transfer_objects;
 
 import com.example.invoicecreatorservice.tools.ContactGenerator;
-import lombok.AllArgsConstructor;
 
-@AllArgsConstructor
 public class CompanyForAlterationDTO {
     private int id;
     private String name;
@@ -27,6 +25,17 @@ public class CompanyForAlterationDTO {
 
     public CompanyForAlterationDTO(){
 
+    }
+
+    public CompanyForAlterationDTO(int id, String name, String address, String zipcode, String city, String telephoneNumber, String contactCode, int ownerId) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.zipcode = zipcode;
+        this.city = city;
+        this.telephoneNumber = telephoneNumber;
+        this.contactCode = contactCode;
+        this.ownerId = ownerId;
     }
 
     public boolean validateForUpdate(){

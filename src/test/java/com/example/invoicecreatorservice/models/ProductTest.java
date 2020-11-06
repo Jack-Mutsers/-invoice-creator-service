@@ -1,5 +1,8 @@
 package com.example.invoicecreatorservice.models;
 
+import com.example.invoicecreatorservice.data_transfer_objects.CustomerForAlterationDTO;
+import com.example.invoicecreatorservice.data_transfer_objects.ProductCategoryForAlterationDTO;
+import com.example.invoicecreatorservice.data_transfer_objects.ProductForAlterationDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -16,7 +19,7 @@ class ProductTest {
         int categoryId = 5;
         String productCode = "hlth002";
 
-        Product product = new Product(
+        Product entity = new Product(
             id,
             name,
             price,
@@ -24,12 +27,11 @@ class ProductTest {
             productCode
         );
 
-        assertEquals(id, product.getId());
-        assertEquals(name, product.getName());
-        double getPrice = product.getPrice();
-        assertEquals(price, product.getPrice());
-        assertEquals(categoryId, product.getCategoryId());
-        assertEquals(productCode, product.getProductCode());
+        assertEquals(id, entity.getId());
+        assertEquals(name, entity.getName());
+        assertEquals(price, entity.getPrice());
+        assertEquals(categoryId, entity.getCategoryId());
+        assertEquals(productCode, entity.getProductCode());
     }
 
     @Test
@@ -40,12 +42,60 @@ class ProductTest {
         int categoryId = 0;
         String productCode = null;
 
-        Product product = new Product();
+        Product entity = new Product();
 
-        assertEquals(id, product.getId());
-        assertEquals(name, product.getName());
-        assertEquals(price, product.getPrice());
-        assertEquals(categoryId, product.getCategoryId());
-        assertEquals(productCode, product.getProductCode());
+        assertEquals(id, entity.getId());
+        assertEquals(name, entity.getName());
+        assertEquals(price, entity.getPrice());
+        assertEquals(categoryId, entity.getCategoryId());
+        assertEquals(productCode, entity.getProductCode());
+    }
+
+    @Test
+    void instantiateEntityByDTO(){
+        int id = 5;
+        String name = "toothpast";
+        double price = 13.6;
+        int categoryId = 5;
+        String productCode = "hlth002";
+
+        ProductForAlterationDTO entityDTO = new ProductForAlterationDTO(
+                id,
+                name,
+                price,
+                categoryId,
+                productCode
+        );
+
+        Product entity = new Product(entityDTO);
+
+        assertEquals(id, entity.getId());
+        assertEquals(name, entity.getName());
+        assertEquals(price, entity.getPrice());
+        assertEquals(categoryId, entity.getCategoryId());
+        assertEquals(productCode, entity.getProductCode());
+    }
+
+    @Test
+    void fillEmptyEntity(){
+        int id = 5;
+        String name = "toothpast";
+        double price = 13.6;
+        int categoryId = 5;
+        String productCode = "hlth002";
+
+        Product entity = new Product();
+
+        entity.setId(id);
+        entity.setName(name);
+        entity.setPrice(price);
+        entity.setCategoryId(categoryId);
+        entity.setProductCode(productCode);
+
+        assertEquals(id, entity.getId());
+        assertEquals(name, entity.getName());
+        assertEquals(price, entity.getPrice());
+        assertEquals(categoryId, entity.getCategoryId());
+        assertEquals(productCode, entity.getProductCode());
     }
 }

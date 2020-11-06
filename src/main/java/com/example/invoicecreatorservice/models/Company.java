@@ -9,11 +9,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @SuppressWarnings("WeakerAccess")
-@AllArgsConstructor
+//@AllArgsConstructor
 @Entity
 public class Company {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
     private String address;
@@ -36,6 +36,17 @@ public class Company {
 
     public Company(){
 
+    }
+
+    public Company(int id, String name, String address, String zipcode, String city, String telephoneNumber, String contactCode, int ownerId) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.zipcode = zipcode;
+        this.city = city;
+        this.telephoneNumber = telephoneNumber;
+        this.contactCode = contactCode;
+        this.ownerId = ownerId;
     }
 
     public int getId() {

@@ -1,5 +1,8 @@
 package com.example.invoicecreatorservice.models;
 
+import com.example.invoicecreatorservice.data_transfer_objects.CustomerForAlterationDTO;
+import com.example.invoicecreatorservice.data_transfer_objects.UserAccountForAlterationDTO;
+import com.example.invoicecreatorservice.data_transfer_objects.UserForAlterationDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -16,20 +19,20 @@ class UserAccountTest {
         String contactCode = "123456";
         int companyId = 1;
 
-        UserAccount userAccount = new UserAccount(
-                id,
-                username,
-                password,
-                userId,
-                contactCode,
-                companyId
+        UserAccount entity = new UserAccount(
+            id,
+            username,
+            password,
+            userId,
+            contactCode,
+            companyId
         );
 
-        assertEquals(id, userAccount.getId());
-        assertEquals(username, userAccount.getUsername());
-        assertEquals(password, userAccount.getPassword());
-        assertEquals(userId, userAccount.getUserId());
-        assertEquals(contactCode, userAccount.getContactCode());
+        assertEquals(id, entity.getId());
+        assertEquals(username, entity.getUsername());
+        assertEquals(password, entity.getPassword());
+        assertEquals(userId, entity.getUserId());
+        assertEquals(contactCode, entity.getContactCode());
     }
 
 
@@ -40,11 +43,70 @@ class UserAccountTest {
         String password = null;
         int userId = 0;
 
-        UserAccount userAccount = new UserAccount();
+        UserAccount entity = new UserAccount();
 
-        assertEquals(id, userAccount.getId());
-        assertEquals(username, userAccount.getUsername());
-        assertEquals(password, userAccount.getPassword());
-        assertEquals(userId, userAccount.getUserId());
+        assertEquals(id, entity.getId());
+        assertEquals(username, entity.getUsername());
+        assertEquals(password, entity.getPassword());
+        assertEquals(userId, entity.getUserId());
+    }
+
+
+    @Test
+    void instantiateEntityByDTO(){
+        int id = 2;
+        String username = "henk";
+        String password = "Password1!";
+        int userId = 2;
+        String contactCode = "123456";
+        int companyId = 1;
+
+        UserForAlterationDTO userDto = new UserForAlterationDTO(
+            userId,
+            "henk",
+            "testlane 64",
+            "1234 AB",
+            "Testvile"
+        );
+
+        UserAccountForAlterationDTO entityDTO = new UserAccountForAlterationDTO(
+            id,
+            username,
+            password,
+            userDto,
+            contactCode,
+            companyId
+        );
+
+        UserAccount entity = new UserAccount(entityDTO);
+
+        assertEquals(id, entity.getId());
+        assertEquals(username, entity.getUsername());
+        assertEquals(password, entity.getPassword());
+        assertEquals(userId, entity.getUserId());
+    }
+
+    @Test
+    void fillEmptyEntity(){
+        int id = 2;
+        String username = "henk";
+        String password = "Password1!";
+        int userId = 2;
+        String contactCode = "123456";
+        int companyId = 1;
+
+        UserAccount entity = new UserAccount();
+
+        entity.setId(id);
+        entity.setUsername(username);
+        entity.setPassword(password);
+        entity.setUserId(userId);
+        entity.setContactCode(contactCode);
+        entity.setCompanyId(companyId);
+
+        assertEquals(id, entity.getId());
+        assertEquals(username, entity.getUsername());
+        assertEquals(password, entity.getPassword());
+        assertEquals(userId, entity.getUserId());
     }
 }

@@ -87,16 +87,23 @@ public class UserAccountService {
         }
 
         try{
+            UserAccount userAccount = userAccountRepo.findByUsername(accountDTO.getUsername());
+
+            // check if user exists, if so return null
+            if(userAccount != null && userAccount.getId() > 0){
+                return null;
+            }
+
             UserDTO user = userService.createUser(accountDTO.getUser());
 
-            UserAccount userAccount = new UserAccount(accountDTO);
-            userAccount.setUserId(user.getId());
+            UserAccount newUserAccount = new UserAccount(accountDTO);
+            newUserAccount.setUserId(user.getId());
 
-            String saltedPassword = PasswordEncoder.getSaltedHash(userAccount.getPassword());
-            userAccount.setPassword(saltedPassword);
+            String saltedPassword = PasswordEncoder.getSaltedHash(newUserAccount.getPassword());
+            newUserAccount.setPassword(saltedPassword);
 
-            UserAccountDTO newAccountDTO = new UserAccountDTO(userAccountRepo.save(userAccount));
-            newAccountDTO.setUser(userService.getUser(userAccount.getUserId()));
+            UserAccountDTO newAccountDTO = new UserAccountDTO(userAccountRepo.save(newUserAccount));
+            newAccountDTO.setUser(userService.getUser(newUserAccount.getUserId()));
 
             return newAccountDTO;
 

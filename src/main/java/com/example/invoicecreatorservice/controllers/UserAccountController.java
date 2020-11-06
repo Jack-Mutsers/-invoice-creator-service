@@ -52,7 +52,7 @@ public class UserAccountController {
         UserAccountDTO newObject = service.createUserAccount(user);
 
         if (newObject == null){
-            return new ResponseEntity<>("The account can not be created", HttpStatus.CONFLICT);
+            return new ResponseEntity<>("Username already exists", HttpStatus.CONFLICT);
         }
 
         return new ResponseEntity<>(newObject, HttpStatus.CREATED);

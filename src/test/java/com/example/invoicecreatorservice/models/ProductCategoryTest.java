@@ -1,5 +1,7 @@
 package com.example.invoicecreatorservice.models;
 
+import com.example.invoicecreatorservice.data_transfer_objects.CustomerForAlterationDTO;
+import com.example.invoicecreatorservice.data_transfer_objects.ProductCategoryForAlterationDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -13,17 +15,16 @@ class ProductCategoryTest {
         String name = "healthcare";
         int btw = 23;
 
-        ProductCategory productCategory = new ProductCategory(
+        ProductCategory entity = new ProductCategory(
             id,
             name,
             btw
         );
 
-        assertEquals(id, productCategory.getId());
-        assertEquals(name, productCategory.getName());
-        assertEquals(btw, productCategory.getBtw());
+        assertEquals(id, entity.getId());
+        assertEquals(name, entity.getName());
+        assertEquals(btw, entity.getBtw());
     }
-
 
     @Test
     void instantiateEmptyEntity(){
@@ -31,10 +32,46 @@ class ProductCategoryTest {
         String name = null;
         int btw = 0;
 
-        ProductCategory productCategory = new ProductCategory();
+        ProductCategory entity = new ProductCategory();
 
-        assertEquals(id, productCategory.getId());
-        assertEquals(name, productCategory.getName());
-        assertEquals(btw, productCategory.getBtw());
+        assertEquals(id, entity.getId());
+        assertEquals(name, entity.getName());
+        assertEquals(btw, entity.getBtw());
+    }
+
+    @Test
+    void instantiateEntityByDTO(){
+        int id = 5;
+        String name = "healthcare";
+        int btw = 23;
+
+        ProductCategoryForAlterationDTO entityDTO = new ProductCategoryForAlterationDTO(
+            id,
+            name,
+            btw
+        );
+
+        ProductCategory entity = new ProductCategory(entityDTO);
+
+        assertEquals(id, entity.getId());
+        assertEquals(name, entity.getName());
+        assertEquals(btw, entity.getBtw());
+    }
+
+    @Test
+    void fillEmptyEntity(){
+        int id = 5;
+        String name = "healthcare";
+        int btw = 23;
+
+        ProductCategory entity = new ProductCategory();
+
+        entity.setId(id);
+        entity.setName(name);
+        entity.setBtw(btw);
+
+        assertEquals(id, entity.getId());
+        assertEquals(name, entity.getName());
+        assertEquals(btw, entity.getBtw());
     }
 }

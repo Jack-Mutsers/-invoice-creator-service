@@ -40,6 +40,10 @@ public class ProductForAlterationDTO {
         return price;
     }
 
+    public void setPrice(double price) {
+        this.price = (int)Math.round(price * 100.0);
+    }
+
     public int getCategoryId(){
         return categoryId;
     }
