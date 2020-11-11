@@ -20,11 +20,12 @@ public class UserForAlterationDTO {
     }
 
     public boolean validateForUpdate() {
-        return (this.id == 0 || this.name == null || this.address == null || this.zipcode == null || this.city == null);
+        return (this.id == 0 || this.validateForCreation());
     }
 
     public boolean validateForCreation(){
-        return ( this.name == null || this.address == null || this.zipcode == null || this.city == null );
+        return ( this.name == null || this.address == null || this.zipcode == null || this.city == null ||
+                this.name.isBlank() || this.address.isBlank() || this.zipcode.isBlank() || this.city.isBlank());
     }
 
     public int getId() {

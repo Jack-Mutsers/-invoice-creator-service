@@ -39,11 +39,12 @@ public class CompanyForAlterationDTO {
     }
 
     public boolean validateForUpdate(){
-        return ( this.id == 0 || this.name == null || this.address == null || this.zipcode == null || this.city == null || this.telephoneNumber == null || this.contactCode == null );
+        return ( this.id == 0 || this.validateForCreation() || this.contactCode == null || this.contactCode.isBlank());
     }
 
     public boolean validateForCreation(){
-        return (this.name == null || this.address == null || this.zipcode == null || this.city == null || this.telephoneNumber == null);
+        return (this.name == null || this.address == null || this.zipcode == null || this.city == null || this.telephoneNumber == null ||
+                this.name.isBlank() || this.address.isBlank() || this.zipcode.isBlank() || this.city.isBlank() || this.telephoneNumber.isBlank());
     }
 
     public int getId() {

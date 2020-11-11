@@ -55,11 +55,11 @@ public class MessageDTO {
         this.contactCode = contactCode;
     }
 
-    public String getmessageBody() {
+    public String getMessageBody() {
         return messageBody;
     }
 
-    public void setmessageBody(String messageBody) {
+    public void setMessageBody(String messageBody) {
         this.messageBody = messageBody;
     }
 

@@ -32,7 +32,7 @@ public class ProductDTO {
     }
 
     public ProductDTO(){
-
+        this.price = 0.0;
     }
 
     public List<ProductDTO> getProductList(List<Product> products){

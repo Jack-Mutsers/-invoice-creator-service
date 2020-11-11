@@ -19,28 +19,21 @@ public class UserAccountForAlterationDTO {
         this.companyId = companyId;
     }
 
-    public UserAccountForAlterationDTO(String username, String password, UserForAlterationDTO user) {
-        this.username = username;
-        this.password = password;
-        this.user = user;
-
-        this.generateContactCode();
-    }
-
     public UserAccountForAlterationDTO(){
 
     }
 
     public boolean validateForUpdate(){
-        return ( this.id == 0 ||  this.username == null ||  this.password == null ||  this.user == null || this.contactCode == null );
+        return ( this.id == 0 ||  this.validateForCreation() || this.contactCode.isEmpty() );
     }
 
     public boolean validateForCreation(){
-        return ( this.username == null || this.password == null || this.user == null );
+        return ( this.validateLoginData() || this.user == null );
     }
 
     public boolean validateLoginData(){
-        return ( this.username == null || this.password == null);
+        return ( this.username == null || this.password == null ||
+                this.username.isBlank() || this.password.isBlank());
     }
 
     public int getId() {

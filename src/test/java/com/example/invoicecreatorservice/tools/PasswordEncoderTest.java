@@ -1,4 +1,4 @@
-package com.example.invoicecreatorservice.services;
+package com.example.invoicecreatorservice.tools;
 
 import com.example.invoicecreatorservice.tools.PasswordEncoder;
 import org.junit.jupiter.api.Test;

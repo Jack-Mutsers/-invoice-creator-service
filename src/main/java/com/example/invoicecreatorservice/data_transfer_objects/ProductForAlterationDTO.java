@@ -17,15 +17,14 @@ public class ProductForAlterationDTO {
     }
 
     public ProductForAlterationDTO(){
-
     }
 
     public boolean validateForUpdate(){
-        return ( this.id == 0 || this.name == null || this.price == 0 || this.categoryId == 0 || this.productCode == null );
+        return ( this.id == 0 || this.validateForCreation() );
     }
 
     public boolean validateForCreation(){
-        return ( this.name == null || this.price == 0 || this.categoryId == 0 || this.productCode == null );
+        return ( this.name == null || this.name.isBlank() || this.price == 0 || this.categoryId == 0 || this.productCode == null || this.productCode.isBlank() );
     }
 
     public int getId(){
