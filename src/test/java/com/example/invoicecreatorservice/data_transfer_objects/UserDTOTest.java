@@ -52,12 +52,6 @@ class UserDTOTest {
         assertEquals(city, DTOentity.getCity());
     }
 
-
-    @Test
-    void instantiateEntityByDTO(){
-
-    }
-
     @Test
     void fillEmptyEntity(){
         int id = 2;

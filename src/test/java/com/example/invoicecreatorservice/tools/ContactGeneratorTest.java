@@ -3,10 +3,10 @@ package com.example.invoicecreatorservice.tools;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-public class ContactGeneratorTest {
+class ContactGeneratorTest {
 
     @Test
     void codeGenerationTest() {
@@ -14,6 +14,6 @@ public class ContactGeneratorTest {
 
         String newCode = generator.generateCode();
 
-        assertTrue(newCode.length() == 10);
+        assertEquals(10, newCode.length());
     }
 }
