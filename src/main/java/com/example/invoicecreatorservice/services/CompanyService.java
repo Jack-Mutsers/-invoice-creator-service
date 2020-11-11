@@ -16,21 +16,10 @@ public class CompanyService {
     @Autowired
     private CompanyRepo companyRepo;
 
-    @Autowired
-    private UserAccountService userAccountService;
-
-    public CompanyDTO getCompany(int companyId, int userId){
-        userAccountService = new UserAccountService();
-
-        UserAccountDTO accountDTO = userAccountService.getUserAccount(userId);
-
-        if(accountDTO.getCompany().getId() != companyId){
-            return null;
-        }
-
+    public CompanyDTO getCompany(int companyId){
         Company company = companyRepo.findById(companyId);
         CompanyDTO companyDTO = new CompanyDTO(company);
-        companyDTO.setOwnerId(userId);
+        companyDTO.setOwnerId(company.getOwnerId());
         return companyDTO;
     }
 
@@ -79,19 +68,12 @@ public class CompanyService {
         }
     }
 
-    public boolean updateCompany(CompanyForAlterationDTO companyDTO, int userId) {
+    public boolean updateCompany(CompanyForAlterationDTO companyDTO) {
         if(companyDTO.validateForUpdate()){
             return false;
         }
 
         try {
-            userAccountService = new UserAccountService();
-            UserAccountDTO accountDTO = userAccountService.getUserAccount(userId);
-
-            if(accountDTO.getCompany().getId() != companyDTO.getId()){
-                return false;
-            }
-
             Company company = new Company(companyDTO);
             companyRepo.save(company);
             return true;

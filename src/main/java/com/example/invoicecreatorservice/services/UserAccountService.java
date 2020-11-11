@@ -39,7 +39,7 @@ public class UserAccountService {
                 accountDTO.setUser(userService.getUser(userAccount.getUserId()));
 
                 if(accountDTO.getCompany() != null && accountDTO.getCompany().getId() > 0){
-                    accountDTO.setCompany(companyService.getCompany(accountDTO.getCompany().getId(), account.getId()));
+                    accountDTO.setCompany(companyService.getCompany(accountDTO.getCompany().getId()));
                 }
 
                 return accountDTO;
