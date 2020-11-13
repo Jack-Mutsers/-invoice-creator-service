@@ -27,6 +27,10 @@ public class ProductForAlterationDTO {
         return ( this.name == null || this.name.isBlank() || this.price == 0 || this.categoryId == 0 || this.productCode == null || this.productCode.isBlank() );
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public int getId(){
         return id;
     }

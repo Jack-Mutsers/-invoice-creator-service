@@ -50,10 +50,14 @@ public class MessageController {
 
     @PostMapping(path="")
     public @ResponseBody ResponseEntity<Object> createMessage(@RequestBody MessageForAlterationDTO messageDTO) {
+        if(messageDTO.validateForCreation()){
+            return new ResponseEntity<>("Please provide valid data for the creation", HttpStatus.CONFLICT);
+        }
+
         boolean success = service.createMessage(messageDTO);
 
         if(!success){
-            return new ResponseEntity<>("Message could not be send", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Something went wrong with the creation of the message.", HttpStatus.CONFLICT);
         }
 
         return new ResponseEntity<>("Message has been send", HttpStatus.OK);
@@ -61,10 +65,14 @@ public class MessageController {
 
     @PutMapping(path="")
     public @ResponseBody ResponseEntity<Object> updateRequest(@RequestBody MessageForAlterationDTO messageDTO){
+        if(messageDTO.validateForUpdate()){
+            return new ResponseEntity<>("Please provide valid data for the update", HttpStatus.CONFLICT);
+        }
+
         boolean success = service.updateRequest(messageDTO);
 
         if(!success){
-            return new ResponseEntity<>("Request could not be updated", HttpStatus.NOT_FOUND);
+            return  new ResponseEntity<>("Something went wrong with the update of the message.", HttpStatus.CONFLICT);
         }
 
         return new ResponseEntity<>("Request has been updated", HttpStatus.OK);

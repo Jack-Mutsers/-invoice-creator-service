@@ -28,6 +28,10 @@ public class CustomerForAlterationDTO {
                 this.name.isBlank() || this.address.isBlank() || this.zipcode.isBlank() || this.city.isBlank());
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public int getId() {
         return id;
     }

@@ -48,9 +48,6 @@ public class CompanyService {
     }
 
     public CompanyDTO createCompany(CompanyForAlterationDTO companyDTO, int userId) {
-        if(companyDTO.validateForCreation()){
-            return null;
-        }
         if(companyDTO.getContactCode() == null){
             companyDTO.generateContactCode();
         }
@@ -58,6 +55,9 @@ public class CompanyService {
         try{
             Company company = new Company(companyDTO);
             company.setOwnerId(userId);
+
+            // set id to 0 to prevent update of existing record on create
+            company.setId(0);
 
             Company newObject = companyRepo.save(company);
             CompanyDTO newObjectDTO = new CompanyDTO(newObject);
@@ -69,10 +69,6 @@ public class CompanyService {
     }
 
     public boolean updateCompany(CompanyForAlterationDTO companyDTO) {
-        if(companyDTO.validateForUpdate()){
-            return false;
-        }
-
         try {
             Company company = new Company(companyDTO);
             companyRepo.save(company);

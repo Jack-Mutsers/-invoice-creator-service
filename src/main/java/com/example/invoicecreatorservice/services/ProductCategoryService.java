@@ -40,11 +40,12 @@ public class ProductCategoryService {
 
     public ProductCategoryDTO createCategory(ProductCategoryForAlterationDTO categoryDTO) {
         try{
-            if (categoryDTO.validateForCreation()) {
-                return null;
-            }
 
             ProductCategory category = new ProductCategory(categoryDTO);
+
+            // set id to 0 to prevent update of existing record on create
+            category.setId(0);
+
             ProductCategory newObject = productCategoryRepo.save(category);
             return new ProductCategoryDTO(newObject);
         } catch (Exception ex){
@@ -54,9 +55,6 @@ public class ProductCategoryService {
 
     public boolean updateCategory(ProductCategoryForAlterationDTO categoryDTO) {
         try{
-            if (categoryDTO.validateForUpdate()) {
-                return false;
-            }
 
             ProductCategory category = new ProductCategory(categoryDTO);
             productCategoryRepo.save(category);

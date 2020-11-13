@@ -23,6 +23,10 @@ public class ProductCategoryForAlterationDTO {
         return ( this.name == null || this.name.isBlank() || this.btw == 0 );
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public int getId(){
         return id;
     }

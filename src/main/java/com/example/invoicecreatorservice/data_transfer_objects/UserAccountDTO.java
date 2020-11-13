@@ -5,13 +5,15 @@ import com.example.invoicecreatorservice.models.UserAccount;
 public class UserAccountDTO {
     private int id;
     private String username;
+    private int userId;
     private UserDTO user;
     private String contactCode;
     private CompanyDTO company;
 
-    public UserAccountDTO(int id, String username, UserDTO userDTO, String contactCode) {
+    public UserAccountDTO(int id, String username, int userId, UserDTO userDTO, String contactCode) {
         this.id = id;
         this.username = username;
+        this.userId = userId;
         this.user = userDTO;
         this.contactCode = contactCode;
     }
@@ -19,6 +21,7 @@ public class UserAccountDTO {
     public UserAccountDTO(UserAccount userAccount) {
         this.id = userAccount.getId();
         this.username = userAccount.getUsername();
+        this.userId = userAccount.getUserId();
         this.contactCode = userAccount.getContactCode();
     }
 
@@ -39,6 +42,14 @@ public class UserAccountDTO {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public UserDTO getUser() {

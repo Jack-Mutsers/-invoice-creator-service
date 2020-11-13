@@ -47,6 +47,10 @@ public class CompanyForAlterationDTO {
                 this.name.isBlank() || this.address.isBlank() || this.zipcode.isBlank() || this.city.isBlank() || this.telephoneNumber.isBlank());
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public int getId() {
         return id;
     }

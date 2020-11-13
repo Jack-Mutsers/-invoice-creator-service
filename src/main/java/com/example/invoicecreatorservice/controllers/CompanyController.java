@@ -61,28 +61,36 @@ public class CompanyController {
     }
 
     @PostMapping(path="/{userId}")
-    public @ResponseBody ResponseEntity<Object> createCompany(@PathVariable int userId, @RequestBody CompanyForAlterationDTO company) {
-        CompanyDTO newObject = service.createCompany(company, userId);
+    public @ResponseBody ResponseEntity<Object> createCompany(@PathVariable int userId, @RequestBody CompanyForAlterationDTO companyDTO) {
+        if(companyDTO.validateForCreation()){
+            return new ResponseEntity<>("Please provide valid data for the creation", HttpStatus.CONFLICT);
+        }
+
+        CompanyDTO newObject = service.createCompany(companyDTO, userId);
 
         if (newObject == null){
-            return new ResponseEntity<>("The Company can not be added because it is not complete", HttpStatus.CONFLICT);
+            return new ResponseEntity<>("Something went wrong with the creation of the company.", HttpStatus.CONFLICT);
         }
 
         return new ResponseEntity<>(newObject, HttpStatus.CREATED);
     }
 
     @PutMapping(path ="/{userId}")
-    public @ResponseBody ResponseEntity<String> updateCompany(@PathVariable int userId, @RequestBody CompanyForAlterationDTO company) {
+    public @ResponseBody ResponseEntity<String> updateCompany(@PathVariable int userId, @RequestBody CompanyForAlterationDTO companyDTO) {
+        if(companyDTO.validateForUpdate()){
+            return new ResponseEntity<>("Please provide valid data for the update", HttpStatus.CONFLICT);
+        }
+
         UserAccountDTO accountDTO = userAccountService.getUserAccount(userId);
 
-        if(accountDTO.getCompany().getId() != company.getId()){
+        if(accountDTO.getCompany().getId() != companyDTO.getId()){
             return new ResponseEntity<>("Please provide a valid User.", HttpStatus.FORBIDDEN);
         }
 
-        Boolean success = service.updateCompany(company);
+        Boolean success = service.updateCompany(companyDTO);
 
         if (Boolean.FALSE.equals(success)){
-            return new ResponseEntity<>("Please provide a valid Company.", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Something went wrong with the update of the company.", HttpStatus.CONFLICT);
         }
 
         return new ResponseEntity<>("Company has successfully been updated.", HttpStatus.OK);

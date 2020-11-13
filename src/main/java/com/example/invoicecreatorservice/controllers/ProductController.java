@@ -51,22 +51,30 @@ public class ProductController {
     }
 
     @PostMapping(path="")
-    public @ResponseBody ResponseEntity<Object> createProduct(@RequestBody ProductForAlterationDTO product) {
-        ProductDTO newObject = service.createProduct(product);
+    public @ResponseBody ResponseEntity<Object> createProduct(@RequestBody ProductForAlterationDTO productDTO) {
+        if (productDTO.validateForCreation()) {
+            return new ResponseEntity<>("The product can not be added", HttpStatus.CONFLICT);
+        }
+
+        ProductDTO newObject = service.createProduct(productDTO);
 
         if (newObject == null){
-            return new ResponseEntity<>("The product can not be added", HttpStatus.CONFLICT);
+            return new ResponseEntity<>("something went wrong while trying to create the product", HttpStatus.CONFLICT);
         }
 
         return new ResponseEntity<>(newObject, HttpStatus.CREATED);
     }
 
     @PutMapping(path ="")
-    public @ResponseBody ResponseEntity<String> updateProduct(@RequestBody ProductForAlterationDTO product) {
-        boolean success = service.updateProduct(product);
+    public @ResponseBody ResponseEntity<String> updateProduct(@RequestBody ProductForAlterationDTO productDTO) {
+        if (productDTO.validateForUpdate()) {
+            return new ResponseEntity<>("Please provide a valid product.", HttpStatus.NOT_FOUND);
+        }
+
+        boolean success = service.updateProduct(productDTO);
 
         if (!success){
-            return new ResponseEntity<>("Please provide a valid product.", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Something went wrong while trying to update the product.", HttpStatus.NOT_FOUND);
         }
 
         return new ResponseEntity<>("Product has successfully been updated.", HttpStatus.OK);

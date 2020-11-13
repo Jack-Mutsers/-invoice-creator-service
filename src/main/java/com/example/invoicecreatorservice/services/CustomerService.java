@@ -38,10 +38,6 @@ public class CustomerService {
     }
 
     public CustomerDTO createCustomer(CustomerForAlterationDTO customerDTO) {
-        if(customerDTO.validateForCreation()){
-            return null;
-        }
-
         try{
             Customer customer = new Customer(customerDTO);
             Customer newObject = customerRepo.save(customer);
@@ -52,12 +48,12 @@ public class CustomerService {
     }
 
     public boolean updateCustomer(CustomerForAlterationDTO customerDTO) {
-        if(customerDTO.validateForUpdate()){
-            return false;
-        }
-
         try {
             Customer customer = new Customer(customerDTO);
+
+            // set id to 0 to prevent update of existing record on create
+            customer.setId(0);
+
             customerRepo.save(customer);
             return true;
         }catch (Exception ex){

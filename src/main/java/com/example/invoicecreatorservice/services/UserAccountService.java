@@ -16,17 +16,12 @@ public class UserAccountService {
     @Autowired
     private CompanyService companyService;
 
-    @Autowired
-    private UserService userService = new UserService();
 
     public UserAccountDTO getUserAccount(int id){
         return new UserAccountDTO(userAccountRepo.findById(id));
     }
 
     public UserAccountDTO login(UserAccountForAlterationDTO account) {
-        if(account.validateLoginData()){
-            return null;
-        }
 
         try{
             companyService = new CompanyService();
@@ -36,7 +31,6 @@ public class UserAccountService {
 
             if (validPassword) {
                 UserAccountDTO accountDTO = new UserAccountDTO(userAccount);
-                accountDTO.setUser(userService.getUser(userAccount.getUserId()));
 
                 if(accountDTO.getCompany() != null && accountDTO.getCompany().getId() > 0){
                     accountDTO.setCompany(companyService.getCompany(accountDTO.getCompany().getId()));
@@ -63,10 +57,7 @@ public class UserAccountService {
 
             if (validPassword) {
                 if (userAccount.getId() == id) {
-                    UserDTO user = userService.getUser(userAccount.getUserId());
-
                     userAccountRepo.deleteById(id);
-                    userService.deleteUser(user.getId());
 
                     return true;
                 } else {
@@ -81,29 +72,18 @@ public class UserAccountService {
         }
     }
 
-    public UserAccountDTO createUserAccount(UserAccountForAlterationDTO accountDTO) {
-        if(accountDTO.validateForCreation()){
-            return null;
-        }
+    public UserAccountDTO createUserAccount(UserAccountForAlterationDTO accountDTO, int userId) {
 
         try{
-            UserAccount userAccount = userAccountRepo.findByUsername(accountDTO.getUsername());
-
-            // check if user exists, if so return null
-            if(userAccount != null && userAccount.getId() > 0){
-                return null;
-            }
-
-            UserDTO user = userService.createUser(accountDTO.getUser());
-
             UserAccount newUserAccount = new UserAccount(accountDTO);
-            newUserAccount.setUserId(user.getId());
+            newUserAccount.setUserId(userId);
 
             String saltedPassword = PasswordEncoder.getSaltedHash(newUserAccount.getPassword());
             newUserAccount.setPassword(saltedPassword);
 
+            // set id to 0 to prevent update of existing record on create
+            newUserAccount.setId(0);
             UserAccountDTO newAccountDTO = new UserAccountDTO(userAccountRepo.save(newUserAccount));
-            newAccountDTO.setUser(userService.getUser(newUserAccount.getUserId()));
 
             return newAccountDTO;
 
@@ -113,10 +93,6 @@ public class UserAccountService {
     }
 
     public boolean updateUserAccount(UserAccountForAlterationDTO accountDTO) {
-        if(accountDTO.validateForUpdate()){
-            return false;
-        }
-
         try{
             UserAccount account = new UserAccount(accountDTO);
             userAccountRepo.save(account);
@@ -124,5 +100,10 @@ public class UserAccountService {
         }catch (Exception ex){
             return false;
         }
+    }
+
+    public boolean validateUsername(String username){
+        UserAccount userAccount = userAccountRepo.findByUsername(username);
+        return userAccount == null;
     }
 }

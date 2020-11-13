@@ -39,11 +39,11 @@ public class UserService {
 
     public UserDTO createUser(UserForAlterationDTO userDTO) {
         try{
-            if (userDTO.validateForCreation()) {
-                return null;
-            }
-
             User user = new User(userDTO);
+
+            // set id to 0 to prevent update of existing record on create
+            user.setId(0);
+
             User newObject = userRepo.save(user);
             return new UserDTO(newObject);
         }catch (Exception ex){
@@ -53,10 +53,6 @@ public class UserService {
 
     public boolean updateUser(UserForAlterationDTO userDTO) {
         try{
-            if (userDTO.validateForUpdate()) {
-                return false;
-            }
-
             User user = new User(userDTO);
             userRepo.save(user);
             return true;

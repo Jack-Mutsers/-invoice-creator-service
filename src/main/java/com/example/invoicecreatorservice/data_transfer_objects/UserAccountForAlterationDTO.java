@@ -36,6 +36,10 @@ public class UserAccountForAlterationDTO {
                 this.username.isBlank() || this.password.isBlank());
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public int getId() {
         return id;
     }
