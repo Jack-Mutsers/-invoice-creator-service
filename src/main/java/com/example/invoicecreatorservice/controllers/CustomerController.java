@@ -51,22 +51,30 @@ public class CustomerController {
     }
 
     @PostMapping(path="")
-    public @ResponseBody ResponseEntity<Object> createCustomer(@RequestBody CustomerForAlterationDTO customer) {
-        CustomerDTO newObject = service.createCustomer(customer);
+    public @ResponseBody ResponseEntity<Object> createCustomer(@RequestBody CustomerForAlterationDTO customerDTO) {
+        if(customerDTO.validateForCreation()){
+            return new ResponseEntity<>("Please provide valid data for the creation", HttpStatus.CONFLICT);
+        }
+
+        CustomerDTO newObject = service.createCustomer(customerDTO);
 
         if (newObject == null){
-            return new ResponseEntity<>("The user can not be added because it is not complete", HttpStatus.CONFLICT);
+            return new ResponseEntity<>("Something went wrong with the creation of the customer.", HttpStatus.CONFLICT);
         }
 
         return new ResponseEntity<>(newObject, HttpStatus.CREATED);
     }
 
     @PutMapping(path ="")
-    public @ResponseBody ResponseEntity<String> updateCustomer(@RequestBody CustomerForAlterationDTO customer) {
-        Boolean success = service.updateCustomer(customer);
+    public @ResponseBody ResponseEntity<String> updateCustomer(@RequestBody CustomerForAlterationDTO customerDTO) {
+        if(customerDTO.validateForUpdate()){
+            return new ResponseEntity<>("Please provide valid data for the update", HttpStatus.CONFLICT);
+        }
+
+        Boolean success = service.updateCustomer(customerDTO);
 
         if (Boolean.FALSE.equals(success)){
-            return new ResponseEntity<>("Please provide a valid Customer.", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Something went wrong with the update of the customer.", HttpStatus.CONFLICT);
         }
 
         return new ResponseEntity<>("Customer has successfully been updated.", HttpStatus.OK);

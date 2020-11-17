@@ -16,21 +16,10 @@ public class CompanyService {
     @Autowired
     private CompanyRepo companyRepo;
 
-    @Autowired
-    private UserAccountService userAccountService;
-
-    public CompanyDTO getCompany(int companyId, int userId){
-        userAccountService = new UserAccountService();
-
-        UserAccountDTO accountDTO = userAccountService.getUserAccount(userId);
-
-        if(accountDTO.getCompany().getId() != companyId){
-            return null;
-        }
-
+    public CompanyDTO getCompany(int companyId){
         Company company = companyRepo.findById(companyId);
         CompanyDTO companyDTO = new CompanyDTO(company);
-        companyDTO.setOwnerId(userId);
+        companyDTO.setOwnerId(company.getOwnerId());
         return companyDTO;
     }
 
@@ -59,9 +48,6 @@ public class CompanyService {
     }
 
     public CompanyDTO createCompany(CompanyForAlterationDTO companyDTO, int userId) {
-        if(companyDTO.validateForCreation()){
-            return null;
-        }
         if(companyDTO.getContactCode() == null){
             companyDTO.generateContactCode();
         }
@@ -69,6 +55,9 @@ public class CompanyService {
         try{
             Company company = new Company(companyDTO);
             company.setOwnerId(userId);
+
+            // set id to 0 to prevent update of existing record on create
+            company.setId(0);
 
             Company newObject = companyRepo.save(company);
             CompanyDTO newObjectDTO = new CompanyDTO(newObject);
@@ -79,19 +68,8 @@ public class CompanyService {
         }
     }
 
-    public boolean updateCompany(CompanyForAlterationDTO companyDTO, int userId) {
-        if(companyDTO.validateForUpdate()){
-            return false;
-        }
-
+    public boolean updateCompany(CompanyForAlterationDTO companyDTO) {
         try {
-            userAccountService = new UserAccountService();
-            UserAccountDTO accountDTO = userAccountService.getUserAccount(userId);
-
-            if(accountDTO.getCompany().getId() != companyDTO.getId()){
-                return false;
-            }
-
             Company company = new Company(companyDTO);
             companyRepo.save(company);
             return true;

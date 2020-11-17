@@ -16,11 +16,15 @@ public class ProductCategoryForAlterationDTO {
     }
 
     public boolean validateForUpdate(){
-        return ( this.id == 0 || this.name == null || this.btw == 0 );
+        return ( this.id == 0 || this.validateForCreation() );
     }
 
     public boolean validateForCreation(){
-        return ( this.name == null || this.btw == 0 );
+        return ( this.name == null || this.name.isBlank() || this.btw == 0 );
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getId(){

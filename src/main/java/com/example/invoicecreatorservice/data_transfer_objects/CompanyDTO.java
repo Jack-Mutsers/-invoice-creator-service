@@ -22,6 +22,7 @@ public class CompanyDTO {
         this.city = company.getCity();
         this.telephoneNumber = company.getTelephoneNumber();
         this.contactCode = company.getContactCode();
+        this.ownerId = company.getOwnerId();
     }
 
     public CompanyDTO(){

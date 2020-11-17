@@ -50,12 +50,13 @@ public class ProductService {
     }
 
     public ProductDTO createProduct(ProductForAlterationDTO productDTO) {
-        if (productDTO.validateForCreation()) {
-            return null;
-        }
 
         try{
             Product product = new Product(productDTO);
+
+            // set id to 0 to prevent update of existing record on create
+            product.setId(0);
+
             Product newObject = productRepo.save(product);
             ProductDTO newProductDTO = new ProductDTO(newObject);
 
@@ -67,9 +68,6 @@ public class ProductService {
     }
 
     public boolean updateProduct(ProductForAlterationDTO productDTO) {
-        if (productDTO.validateForUpdate()) {
-            return false;
-        }
 
         try {
             Product product = new Product(productDTO);

@@ -2,7 +2,9 @@ package com.example.invoicecreatorservice.controllers;
 
 import com.example.invoicecreatorservice.data_transfer_objects.CompanyDTO;
 import com.example.invoicecreatorservice.data_transfer_objects.CompanyForAlterationDTO;
+import com.example.invoicecreatorservice.data_transfer_objects.UserAccountDTO;
 import com.example.invoicecreatorservice.services.CompanyService;
+import com.example.invoicecreatorservice.services.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,26 @@ public class CompanyController {
     @Autowired
     private final CompanyService service = new CompanyService();
 
+    @Autowired
+    private UserAccountService userAccountService = new UserAccountService();;
+
+    @GetMapping(path="/{companyId}/{userId}")
+    public @ResponseBody ResponseEntity<Object> getCompany(@PathVariable int companyId, @PathVariable int userId) {
+        UserAccountDTO accountDTO = userAccountService.getUserAccount(userId);
+
+        if(accountDTO.getCompany().getId() != companyId){
+            return new ResponseEntity<>("Please provide a valid User.", HttpStatus.FORBIDDEN);
+        }
+
+        CompanyDTO company = service.getCompany(companyId);
+
+        if (company == null) {
+            return new ResponseEntity<>("Please provide a valid customer identifier.", HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(company, HttpStatus.OK);
+    }
+
     @GetMapping(path="")
     public  @ResponseBody ResponseEntity<Object> getAllCompanies() {
         Iterable<CompanyDTO> companies = service.getAllCompanies();
@@ -25,17 +47,6 @@ public class CompanyController {
         }
 
         return new ResponseEntity<>(companies, HttpStatus.OK);
-    }
-
-    @GetMapping(path="/{companyId}/{userId}")
-    public @ResponseBody ResponseEntity<Object> getCompany(@PathVariable int companyId, @PathVariable int userId) {
-        CompanyDTO company = service.getCompany(companyId, userId);
-
-        if (company == null) {
-            return new ResponseEntity<>("Please provide a valid customer identifier.", HttpStatus.NOT_FOUND);
-        }
-
-        return new ResponseEntity<>(company, HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/{companyId}/{userId}")
@@ -50,22 +61,36 @@ public class CompanyController {
     }
 
     @PostMapping(path="/{userId}")
-    public @ResponseBody ResponseEntity<Object> createCompany(@PathVariable int userId, @RequestBody CompanyForAlterationDTO company) {
-        CompanyDTO newObject = service.createCompany(company, userId);
+    public @ResponseBody ResponseEntity<Object> createCompany(@PathVariable int userId, @RequestBody CompanyForAlterationDTO companyDTO) {
+        if(companyDTO.validateForCreation()){
+            return new ResponseEntity<>("Please provide valid data for the creation", HttpStatus.CONFLICT);
+        }
+
+        CompanyDTO newObject = service.createCompany(companyDTO, userId);
 
         if (newObject == null){
-            return new ResponseEntity<>("The Company can not be added because it is not complete", HttpStatus.CONFLICT);
+            return new ResponseEntity<>("Something went wrong with the creation of the company.", HttpStatus.CONFLICT);
         }
 
         return new ResponseEntity<>(newObject, HttpStatus.CREATED);
     }
 
     @PutMapping(path ="/{userId}")
-    public @ResponseBody ResponseEntity<String> updateCompany(@PathVariable int userId, @RequestBody CompanyForAlterationDTO company) {
-        Boolean success = service.updateCompany(company, userId);
+    public @ResponseBody ResponseEntity<String> updateCompany(@PathVariable int userId, @RequestBody CompanyForAlterationDTO companyDTO) {
+        if(companyDTO.validateForUpdate()){
+            return new ResponseEntity<>("Please provide valid data for the update", HttpStatus.CONFLICT);
+        }
+
+        UserAccountDTO accountDTO = userAccountService.getUserAccount(userId);
+
+        if(accountDTO.getCompany().getId() != companyDTO.getId()){
+            return new ResponseEntity<>("Please provide a valid User.", HttpStatus.FORBIDDEN);
+        }
+
+        Boolean success = service.updateCompany(companyDTO);
 
         if (Boolean.FALSE.equals(success)){
-            return new ResponseEntity<>("Please provide a valid Company.", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Something went wrong with the update of the company.", HttpStatus.CONFLICT);
         }
 
         return new ResponseEntity<>("Company has successfully been updated.", HttpStatus.OK);

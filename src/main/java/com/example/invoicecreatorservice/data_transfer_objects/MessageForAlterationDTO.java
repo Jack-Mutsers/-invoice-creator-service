@@ -17,28 +17,23 @@ public class MessageForAlterationDTO {
         this.done = done;
     }
 
-    public MessageForAlterationDTO(int userId, String contactCode, String messageBody, String type){
-        this.userId = userId;
-        this.contactCode = contactCode;
-        this.messageBody = messageBody;
-        this.type = type;
-    }
-
     public MessageForAlterationDTO(){
 
     }
 
     public boolean validateForUpdate(){
-        return (this.id == 0 || this.userId == 0 || this.contactCode == null || this.messageBody == null || this.type == null);
+        return (this.id == 0 || this.validateForCreation());
     }
 
     public boolean validateForCreation(){
-        return (this.userId == 0 || this.contactCode == null || this.messageBody == null || this.type == null);
+        return (this.userId == 0 || this.contactCode == null || this.messageBody == null || this.type == null ||
+                this.contactCode.isBlank() || this.messageBody.isBlank() || this.type.isBlank());
     }
 
     public int getId() {
         return id;
     }
+    
     public void setId(int id) {
         this.id = id;
     }

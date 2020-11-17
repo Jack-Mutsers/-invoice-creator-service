@@ -52,22 +52,30 @@ public class ProductCategoryController {
     }
 
     @PostMapping(path="")
-    public @ResponseBody ResponseEntity<Object> createCategory(@RequestBody ProductCategoryForAlterationDTO category) {
-        ProductCategoryDTO newObject = service.createCategory(category);
+    public @ResponseBody ResponseEntity<Object> createCategory(@RequestBody ProductCategoryForAlterationDTO categoryDTO) {
+        if (categoryDTO.validateForCreation()) {
+            return new ResponseEntity<>("Please provide valid data for the creation", HttpStatus.CONFLICT);
+        }
+
+        ProductCategoryDTO newObject = service.createCategory(categoryDTO);
 
         if (newObject == null){
-            return new ResponseEntity<>("The product has not been added", HttpStatus.CONFLICT);
+            return new ResponseEntity<>("Something went wrong with the creation of the category.", HttpStatus.CONFLICT);
         }
 
         return new ResponseEntity<>(newObject, HttpStatus.CREATED);
     }
 
     @PutMapping(path ="")
-    public @ResponseBody ResponseEntity<String> updateCategory(@RequestBody ProductCategoryForAlterationDTO category) {
-        boolean success = service.updateCategory(category);
+    public @ResponseBody ResponseEntity<String> updateCategory(@RequestBody ProductCategoryForAlterationDTO categoryDTO) {
+        if (categoryDTO.validateForUpdate()) {
+            return new ResponseEntity<>("Please provide valid data for the update", HttpStatus.CONFLICT);
+        }
+
+        boolean success = service.updateCategory(categoryDTO);
 
         if (!success){
-            return new ResponseEntity<>("Please provide a valid product category.", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Something went wrong with the update of the category.", HttpStatus.NOT_FOUND);
         }
 
         return new ResponseEntity<>("Product category has successfully been updated.", HttpStatus.OK);

@@ -45,13 +45,12 @@ public class MessageService {
     }
 
     public boolean createMessage(MessageForAlterationDTO messageDTO) {
-        if(messageDTO.validateForCreation()){
-            return false;
-        }
-
         try{
             Message message = new Message(messageDTO);
             message.setDone(false);
+
+            // set id to 0 to prevent update of existing record on create
+            message.setId(0);
 
             messageRepo.save(message);
 
@@ -62,10 +61,6 @@ public class MessageService {
     }
 
     public Boolean updateRequest(MessageForAlterationDTO messageDTO){
-        if(messageDTO.validateForUpdate()){
-            return false;
-        }
-
         try{
             Message message = new Message(messageDTO);
 
