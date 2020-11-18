@@ -10,10 +10,12 @@ class UserAccountForAlterationDTOTest {
     @Test
     void instantiateEntity(){
         int id = 2;
+        boolean active = true;
         String username = "henk";
         String password = "Password1!";
         String contactCode = "123456";
         int companyId = 1;
+        String role = "ROLE_OWNER";
 
         int userId = 2;
         String name = "henk";
@@ -33,11 +35,13 @@ class UserAccountForAlterationDTOTest {
 
         UserAccountForAlterationDTO DTOentity = new UserAccountForAlterationDTO(
             id,
+            active,
             username,
             password,
             userDTO,
             contactCode,
-            companyId
+            companyId,
+            role
         );
 
         assertEquals(id, DTOentity.getId());
@@ -51,6 +55,7 @@ class UserAccountForAlterationDTOTest {
     @Test
     void instantiateEmptyEntity(){
         int id = 0;
+        boolean active = true;
         String username = null;
         String password = null;
         String contactCode = null;
@@ -69,10 +74,12 @@ class UserAccountForAlterationDTOTest {
     @Test
     void entityValidationTestForUpdateSuccess(){
         int id = 2;
+        boolean active = true;
         String username = "henk";
         String password = "Password1!";
         String contactCode = "123456";
         int companyId = 1;
+        String role = "ROLE_OWNER";
 
         int userId = 2;
         String name = "henk";
@@ -92,11 +99,13 @@ class UserAccountForAlterationDTOTest {
 
         UserAccountForAlterationDTO DTOentity = new UserAccountForAlterationDTO(
                 id,
+                active,
                 username,
                 password,
                 userDTO,
                 contactCode,
-                companyId
+                companyId,
+                role
         );
 
         assertFalse(DTOentity.validateForUpdate());
@@ -105,10 +114,12 @@ class UserAccountForAlterationDTOTest {
     @Test
     void entityValidationTestForUpdateFailure(){
         int id = 0;
+        boolean active = true;
         String username = "henk";
         String password = "Password1!";
         String contactCode = "";
         int companyId = 1;
+        String role = "ROLE_OWNER";
 
         int userId = 2;
         String name = "henk";
@@ -128,11 +139,13 @@ class UserAccountForAlterationDTOTest {
 
         UserAccountForAlterationDTO DTOentity = new UserAccountForAlterationDTO(
                 id,
+                active,
                 username,
                 password,
                 userDTO,
                 contactCode,
-                companyId
+                companyId,
+                role
         );
 
         assertTrue(DTOentity.validateForUpdate());
@@ -141,10 +154,12 @@ class UserAccountForAlterationDTOTest {
     @Test
     void entityValidationTestForCreationSuccess(){
         int id = 0;
+        boolean active = true;
         String username = "henk";
         String password = "Password1!";
         String contactCode = "123456";
         int companyId = 1;
+        String role = "ROLE_OWNER";
 
         int userId = 0;
         String name = "henk";
@@ -164,11 +179,13 @@ class UserAccountForAlterationDTOTest {
 
         UserAccountForAlterationDTO DTOentity = new UserAccountForAlterationDTO(
                 id,
+                active,
                 username,
                 password,
                 userDTO,
                 contactCode,
-                companyId
+                companyId,
+                role
         );
 
         assertFalse(DTOentity.validateForCreation());
@@ -177,10 +194,12 @@ class UserAccountForAlterationDTOTest {
     @Test
     void entityValidationTestForCreationFailure(){
         int id = 0;
+        boolean active = true;
         String username = "henk";
         String password = "";
         String contactCode = "123456";
         int companyId = 1;
+        String role = "ROLE_OWNER";
 
         int userId = 0;
         String name = "henk";
@@ -200,11 +219,13 @@ class UserAccountForAlterationDTOTest {
 
         UserAccountForAlterationDTO DTOentity = new UserAccountForAlterationDTO(
                 id,
+                active,
                 username,
                 password,
                 userDTO,
                 contactCode,
-                companyId
+                companyId,
+                role
         );
 
         assertTrue(DTOentity.validateForCreation());
@@ -213,19 +234,23 @@ class UserAccountForAlterationDTOTest {
     @Test
     void entityValidationTestForLoginSuccess(){
         int id = 0;
+        boolean active = true;
         String username = "henk";
         String password = "Password1!";
         String contactCode = null;
         int companyId = 0;
         UserForAlterationDTO userDTO = null;
+        String role = "ROLE_OWNER";
 
         UserAccountForAlterationDTO DTOentity = new UserAccountForAlterationDTO(
                 id,
+                active,
                 username,
                 password,
                 userDTO,
                 contactCode,
-                companyId
+                companyId,
+                role
         );
 
         assertFalse(DTOentity.validateLoginData());
@@ -234,20 +259,24 @@ class UserAccountForAlterationDTOTest {
     @Test
     void entityValidationTestForLoginFailure(){
         int id = 0;
+        boolean active = true;
         String username = "henk";
         String password = "";
         String contactCode = null;
         int companyId = 0;
         UserForAlterationDTO userDTO = null;
+        String role = "ROLE_OWNER";
 
 
         UserAccountForAlterationDTO DTOentity = new UserAccountForAlterationDTO(
                 id,
+                active,
                 username,
                 password,
                 userDTO,
                 contactCode,
-                companyId
+                companyId,
+                role
         );
 
         assertTrue(DTOentity.validateLoginData());

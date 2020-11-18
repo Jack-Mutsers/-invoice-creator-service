@@ -10,14 +10,6 @@ public class UserAccountDTO {
     private String contactCode;
     private CompanyDTO company;
 
-    public UserAccountDTO(int id, String username, int userId, UserDTO userDTO, String contactCode) {
-        this.id = id;
-        this.username = username;
-        this.userId = userId;
-        this.user = userDTO;
-        this.contactCode = contactCode;
-    }
-
     public UserAccountDTO(UserAccount userAccount) {
         this.id = userAccount.getId();
         this.username = userAccount.getUsername();

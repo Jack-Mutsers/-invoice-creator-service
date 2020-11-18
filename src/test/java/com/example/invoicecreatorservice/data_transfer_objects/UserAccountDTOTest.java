@@ -11,19 +11,23 @@ class UserAccountDTOTest {
     @Test
     void instantiateEntity(){
         int id = 2;
+        boolean active = true;
         String username = "henk";
         String password = "Password1!";
         int userId = 2;
         String contactCode = "123456";
         int companyId = 1;
+        String role = "ROLE_EMPLOYEE";
 
         UserAccount entity = new UserAccount(
                 id,
+                active,
                 username,
                 password,
                 userId,
                 contactCode,
-                companyId
+                companyId,
+                role
         );
 
         UserAccountDTO DTOentity = new UserAccountDTO(entity);
@@ -38,9 +42,7 @@ class UserAccountDTOTest {
     void instantiateEmptyEntity(){
         int id = 0;
         String username = null;
-        String password = null;
         String contactCode = null;
-        int userId = 0;
 
         UserAccountDTO DTOentity = new UserAccountDTO();
 
@@ -53,10 +55,7 @@ class UserAccountDTOTest {
     void fillEmptyEntity(){
         int id = 2;
         String username = "henk";
-        String password = "Password1!";
-        int userId = 2;
         String contactCode = "123456";
-        int companyId = 1;
 
         UserAccountDTO DTOentity = new UserAccountDTO();
 

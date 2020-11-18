@@ -12,19 +12,23 @@ class UserAccountTest {
     @Test
     void instantiateEntity(){
         int id = 2;
+        boolean active = true;
         String username = "henk";
         String password = "Password1!";
         int userId = 2;
         String contactCode = "123456";
         int companyId = 1;
+        String role = "ROLE_OWNER";
 
         UserAccount entity = new UserAccount(
             id,
+            active,
             username,
             password,
             userId,
             contactCode,
-            companyId
+            companyId,
+            role
         );
 
         assertEquals(id, entity.getId());
@@ -54,11 +58,13 @@ class UserAccountTest {
     @Test
     void instantiateEntityByDTO(){
         int id = 2;
+        boolean active = true;
         String username = "henk";
         String password = "Password1!";
         int userId = 2;
         String contactCode = "123456";
         int companyId = 1;
+        String role = "ROLE_OWNER";
 
         UserForAlterationDTO userDto = new UserForAlterationDTO(
             userId,
@@ -70,11 +76,13 @@ class UserAccountTest {
 
         UserAccountForAlterationDTO entityDTO = new UserAccountForAlterationDTO(
             id,
+            active,
             username,
             password,
             userDto,
             contactCode,
-            companyId
+            companyId,
+            role
         );
 
         UserAccount entity = new UserAccount(entityDTO);
@@ -93,6 +101,7 @@ class UserAccountTest {
         int userId = 2;
         String contactCode = "123456";
         int companyId = 1;
+        String role = "ROLE_OWNER";
 
         UserAccount entity = new UserAccount();
 
@@ -102,10 +111,14 @@ class UserAccountTest {
         entity.setUserId(userId);
         entity.setContactCode(contactCode);
         entity.setCompanyId(companyId);
+        entity.setRole(role);
 
         assertEquals(id, entity.getId());
         assertEquals(username, entity.getUsername());
         assertEquals(password, entity.getPassword());
         assertEquals(userId, entity.getUserId());
+        assertEquals(contactCode, entity.getContactCode());
+        assertEquals(companyId, entity.getCompanyId());
+        assertEquals(role, entity.getRole());
     }
 }

@@ -15,27 +15,33 @@ public class UserAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    private boolean active;
     private String username;
     private String password;
     private int userId;
     private String contactCode;
     private int companyId;
+    private String role;
 
-    public UserAccount(int id, String username, String password, int userId, String contactCode, int companyId) {
+    public UserAccount(int id, boolean active, String username, String password, int userId, String contactCode, int companyId, String role) {
         this.id = id;
+        this.active = active;
         this.username = username;
         this.password = password;
         this.userId = userId;
         this.contactCode = contactCode;
         this.companyId = companyId;
+        this.role = role;
     }
 
     public UserAccount(UserAccountForAlterationDTO accountDTO) {
         this.id = accountDTO.getId();
+        this.active = accountDTO.getActive();
         this.username = accountDTO.getUsername();
         this.password = accountDTO.getPassword();
         this.contactCode = accountDTO.getContactCode();
         this.companyId = accountDTO.getCompanyId();
+        this.role = accountDTO.getRole();
 
         if(accountDTO.getUser() != null){
             this.userId = accountDTO.getUser().getId();
@@ -51,6 +57,14 @@ public class UserAccount {
     }
     public void setId(int id) {
         this.id = id;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public String getUsername() {
@@ -90,5 +104,13 @@ public class UserAccount {
 
     public void setCompanyId(int companyId) {
         this.companyId = companyId;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

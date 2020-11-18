@@ -2,6 +2,7 @@ package com.example.invoicecreatorservice.tools;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.parameters.P;
 
 import java.util.InvalidPropertiesFormatException;
 
@@ -14,9 +15,10 @@ class PasswordEncoderTest {
     void passwordValidationSuccessful() {
         String accountPassword = "HrLULWgjBCAnyhtFxsBljMJtWQhl++50A++Yij/1wUI=$0U2bjzl1Nik9emOoMlRkUkfUHRUXskHnqJE9FTCcCfs=";
         String password = "Password1!";
+        PasswordEncoder encoder = PasswordEncoder.getInstance();
 
         try {
-            boolean validPassword = PasswordEncoder.check(password, accountPassword);
+            boolean validPassword = encoder.check(password, accountPassword);
 
             assertTrue(validPassword);
         } catch (Exception e) {
@@ -28,9 +30,10 @@ class PasswordEncoderTest {
     void passwordValidationFailure() {
         String accountPassword = "HrLULWgjBCAnyhtFxsBljMJtWQhl++50A++Yij/1wUI=$0U2bjzl1Nik9emOoMlRkUkfUHRUXskHnqJE9FTCcCfs=";
         String password = "Wr0ngP@s$w0rd1!";
+        PasswordEncoder encoder = PasswordEncoder.getInstance();
 
         try {
-            boolean validPassword = PasswordEncoder.check(password, accountPassword);
+            boolean validPassword = encoder.check(password, accountPassword);
 
             assertFalse(validPassword);
         } catch (Exception e) {
@@ -42,9 +45,10 @@ class PasswordEncoderTest {
     void passwordValidationException() {
         String accountPassword = "Password1!";
         String password = "Password1!";
+        PasswordEncoder encoder = PasswordEncoder.getInstance();
 
         Exception exception = assertThrows(InvalidPropertiesFormatException.class, () -> {
-            boolean validPassword = PasswordEncoder.check(password, accountPassword);
+            boolean validPassword = encoder.check(password, accountPassword);
         });
 
         String expectedMessage = "The stored password must have the form 'salt$hash'";
@@ -57,9 +61,10 @@ class PasswordEncoderTest {
     void passwordEncryption() {
         String password = "Password1!";
         String newPassword = "";
+        PasswordEncoder encoder = PasswordEncoder.getInstance();
 
         try {
-            newPassword = PasswordEncoder.getSaltedHash(password);
+            newPassword = encoder.getSaltedHash(password);
 
             assertNotEquals("", newPassword);
             assertNotEquals(password, newPassword);
@@ -72,9 +77,10 @@ class PasswordEncoderTest {
     @Test
     void emptyPasswordEncryptionException() {
         String password = "";
+        PasswordEncoder encoder = PasswordEncoder.getInstance();
 
         Exception exception = assertThrows(InvalidPropertiesFormatException.class, () -> {
-            PasswordEncoder.getSaltedHash(password);
+            encoder.getSaltedHash(password);
         });
 
         String expectedMessage = "Empty passwords are not supported.";

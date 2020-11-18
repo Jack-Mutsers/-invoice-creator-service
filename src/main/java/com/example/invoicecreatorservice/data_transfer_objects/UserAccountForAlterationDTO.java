@@ -4,19 +4,23 @@ import com.example.invoicecreatorservice.tools.ContactGenerator;
 
 public class UserAccountForAlterationDTO {
     private int id;
+    private boolean active;
     private String username;
     private String password;
     private UserForAlterationDTO user;
     private String contactCode;
     private int companyId;
+    private String role;
 
-    public UserAccountForAlterationDTO(int id, String username, String password, UserForAlterationDTO user, String contactCode, int companyId) {
+    public UserAccountForAlterationDTO(int id, boolean active, String username, String password, UserForAlterationDTO user, String contactCode, int companyId, String role) {
         this.id = id;
+        this.active = active;
         this.username = username;
         this.password = password;
         this.user = user;
         this.contactCode = contactCode;
         this.companyId = companyId;
+        this.role = role;
     }
 
     public UserAccountForAlterationDTO(){
@@ -24,7 +28,7 @@ public class UserAccountForAlterationDTO {
     }
 
     public boolean validateForUpdate(){
-        return ( this.id == 0 ||  this.validateForCreation() || this.contactCode.isEmpty() );
+        return ( this.id == 0 || this.validateForCreation() || this.contactCode.isBlank() || this.role.isBlank() );
     }
 
     public boolean validateForCreation(){
@@ -42,6 +46,10 @@ public class UserAccountForAlterationDTO {
 
     public int getId() {
         return id;
+    }
+
+    public boolean getActive() {
+        return active;
     }
 
     public String getUsername() {
@@ -75,5 +83,9 @@ public class UserAccountForAlterationDTO {
 
     public void setCompanyId(int companyId) {
         this.companyId = companyId;
+    }
+
+    public String getRole() {
+        return role;
     }
 }

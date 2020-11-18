@@ -12,19 +12,27 @@ import java.util.InvalidPropertiesFormatException;
 
 public class PasswordEncoder {
 
-    private PasswordEncoder(){}
+    private static PasswordEncoder myself;
 
     // The higher the number of iterations the more
     // expensive computing the hash is for us and
     // also for an attacker.
-    private static final int ITERATIONS = 20*1000;
-    private static final int SALT_LENGTH = 32;
-    private static final int DESIRED_LENGTH = 256;
+    private final int ITERATIONS = 20*1000;
+    private final int SALT_LENGTH = 32;
+    private final int DESIRED_LENGTH = 256;
+
+    private PasswordEncoder(){}
+
+    public static PasswordEncoder getInstance(){
+        if(myself == null){ myself = new PasswordEncoder(); }
+
+        return myself;
+    }
 
     /** Computes a salted PBKDF2 hash of given plaintext password
      suitable for storing in a database.
      Empty passwords are not supported. */
-    public static String getSaltedHash(String password) throws InvalidPropertiesFormatException, NoSuchAlgorithmException, InvalidKeySpecException {
+    public String getSaltedHash(String password) throws InvalidPropertiesFormatException, NoSuchAlgorithmException, InvalidKeySpecException {
         byte[] salt = SecureRandom.getInstance("SHA1PRNG").generateSeed(SALT_LENGTH);
         // store the salt with the password
         return Base64.encodeBase64String(salt) + "$" + hash(password, salt);
@@ -32,7 +40,7 @@ public class PasswordEncoder {
 
     /** Checks whether given plaintext password corresponds
      to a stored salted hash of the password. */
-    public static boolean check(String password, String stored) throws InvalidPropertiesFormatException, NoSuchAlgorithmException, InvalidKeySpecException{
+    public boolean check(String password, String stored) throws InvalidPropertiesFormatException, NoSuchAlgorithmException, InvalidKeySpecException{
         String[] saltAndHash = stored.split("\\$");
         if (saltAndHash.length != 2) {
             throw new InvalidPropertiesFormatException("The stored password must have the form 'salt$hash'");
@@ -41,7 +49,7 @@ public class PasswordEncoder {
         return hashOfInput.equals(saltAndHash[1]);
     }
 
-    private static String hash(String password, byte[] salt) throws InvalidPropertiesFormatException, NoSuchAlgorithmException, InvalidKeySpecException {
+    private String hash(String password, byte[] salt) throws InvalidPropertiesFormatException, NoSuchAlgorithmException, InvalidKeySpecException {
         if (password == null || password.length() == 0)
             throw new InvalidPropertiesFormatException("Empty passwords are not supported.");
 
