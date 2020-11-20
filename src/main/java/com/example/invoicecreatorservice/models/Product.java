@@ -2,10 +2,7 @@ package com.example.invoicecreatorservice.models;
 
 import com.example.invoicecreatorservice.data_transfer_objects.ProductForAlterationDTO;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 
 @SuppressWarnings("WeakerAccess")
@@ -18,6 +15,8 @@ public class Product {
     private int id;
     private String name;
     private int price;
+
+    @Column(unique=true, nullable = false)
     private String productCode;
     private int categoryId;
 

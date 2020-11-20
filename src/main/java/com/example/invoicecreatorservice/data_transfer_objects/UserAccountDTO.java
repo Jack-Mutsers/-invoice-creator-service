@@ -11,7 +11,7 @@ public class UserAccountDTO {
     private UserDTO user;
     private String contactCode;
     private CompanyDTO company;
-    private UUID token;
+    private String token;
 
     public UserAccountDTO(UserAccount userAccount) {
         this.id = userAccount.getId();
@@ -71,11 +71,11 @@ public class UserAccountDTO {
         return company;
     }
 
-    public void setToken(UUID token) {
+    public void setToken(String token) {
         this.token = token;
     }
 
-    public UUID getToken() {
+    public String getToken() {
         return token;
     }
 }

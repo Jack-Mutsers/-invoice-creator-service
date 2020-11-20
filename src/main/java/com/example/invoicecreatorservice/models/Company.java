@@ -3,10 +3,7 @@ package com.example.invoicecreatorservice.models;
 import com.example.invoicecreatorservice.data_transfer_objects.CompanyForAlterationDTO;
 import lombok.AllArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @SuppressWarnings("WeakerAccess")
 //@AllArgsConstructor
@@ -15,11 +12,15 @@ public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(unique=true, nullable = false)
     private String name;
     private String address;
     private String zipcode;
     private String city;
     private String telephoneNumber;
+
+    @Column(unique=true, nullable = false)
     private String contactCode;
     private int ownerId;
 

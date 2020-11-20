@@ -47,7 +47,7 @@ public class LoginService {
                         accountDTO.setCompany(companyService.getCompany(accountDTO.getCompany().getId()));
                     }
 
-                    accountDTO.setToken(this.startSessions(accountDTO.getId()));
+//                    accountDTO.setToken(this.startSessions(accountDTO.getId()));
 
                     return accountDTO;
                 }

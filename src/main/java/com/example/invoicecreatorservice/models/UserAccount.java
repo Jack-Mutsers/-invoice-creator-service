@@ -2,10 +2,7 @@ package com.example.invoicecreatorservice.models;
 
 import com.example.invoicecreatorservice.data_transfer_objects.UserAccountForAlterationDTO;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @SuppressWarnings("WeakerAccess")
 //@NoArgsConstructor
@@ -16,9 +13,15 @@ public class UserAccount {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private boolean active;
+
+    @Column(unique=true, nullable = false)
     private String username;
     private String password;
+
+    @Column(unique=true, nullable = false)
     private int userId;
+
+    @Column(unique=true, nullable = false)
     private String contactCode;
     private int companyId;
     private String role;

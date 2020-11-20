@@ -1,4 +1,4 @@
-package com.example.invoicecreatorservice.config.models;
+package com.example.invoicecreatorservice.models;
 
 import com.example.invoicecreatorservice.models.UserAccount;
 import org.springframework.security.core.GrantedAuthority;
@@ -10,14 +10,16 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class MyUserDetails implements UserDetails {
+public class JwtUserDetails implements UserDetails {
 
+    private int id;
     private boolean active;
     private String username;
     private String password;
     private List<GrantedAuthority> authorities;
 
-    public MyUserDetails(UserAccount user) {
+    public JwtUserDetails(UserAccount user) {
+        this.id = user.getId();
         this.username = user.getUsername();
         this.password = user.getPassword();
         this.active = user.isActive();
@@ -29,6 +31,10 @@ public class MyUserDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
+    }
+
+    public int getId() {
+        return id;
     }
 
     @Override
