@@ -2,6 +2,8 @@ package com.example.invoicecreatorservice.data_transfer_objects;
 
 import com.example.invoicecreatorservice.models.UserAccount;
 
+import java.util.UUID;
+
 public class UserAccountDTO {
     private int id;
     private String username;
@@ -9,6 +11,7 @@ public class UserAccountDTO {
     private UserDTO user;
     private String contactCode;
     private CompanyDTO company;
+    private UUID token;
 
     public UserAccountDTO(UserAccount userAccount) {
         this.id = userAccount.getId();
@@ -66,5 +69,13 @@ public class UserAccountDTO {
 
     public CompanyDTO getCompany() {
         return company;
+    }
+
+    public void setToken(UUID token) {
+        this.token = token;
+    }
+
+    public UUID getToken() {
+        return token;
     }
 }

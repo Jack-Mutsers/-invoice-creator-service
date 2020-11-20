@@ -14,42 +14,11 @@ public class UserAccountService {
     @Autowired
     private UserAccountRepo userAccountRepo;
 
-    @Autowired
-    private CompanyService companyService;
-
 //    private PasswordEncoder encoder = PasswordEncoder.getInstance();
     private BCryptEncoder encoder = BCryptEncoder.getInstance();
 
     public UserAccountDTO getUserAccount(int id){
         return new UserAccountDTO(userAccountRepo.findById(id));
-    }
-
-    public UserAccountDTO login(UserAccountForAlterationDTO account) {
-
-        try {
-            companyService = new CompanyService();
-
-            UserAccount userAccount = userAccountRepo.findByUsername(account.getUsername());
-
-            if (userAccount != null) {
-                boolean validPassword = encoder.validatePassword(account.getPassword(), userAccount.getPassword());
-
-                if (validPassword) {
-                    UserAccountDTO accountDTO = new UserAccountDTO(userAccount);
-
-                    if (accountDTO.getCompany() != null && accountDTO.getCompany().getId() > 0) {
-                        accountDTO.setCompany(companyService.getCompany(accountDTO.getCompany().getId()));
-                    }
-
-                    return accountDTO;
-                }
-            }
-
-            return null;
-        }
-        catch (Exception ex){
-            return null;
-        }
     }
 
     public boolean deleteUser(int id, UserAccountForAlterationDTO account) {
