@@ -1,6 +1,6 @@
 package com.example.invoicecreatorservice.controllers;
 
-import com.example.invoicecreatorservice.data_transfer_objects.*;
+import com.example.invoicecreatorservice.objects.data_transfer_objects.*;
 import com.example.invoicecreatorservice.services.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

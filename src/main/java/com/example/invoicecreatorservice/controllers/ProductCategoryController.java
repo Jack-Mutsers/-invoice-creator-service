@@ -1,8 +1,8 @@
 package com.example.invoicecreatorservice.controllers;
 
-import com.example.invoicecreatorservice.data_transfer_objects.ProductCategoryDTO;
-import com.example.invoicecreatorservice.data_transfer_objects.ProductCategoryForAlterationDTO;
-import com.example.invoicecreatorservice.models.ProductCategory;
+import com.example.invoicecreatorservice.objects.data_transfer_objects.ProductCategoryDTO;
+import com.example.invoicecreatorservice.objects.data_transfer_objects.ProductCategoryForAlterationDTO;
+import com.example.invoicecreatorservice.objects.models.ProductCategory;
 import com.example.invoicecreatorservice.services.ProductCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

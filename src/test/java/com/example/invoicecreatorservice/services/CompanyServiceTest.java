@@ -1,29 +1,23 @@
 package com.example.invoicecreatorservice.services;
 
-import com.example.invoicecreatorservice.data_transfer_objects.CompanyDTO;
-import com.example.invoicecreatorservice.data_transfer_objects.CompanyForAlterationDTO;
-import com.example.invoicecreatorservice.data_transfer_objects.UserAccountDTO;
-import com.example.invoicecreatorservice.models.Company;
-import com.example.invoicecreatorservice.models.Customer;
-import com.example.invoicecreatorservice.models.UserAccount;
+import com.example.invoicecreatorservice.objects.data_transfer_objects.CompanyDTO;
+import com.example.invoicecreatorservice.objects.data_transfer_objects.CompanyForAlterationDTO;
+import com.example.invoicecreatorservice.objects.models.Company;
 import com.example.invoicecreatorservice.repositories.CompanyRepo;
-import com.example.invoicecreatorservice.repositories.UserAccountRepo;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
-import java.util.InvalidPropertiesFormatException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.booleanThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-public class CompanyServiceTest {
+class CompanyServiceTest {
 
     @Mock
     CompanyRepo repo;

@@ -1,8 +1,8 @@
 package com.example.invoicecreatorservice.controllers;
 
-import com.example.invoicecreatorservice.data_transfer_objects.CustomerDTO;
-import com.example.invoicecreatorservice.data_transfer_objects.CustomerForAlterationDTO;
-import com.example.invoicecreatorservice.models.Customer;
+import com.example.invoicecreatorservice.objects.data_transfer_objects.CustomerDTO;
+import com.example.invoicecreatorservice.objects.data_transfer_objects.CustomerForAlterationDTO;
+import com.example.invoicecreatorservice.objects.models.Customer;
 import com.example.invoicecreatorservice.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

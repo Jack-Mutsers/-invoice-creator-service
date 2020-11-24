@@ -1,8 +1,8 @@
 package com.example.invoicecreatorservice.controllers;
 
-import com.example.invoicecreatorservice.data_transfer_objects.UserAccountDTO;
-import com.example.invoicecreatorservice.data_transfer_objects.UserAccountForAlterationDTO;
-import com.example.invoicecreatorservice.data_transfer_objects.UserDTO;
+import com.example.invoicecreatorservice.objects.data_transfer_objects.UserAccountDTO;
+import com.example.invoicecreatorservice.objects.data_transfer_objects.UserAccountForAlterationDTO;
+import com.example.invoicecreatorservice.objects.data_transfer_objects.UserDTO;
 import com.example.invoicecreatorservice.services.LoginService;
 import com.example.invoicecreatorservice.services.UserAccountService;
 import com.example.invoicecreatorservice.services.UserService;

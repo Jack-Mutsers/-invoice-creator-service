@@ -1,6 +1,6 @@
 package com.example.invoicecreatorservice.repositories;
 
-import com.example.invoicecreatorservice.models.UserAccount;
+import com.example.invoicecreatorservice.objects.models.UserAccount;
 import org.springframework.data.repository.CrudRepository;
 
 public interface UserAccountRepo extends CrudRepository<UserAccount, Integer> {

@@ -1,7 +1,6 @@
 package com.example.invoicecreatorservice.repositories;
 
-import com.example.invoicecreatorservice.models.UserAccount;
-import com.example.invoicecreatorservice.models.UserSession;
+import com.example.invoicecreatorservice.objects.models.UserSession;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.UUID;

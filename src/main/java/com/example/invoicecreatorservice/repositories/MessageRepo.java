@@ -1,7 +1,7 @@
 package com.example.invoicecreatorservice.repositories;
 
-import com.example.invoicecreatorservice.data_transfer_objects.MessageDTO;
-import com.example.invoicecreatorservice.models.Message;
+import com.example.invoicecreatorservice.objects.data_transfer_objects.MessageDTO;
+import com.example.invoicecreatorservice.objects.models.Message;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

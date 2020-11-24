@@ -1,8 +1,8 @@
 package com.example.invoicecreatorservice.services;
 
-import com.example.invoicecreatorservice.data_transfer_objects.MessageDTO;
-import com.example.invoicecreatorservice.data_transfer_objects.MessageForAlterationDTO;
-import com.example.invoicecreatorservice.models.Message;
+import com.example.invoicecreatorservice.objects.data_transfer_objects.MessageDTO;
+import com.example.invoicecreatorservice.objects.data_transfer_objects.MessageForAlterationDTO;
+import com.example.invoicecreatorservice.objects.models.Message;
 import com.example.invoicecreatorservice.repositories.MessageRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,7 +60,7 @@ public class MessageService {
         }
     }
 
-    public Boolean updateRequest(MessageForAlterationDTO messageDTO){
+    public boolean updateRequest(MessageForAlterationDTO messageDTO){
         try{
             Message message = new Message(messageDTO);
 

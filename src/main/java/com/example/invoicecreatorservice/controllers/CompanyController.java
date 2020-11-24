@@ -1,8 +1,8 @@
 package com.example.invoicecreatorservice.controllers;
 
-import com.example.invoicecreatorservice.data_transfer_objects.CompanyDTO;
-import com.example.invoicecreatorservice.data_transfer_objects.CompanyForAlterationDTO;
-import com.example.invoicecreatorservice.data_transfer_objects.UserAccountDTO;
+import com.example.invoicecreatorservice.objects.data_transfer_objects.CompanyDTO;
+import com.example.invoicecreatorservice.objects.data_transfer_objects.CompanyForAlterationDTO;
+import com.example.invoicecreatorservice.objects.data_transfer_objects.UserAccountDTO;
 import com.example.invoicecreatorservice.services.CompanyService;
 import com.example.invoicecreatorservice.services.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class CompanyController {
     private final CompanyService service = new CompanyService();
 
     @Autowired
-    private UserAccountService userAccountService = new UserAccountService();;
+    private UserAccountService userAccountService = new UserAccountService();
 
     @GetMapping(path="/{companyId}/{userId}")
     public @ResponseBody ResponseEntity<Object> getCompany(@PathVariable int companyId, @PathVariable int userId) {

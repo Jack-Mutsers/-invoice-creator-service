@@ -1,8 +1,8 @@
 package com.example.invoicecreatorservice.services;
 
-import com.example.invoicecreatorservice.data_transfer_objects.ProductDTO;
-import com.example.invoicecreatorservice.data_transfer_objects.ProductForAlterationDTO;
-import com.example.invoicecreatorservice.models.Product;
+import com.example.invoicecreatorservice.objects.data_transfer_objects.ProductDTO;
+import com.example.invoicecreatorservice.objects.data_transfer_objects.ProductForAlterationDTO;
+import com.example.invoicecreatorservice.objects.models.Product;
 import com.example.invoicecreatorservice.repositories.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
