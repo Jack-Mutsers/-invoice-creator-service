@@ -1,5 +1,6 @@
 package com.example.invoicecreatorservice.services;
 
+import com.example.invoicecreatorservice.helpers.logger.LoggerService;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.CompanyDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.CompanyForAlterationDTO;
 import com.example.invoicecreatorservice.objects.models.Company;
@@ -42,15 +43,12 @@ public class CompanyService {
 
             return true;
         }catch (Exception ex){
+            LoggerService.warn(ex.getMessage());
             return false;
         }
     }
 
     public CompanyDTO createCompany(CompanyForAlterationDTO companyDTO, int userId) {
-        if(companyDTO.getContactCode() == null){
-            companyDTO.generateContactCode();
-        }
-
         try{
             Company company = new Company(companyDTO);
             company.setOwnerId(userId);
@@ -63,6 +61,7 @@ public class CompanyService {
             newObjectDTO.setOwnerId(userId);
             return newObjectDTO;
         }catch (Exception ex){
+            LoggerService.warn(ex.getMessage());
             return null;
         }
     }

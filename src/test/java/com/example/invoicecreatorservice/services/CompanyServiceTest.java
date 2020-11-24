@@ -8,12 +8,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -88,15 +90,31 @@ class CompanyServiceTest {
     }
 
     @Test
-    void deleteCompanyTestFailure(){
+    void deleteCompanyTestCompanyDoesNotExistFailure(){
+        //Arrange
+        Company entity = entityList.get(2);
+
+        //Prepare overwrites
+        when(repo.findByIdAndOwnerId(entity.getId(), entity.getOwnerId())).thenReturn(null);
+
+        //Act
+        Boolean result = service.deleteCompany(entity.getId(), entity.getOwnerId());
+
+        //Assert
+        assertFalse(result);
+    }
+
+    @Test
+    void deleteCompanyTestExceptionFailure(){
         //Arrange
         Company entity = entityList.get(2);
 
         //Prepare overwrites
         when(repo.findByIdAndOwnerId(entity.getId(), entity.getOwnerId())).thenReturn(entity);
+        doThrow(new EmptyResultDataAccessException(1000)).when(repo).deleteById(notNull());
 
         //Act
-        boolean result = service.deleteCompany(entity.getId(), 20);
+        Boolean result = service.deleteCompany(entity.getId(), entity.getOwnerId());
 
         //Assert
         assertFalse(result);
@@ -134,6 +152,21 @@ class CompanyServiceTest {
         assertEquals(expectedEntity.getTelephoneNumber(), resultEntity.getTelephoneNumber());
         assertEquals(expectedEntity.getContactCode(), resultEntity.getContactCode());
         assertEquals(expectedEntity.getOwnerId(), resultEntity.getOwnerId());
+    }
+
+    @Test
+    void createCompanyTestExceptionFailure(){
+        //Arrange
+        int userId = 14;
+
+        //Prepare overwrites
+        when(repo.save((Company)isNull())).thenThrow(new IllegalArgumentException("Target object must not be null"));
+
+        //Act
+        CompanyDTO resultEntity = service.createCompany(null, userId);
+
+        //Assert
+        assertNull(resultEntity);
     }
 
     @Test

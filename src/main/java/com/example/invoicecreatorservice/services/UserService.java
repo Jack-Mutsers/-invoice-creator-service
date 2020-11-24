@@ -1,5 +1,6 @@
 package com.example.invoicecreatorservice.services;
 
+import com.example.invoicecreatorservice.helpers.logger.LoggerService;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.UserDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.UserForAlterationDTO;
 import com.example.invoicecreatorservice.objects.models.User;
@@ -33,6 +34,7 @@ public class UserService {
             userRepo.deleteById(id);
             return true;
         }catch (Exception ex){
+            LoggerService.warn(ex.getMessage());
             return false;
         }
     }
@@ -47,6 +49,7 @@ public class UserService {
             User newObject = userRepo.save(user);
             return new UserDTO(newObject);
         }catch (Exception ex){
+            LoggerService.warn(ex.getMessage());
             return null;
         }
     }
@@ -57,6 +60,7 @@ public class UserService {
             userRepo.save(user);
             return true;
         }catch (Exception ex){
+            LoggerService.warn(ex.getMessage());
             return false;
         }
 

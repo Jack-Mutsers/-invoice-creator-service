@@ -3,7 +3,6 @@ package com.example.invoicecreatorservice.controllers;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.UserAccountDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.UserAccountForAlterationDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.UserDTO;
-import com.example.invoicecreatorservice.services.LoginService;
 import com.example.invoicecreatorservice.services.UserAccountService;
 import com.example.invoicecreatorservice.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,25 +21,6 @@ public class UserAccountController {
 
     @Autowired
     private final UserService userService = new UserService();
-
-    @Autowired
-    private final LoginService loginService = new LoginService();
-
-    @PostMapping(path="/login")
-    public @ResponseBody ResponseEntity<Object> login(@RequestBody UserAccountForAlterationDTO account) {
-        if(account.validateLoginData()){
-            return new ResponseEntity<>("Invalid login credentials", HttpStatus.BAD_REQUEST);
-        }
-
-        UserAccountDTO userAccount = loginService.login(account);
-
-        if (userAccount == null) {
-            return new ResponseEntity<>("Login credentials were incorrect!", HttpStatus.BAD_REQUEST);
-        }
-
-        userAccount.setUser(userService.getUser(userAccount.getId()));
-        return new ResponseEntity<>(userAccount, HttpStatus.OK);
-    }
 
     @DeleteMapping(path = "/{id}")
     public @ResponseBody ResponseEntity<String> deleteUser(@PathVariable int id, @RequestBody UserAccountForAlterationDTO account) {

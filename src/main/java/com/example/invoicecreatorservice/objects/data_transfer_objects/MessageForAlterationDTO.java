@@ -1,12 +1,15 @@
 package com.example.invoicecreatorservice.objects.data_transfer_objects;
 
+import lombok.Getter;
+
+@Getter
 public class MessageForAlterationDTO {
     private int id;
     private int userId;
     private String contactCode;
     private String messageBody;
     private String type;
-    private boolean done;
+    private Boolean done;
 
     public MessageForAlterationDTO(int id, int userId, String contactCode, String messageBody, String type, boolean done){
         this.id = id;
@@ -17,9 +20,7 @@ public class MessageForAlterationDTO {
         this.done = done;
     }
 
-    public MessageForAlterationDTO(){
-
-    }
+    public MessageForAlterationDTO(){}
 
     public boolean validateForUpdate(){
         return (this.id == 0 || this.validateForCreation());
@@ -30,32 +31,8 @@ public class MessageForAlterationDTO {
                 this.contactCode.isBlank() || this.messageBody.isBlank() || this.type.isBlank());
     }
 
-    public int getId() {
-        return id;
-    }
-    
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public String getContactCode() {
-        return contactCode;
-    }
-
-    public String getMessageBody() {
-        return messageBody;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public boolean getDone(){
-        return done;
     }
 
 }

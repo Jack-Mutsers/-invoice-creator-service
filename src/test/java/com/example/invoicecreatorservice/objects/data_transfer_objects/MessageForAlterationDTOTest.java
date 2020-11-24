@@ -40,7 +40,7 @@ class MessageForAlterationDTOTest {
         String contactCode = null;
         String messageBody = null;
         String type = null;
-        boolean done = false;
+        Boolean done = null;
 
         MessageForAlterationDTO DTOentity = new MessageForAlterationDTO();
 
@@ -59,7 +59,7 @@ class MessageForAlterationDTOTest {
         String contactCode = "1Dfr23AS2d";
         String messageBody = "this is a test message for a unit test";
         String type = "notification";
-        boolean done = false;
+        Boolean done = false;
 
         MessageForAlterationDTO DTOentity = new MessageForAlterationDTO(
                 id,
@@ -81,7 +81,7 @@ class MessageForAlterationDTOTest {
         String contactCode = "1Dfr23AS2d";
         String messageBody = "this is a test message for a unit test";
         String type = "";
-        boolean done = false;
+        Boolean done = false;
 
         MessageForAlterationDTO DTOentity = new MessageForAlterationDTO(
                 id,
@@ -103,7 +103,7 @@ class MessageForAlterationDTOTest {
         String contactCode = "1Dfr23AS2d";
         String messageBody = "this is a test message for a unit test";
         String type = "notification";
-        boolean done = false;
+        Boolean done = false;
 
         MessageForAlterationDTO DTOentity = new MessageForAlterationDTO(
                 id,
@@ -125,7 +125,7 @@ class MessageForAlterationDTOTest {
         String contactCode = null;
         String messageBody = "this is a test message for a unit test";
         String type = "";
-        boolean done = false;
+        Boolean done = false;
 
         MessageForAlterationDTO DTOentity = new MessageForAlterationDTO(
                 id,

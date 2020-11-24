@@ -1,5 +1,6 @@
 package com.example.invoicecreatorservice.services;
 
+import com.example.invoicecreatorservice.helpers.logger.LoggerService;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.CustomerDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.CustomerForAlterationDTO;
 import com.example.invoicecreatorservice.objects.models.Customer;
@@ -33,6 +34,7 @@ public class CustomerService {
 
             return true;
         }catch (Exception ex){
+            LoggerService.warn(ex.getMessage());
             return false;
         }
     }
@@ -43,6 +45,7 @@ public class CustomerService {
             Customer newObject = customerRepo.save(customer);
             return new CustomerDTO(newObject);
         }catch (Exception ex){
+            LoggerService.warn(ex.getMessage());
             return null;
         }
     }
@@ -57,6 +60,7 @@ public class CustomerService {
             customerRepo.save(customer);
             return true;
         }catch (Exception ex){
+            LoggerService.warn(ex.getMessage());
             return false;
         }
     }

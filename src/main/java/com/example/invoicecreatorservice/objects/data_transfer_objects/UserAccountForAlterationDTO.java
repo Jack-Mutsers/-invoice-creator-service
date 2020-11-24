@@ -2,13 +2,15 @@ package com.example.invoicecreatorservice.objects.data_transfer_objects;
 
 import com.example.invoicecreatorservice.helpers.tools.ContactGenerator;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
 public class UserAccountForAlterationDTO {
     private int id;
-    private boolean active;
+    private Boolean active;
     private String username;
     private String password;
     private UserForAlterationDTO user;
@@ -33,32 +35,8 @@ public class UserAccountForAlterationDTO {
         this.id = id;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public boolean getActive() {
-        return active;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public UserForAlterationDTO getUser() {
-        return user;
-    }
-
     public void setUser(UserForAlterationDTO user) {
         this.user = user;
-    }
-
-    public String getContactCode(){
-        return this.contactCode;
     }
 
     public void generateContactCode(){
@@ -66,15 +44,8 @@ public class UserAccountForAlterationDTO {
         this.contactCode = generator.generateCode();
     }
 
-    public int getCompanyId() {
-        return companyId;
-    }
-
     public void setCompanyId(int companyId) {
         this.companyId = companyId;
     }
 
-    public String getRole() {
-        return role;
-    }
 }

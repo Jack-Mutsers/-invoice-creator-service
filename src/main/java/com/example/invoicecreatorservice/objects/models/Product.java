@@ -1,6 +1,8 @@
 package com.example.invoicecreatorservice.objects.models;
 
 import com.example.invoicecreatorservice.objects.data_transfer_objects.ProductForAlterationDTO;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -9,6 +11,8 @@ import javax.persistence.*;
 //@NoArgsConstructor
 //@AllArgsConstructor
 @Entity
+@Getter
+@Setter
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,25 +40,7 @@ public class Product {
         this.productCode = productDTO.getProductCode();
     }
 
-    public Product(){
-
-    }
-
-    public int getId(){
-        return id;
-    }
-
-    public void setId(int id){
-        this.id = id;
-    }
-
-    public String getName(){
-        return name;
-    }
-
-    public void setName(String name){
-        this.name = name;
-    }
+    public Product(){}
 
     public double getPrice(){
         return price / 100.0;
@@ -62,22 +48,6 @@ public class Product {
 
     public void setPrice(double price){
         this.price = (int)Math.round(price * 100.0);
-    }
-
-    public int getCategoryId(){
-        return categoryId;
-    }
-
-    public void setCategoryId(int categoryId){
-        this.categoryId = categoryId;
-    }
-
-    public String getProductCode(){
-        return productCode;
-    }
-
-    public void setProductCode(String productCode) {
-        this.productCode = productCode;
     }
 
 }

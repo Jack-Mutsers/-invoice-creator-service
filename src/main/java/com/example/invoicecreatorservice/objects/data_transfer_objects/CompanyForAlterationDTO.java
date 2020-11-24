@@ -1,7 +1,9 @@
 package com.example.invoicecreatorservice.objects.data_transfer_objects;
 
 import com.example.invoicecreatorservice.helpers.tools.ContactGenerator;
+import lombok.Getter;
 
+@Getter
 public class CompanyForAlterationDTO {
     private int id;
     private String name;
@@ -23,9 +25,7 @@ public class CompanyForAlterationDTO {
         this.generateContactCode();
     }
 
-    public CompanyForAlterationDTO(){
-
-    }
+    public CompanyForAlterationDTO(){}
 
     public CompanyForAlterationDTO(int id, String name, String address, String zipcode, String city, String telephoneNumber, String contactCode, int ownerId) {
         this.id = id;
@@ -51,41 +51,9 @@ public class CompanyForAlterationDTO {
         this.id = id;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public String getZipcode() {
-        return zipcode;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public String getTelephoneNumber() {
-        return telephoneNumber;
-    }
-
-    public String getContactCode() {
-        return contactCode;
-    }
-
     public void generateContactCode(){
         ContactGenerator generator = new ContactGenerator();
         this.contactCode = generator.generateCode();
-    }
-
-    public int getOwnerId() {
-        return ownerId;
     }
 
     public void setOwnerId(int ownerId) {

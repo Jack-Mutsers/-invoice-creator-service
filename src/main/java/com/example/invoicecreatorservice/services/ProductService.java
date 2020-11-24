@@ -1,5 +1,6 @@
 package com.example.invoicecreatorservice.services;
 
+import com.example.invoicecreatorservice.helpers.logger.LoggerService;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.ProductDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.ProductForAlterationDTO;
 import com.example.invoicecreatorservice.objects.models.Product;
@@ -45,6 +46,7 @@ public class ProductService {
             productRepo.deleteById(id);
             return true;
         }catch (Exception ex){
+            LoggerService.warn(ex.getMessage());
             return false;
         }
     }
@@ -63,6 +65,7 @@ public class ProductService {
             newProductDTO.setCategory(categoryService.getCategory(newObject.getCategoryId()));
             return newProductDTO;
         }catch (Exception ex){
+            LoggerService.warn(ex.getMessage());
             return null;
         }
     }
@@ -74,6 +77,7 @@ public class ProductService {
             productRepo.save(product);
             return true;
         }catch (Exception ex){
+            LoggerService.warn(ex.getMessage());
             return false;
         }
     }

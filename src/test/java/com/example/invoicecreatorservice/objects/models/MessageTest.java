@@ -41,7 +41,7 @@ class MessageTest {
         String contactCode = null;
         String messageBody = null;
         String type = null;
-        boolean done = false;
+        Boolean done = null;
 
         Message entity = new Message();
 

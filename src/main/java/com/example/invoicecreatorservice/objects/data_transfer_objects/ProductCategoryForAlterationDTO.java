@@ -1,5 +1,8 @@
 package com.example.invoicecreatorservice.objects.data_transfer_objects;
 
+import lombok.Getter;
+
+@Getter
 public class ProductCategoryForAlterationDTO {
     private int id;
     private String name;
@@ -11,9 +14,7 @@ public class ProductCategoryForAlterationDTO {
         this.btw = btw;
     }
 
-    public ProductCategoryForAlterationDTO(){
-
-    }
+    public ProductCategoryForAlterationDTO(){}
 
     public boolean validateForUpdate(){
         return ( this.id == 0 || this.validateForCreation() );
@@ -25,18 +26,6 @@ public class ProductCategoryForAlterationDTO {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getId(){
-        return id;
-    }
-
-    public String getName(){
-        return name;
-    }
-
-    public int getBtw(){
-        return btw;
     }
 
 }

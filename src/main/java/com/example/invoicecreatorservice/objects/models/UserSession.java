@@ -1,5 +1,8 @@
 package com.example.invoicecreatorservice.objects.models;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,6 +16,8 @@ import java.util.UUID;
 //@NoArgsConstructor
 //@AllArgsConstructor
 @Entity
+@Getter
+@Setter
 public class UserSession {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,36 +38,4 @@ public class UserSession {
     }
 
     public UserSession() {}
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public String getExpirationDate() {
-        return expirationDate;
-    }
-
-    public void setExpirationDate(String expirationDate) {
-        this.expirationDate = expirationDate;
-    }
-
-    public UUID getToken() {
-        return token;
-    }
-
-    public void setToken(UUID token) {
-        this.token = token;
-    }
 }

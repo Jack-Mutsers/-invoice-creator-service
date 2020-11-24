@@ -1,5 +1,6 @@
 package com.example.invoicecreatorservice.services;
 
+import com.example.invoicecreatorservice.helpers.logger.LoggerService;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.*;
 import com.example.invoicecreatorservice.objects.models.UserAccount;
 import com.example.invoicecreatorservice.repositories.UserAccountRepo;
@@ -41,6 +42,7 @@ public class UserAccountService {
             }
         }
         catch (Exception ex){
+            LoggerService.warn(ex.getMessage());
             return false;
         }
     }
@@ -61,6 +63,7 @@ public class UserAccountService {
             return new UserAccountDTO(userAccountRepo.save(newUserAccount));
 
         }catch (Exception ex){
+            LoggerService.warn(ex.getMessage());
             return null;
         }
     }
@@ -86,6 +89,7 @@ public class UserAccountService {
             userAccountRepo.save(account);
             return true;
         }catch (Exception ex){
+            LoggerService.warn(ex.getMessage());
             return false;
         }
     }

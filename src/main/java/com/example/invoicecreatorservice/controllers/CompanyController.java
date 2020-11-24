@@ -66,6 +66,10 @@ public class CompanyController {
             return new ResponseEntity<>("Please provide valid data for the creation", HttpStatus.CONFLICT);
         }
 
+        if(companyDTO.getContactCode() == null){
+            companyDTO.generateContactCode();
+        }
+
         CompanyDTO newObject = service.createCompany(companyDTO, userId);
 
         if (newObject == null){

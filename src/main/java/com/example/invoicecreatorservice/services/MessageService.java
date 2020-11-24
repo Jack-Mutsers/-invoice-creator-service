@@ -1,5 +1,6 @@
 package com.example.invoicecreatorservice.services;
 
+import com.example.invoicecreatorservice.helpers.logger.LoggerService;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.MessageDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.MessageForAlterationDTO;
 import com.example.invoicecreatorservice.objects.models.Message;
@@ -56,6 +57,7 @@ public class MessageService {
 
             return true;
         }catch (Exception ex){
+            LoggerService.warn(ex.getMessage());
             return false;
         }
     }
@@ -68,6 +70,7 @@ public class MessageService {
 
             return true;
         }catch (Exception ex){
+            LoggerService.warn(ex.getMessage());
             return false;
         }
     }

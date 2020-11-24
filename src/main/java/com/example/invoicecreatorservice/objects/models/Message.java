@@ -1,6 +1,8 @@
 package com.example.invoicecreatorservice.objects.models;
 
 import com.example.invoicecreatorservice.objects.data_transfer_objects.MessageForAlterationDTO;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +13,7 @@ import javax.persistence.Id;
 //@NoArgsConstructor
 //@AllArgsConstructor
 @Entity
+@Getter @Setter
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,7 +22,7 @@ public class Message {
     private String contactCode;
     private String messageBody;
     private String type;
-    private boolean done;
+    private Boolean done;
 
     public Message(int id, int userId, String contactCode, String messageBody, String type, boolean done){
         this.id = id;
@@ -39,54 +42,5 @@ public class Message {
         this.done = messageDTO.getDone();
     }
 
-    public Message(){
-
-    }
-
-    public int getId() {
-        return id;
-    }
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public String getContactCode() {
-        return contactCode;
-    }
-
-    public void setContactCode(String contactCode) {
-        this.contactCode = contactCode;
-    }
-
-    public String getMessageBody() {
-        return messageBody;
-    }
-
-    public void setMessageBody(String messageBody) {
-        this.messageBody = messageBody;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public boolean getDone(){
-        return done;
-    }
-
-    public void setDone(boolean done){
-        this.done = done;
-    }
+    public Message(){}
 }
