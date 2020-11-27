@@ -77,6 +77,11 @@ public class CompanyController {
             return new ResponseEntity<>(new ResponseDTO(false, "Something went wrong with the creation of the company."), HttpStatus.CONFLICT);
         }
 
+        if (!userAccountService.addCompanyToUser(userId, newObject.getId())){
+            service.deleteCompany(newObject.getId(), userId);
+            return new ResponseEntity<>(new ResponseDTO(false, "Something went wrong with the creation of the company."), HttpStatus.CONFLICT);
+        }
+
         return new ResponseEntity<>(new ResponseDTO(true, newObject), HttpStatus.CREATED);
     }
 

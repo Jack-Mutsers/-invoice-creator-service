@@ -9,4 +9,5 @@ public interface IUserAccountService {
     UserAccountDTO createUserAccount(UserAccountForAlterationDTO accountDTO, int userId);
     boolean updateUserAccount(UserAccountForAlterationDTO accountDTO);
     boolean validateUsername(String username);
+    boolean addCompanyToUser(int id, int companyId);
 }

@@ -8,6 +8,7 @@ import com.example.invoicecreatorservice.objects.data_transfer_objects.ResponseD
 import com.example.invoicecreatorservice.objects.models.JwtRequest;
 import com.example.invoicecreatorservice.objects.models.JwtUserDetails;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.UserAccountDTO;
+import com.example.invoicecreatorservice.services.CompanyService;
 import com.example.invoicecreatorservice.services.JwtUserDetailsService;
 import com.example.invoicecreatorservice.services.UserAccountService;
 import com.example.invoicecreatorservice.services.UserService;
@@ -37,6 +38,9 @@ public class JwtAuthenticationController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CompanyService companyService;
 
     @PostMapping(path="/authenticate")
     public ResponseEntity<ResponseDTO> createAuthenticationToken(@RequestHeader Map<String, String> header) {

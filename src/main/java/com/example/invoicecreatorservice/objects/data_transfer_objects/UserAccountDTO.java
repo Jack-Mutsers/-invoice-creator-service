@@ -12,13 +12,17 @@ public class UserAccountDTO {
     private int userId;
     private UserDTO user;
     private String contactCode;
+    private int companyId;
     private CompanyDTO company;
+    private String role;
     private String token;
 
     public UserAccountDTO(UserAccount userAccount) {
         this.id = userAccount.getId();
         this.username = userAccount.getUsername();
         this.userId = userAccount.getUserId();
+        this.companyId = userAccount.getCompanyId();
+        this.role = userAccount.getRole();
         this.contactCode = userAccount.getContactCode();
     }
 

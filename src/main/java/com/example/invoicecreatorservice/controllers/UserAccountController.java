@@ -49,7 +49,7 @@ public class UserAccountController {
             accountDTO.generateContactCode();
         }
 
-        if(accountDTO.validateForCreation() && !service.validateUsername(accountDTO.getUsername()) && accountDTO.getUser().validateForCreation()){
+        if(accountDTO.validateForCreation() || !service.validateUsername(accountDTO.getUsername()) || accountDTO.getUser().validateForCreation()){
             return new ResponseEntity<>(new ResponseDTO(false, "Incomplete data or username already exists"), HttpStatus.CONFLICT);
         }
 

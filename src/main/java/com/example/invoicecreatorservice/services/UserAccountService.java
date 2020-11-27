@@ -3,11 +3,14 @@ package com.example.invoicecreatorservice.services;
 import com.example.invoicecreatorservice.contracts.services.IUserAccountService;
 import com.example.invoicecreatorservice.helpers.logger.LoggerService;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.*;
+import com.example.invoicecreatorservice.objects.models.User;
 import com.example.invoicecreatorservice.objects.models.UserAccount;
 import com.example.invoicecreatorservice.repositories.UserAccountRepo;
 import com.example.invoicecreatorservice.helpers.tools.BCryptEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import static com.example.invoicecreatorservice.objects.models.UserAccount.OWNER;
 
 @Service
 public class UserAccountService implements IUserAccountService {
@@ -98,5 +101,20 @@ public class UserAccountService implements IUserAccountService {
     public boolean validateUsername(String username){
         UserAccount userAccount = userAccountRepo.findByUsername(username);
         return userAccount == null;
+    }
+
+    public boolean addCompanyToUser(int id, int companyId) {
+        try{
+            UserAccount userAccount = userAccountRepo.findById(id);
+            userAccount.setCompanyId(companyId);
+            userAccount.setRole(OWNER);
+
+            userAccountRepo.save(userAccount);
+
+            return true;
+        }catch (Exception ex){
+            LoggerService.warn(ex.getMessage());
+            return false;
+        }
     }
 }
