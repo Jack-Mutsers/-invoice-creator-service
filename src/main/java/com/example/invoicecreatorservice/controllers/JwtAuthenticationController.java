@@ -4,6 +4,7 @@ import java.util.Base64;
 import java.util.Map;
 
 import com.example.invoicecreatorservice.helpers.components.JwtTokenUtil;
+import com.example.invoicecreatorservice.objects.data_transfer_objects.ResponseDTO;
 import com.example.invoicecreatorservice.objects.models.JwtRequest;
 import com.example.invoicecreatorservice.objects.models.JwtUserDetails;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.UserAccountDTO;
@@ -38,7 +39,7 @@ public class JwtAuthenticationController {
     private UserService userService;
 
     @PostMapping(path="/authenticate")
-    public ResponseEntity<Object> createAuthenticationToken(@RequestHeader Map<String, String> header) {
+    public ResponseEntity<ResponseDTO> createAuthenticationToken(@RequestHeader Map<String, String> header) {
         try {
 
             // get the base64 string
@@ -58,16 +59,20 @@ public class JwtAuthenticationController {
 
             authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
             final JwtUserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-            final String token = jwtTokenUtil.generateToken(userDetails);
-
             final UserAccountDTO user = userAccountService.getUserAccount(userDetails.getId());
+
+            if(user == null || user.getId() == 0 || user.getUsername().isBlank()){
+                return new ResponseEntity<>(new ResponseDTO(false, "Login credentials were incorrect!"), HttpStatus.NOT_FOUND);
+            }
+
+            final String token = jwtTokenUtil.generateToken(userDetails);
             user.setToken(token);
             user.setUser(userService.getUser(user.getUserId()));
 
-            return ResponseEntity.ok(user);
+            return new ResponseEntity<>(new ResponseDTO(true, user), HttpStatus.OK);
 
         } catch (Exception ex){
-            return new ResponseEntity<>("Login credentials were incorrect!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ResponseDTO(false, "Login credentials were incorrect!"), HttpStatus.BAD_REQUEST);
         }
     }
 

@@ -1,36 +1,27 @@
 package com.example.invoicecreatorservice.objects.models;
 
+import com.example.invoicecreatorservice.objects.base.Person;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.CustomerForAlterationDTO;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
 @SuppressWarnings("WeakerAccess")
-//@NoArgsConstructor
-@AllArgsConstructor
-@Entity
 @Getter
 @Setter
-public class Customer {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    private String name;
-    private String address;
-    private String zipcode;
-    private String city;
+@Entity
+public class Customer extends Person {
+    private int userId;
+
+    public Customer(int id, String name, String address, String zipcode, String city, int userId) {
+        super(id, name, address, zipcode, city);
+        this.userId = userId;
+    }
 
     public Customer(CustomerForAlterationDTO customerDTO) {
-        this.id = customerDTO.getId();
-        this.name = customerDTO.getName();
-        this.address = customerDTO.getAddress();
-        this.zipcode = customerDTO.getZipcode();
-        this.city = customerDTO.getCity();
+        super(customerDTO.getId(), customerDTO.getName(), customerDTO.getAddress(), customerDTO.getZipcode(), customerDTO.getCity());
+        this.userId = customerDTO.getUserId();
     }
 
     public Customer(){}

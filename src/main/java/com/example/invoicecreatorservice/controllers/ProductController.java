@@ -2,6 +2,7 @@ package com.example.invoicecreatorservice.controllers;
 
 import com.example.invoicecreatorservice.objects.data_transfer_objects.ProductDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.ProductForAlterationDTO;
+import com.example.invoicecreatorservice.objects.data_transfer_objects.ResponseDTO;
 import com.example.invoicecreatorservice.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,66 +19,66 @@ public class ProductController {
     private final ProductService service = new ProductService();
 
     @GetMapping(path="/{id}")
-    public @ResponseBody ResponseEntity<Object> getProduct(@PathVariable int id) {
+    public @ResponseBody ResponseEntity<ResponseDTO> getProduct(@PathVariable int id) {
         ProductDTO product = service.getProduct(id);
 
         if (product == null) {
-            return new ResponseEntity<>("Please provide a valid product identifier.", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponseDTO(false, "Please provide a valid product identifier."), HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(product, HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDTO(true, product), HttpStatus.OK);
     }
 
     @GetMapping(path="")
-    public @ResponseBody ResponseEntity<Object> getAllProducts() {
+    public @ResponseBody ResponseEntity<ResponseDTO> getAllProducts() {
         Iterable<ProductDTO> products = service.getAllProducts();
 
         if(products == null){
-            return new ResponseEntity<>("There are currently no products availible", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponseDTO(false, "There are currently no products availible"), HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(products, HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDTO(true, products), HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/{id}")
-    public @ResponseBody ResponseEntity<String> deleteProduct(@PathVariable int id) {
+    public @ResponseBody ResponseEntity<ResponseDTO> deleteProduct(@PathVariable int id) {
         boolean success = service.deleteProduct(id);
 
         if(!success){
-            return new ResponseEntity<>("Product not found.", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponseDTO(false, "Product not found."), HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>("Product has been deleted successfully.", HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDTO(true, "Product has been deleted successfully."), HttpStatus.OK);
     }
 
     @PostMapping(path="")
-    public @ResponseBody ResponseEntity<Object> createProduct(@RequestBody ProductForAlterationDTO productDTO) {
+    public @ResponseBody ResponseEntity<ResponseDTO> createProduct(@RequestBody ProductForAlterationDTO productDTO) {
         if (productDTO.validateForCreation()) {
-            return new ResponseEntity<>("The product can not be added", HttpStatus.CONFLICT);
+            return new ResponseEntity<>(new ResponseDTO(false, "The product can not be added"), HttpStatus.CONFLICT);
         }
 
         ProductDTO newObject = service.createProduct(productDTO);
 
         if (newObject == null){
-            return new ResponseEntity<>("something went wrong while trying to create the product", HttpStatus.CONFLICT);
+            return new ResponseEntity<>(new ResponseDTO(false, "something went wrong while trying to create the product"), HttpStatus.CONFLICT);
         }
 
-        return new ResponseEntity<>(newObject, HttpStatus.CREATED);
+        return new ResponseEntity<>(new ResponseDTO(true, "Product/service has been added"), HttpStatus.CREATED);
     }
 
     @PutMapping(path ="")
-    public @ResponseBody ResponseEntity<String> updateProduct(@RequestBody ProductForAlterationDTO productDTO) {
+    public @ResponseBody ResponseEntity<ResponseDTO> updateProduct(@RequestBody ProductForAlterationDTO productDTO) {
         if (productDTO.validateForUpdate()) {
-            return new ResponseEntity<>("Please provide a valid product.", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponseDTO(false, "Please provide a valid product."), HttpStatus.NOT_FOUND);
         }
 
         boolean success = service.updateProduct(productDTO);
 
         if (!success){
-            return new ResponseEntity<>("Something went wrong while trying to update the product.", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponseDTO(false, "Something went wrong while trying to update the product."), HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>("Product has successfully been updated.", HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDTO(true, "Product has successfully been updated."), HttpStatus.OK);
 
     }
 }

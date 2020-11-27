@@ -15,13 +15,15 @@ class CustomerForAlterationDTOTest {
         String address = "testlane 64";
         String zipcode = "1234 AB";
         String city = "Testvile";
+        int userId = 0;
 
         CustomerForAlterationDTO DTOentity = new CustomerForAlterationDTO(
             id,
             name,
             address,
             zipcode,
-            city
+            city,
+            userId
         );
 
         assertEquals(id, DTOentity.getId());
@@ -55,13 +57,15 @@ class CustomerForAlterationDTOTest {
         String address = "testlane 64";
         String zipcode = "1234 AB";
         String city = "Testvile";
+        int userId = 0;
 
         CustomerForAlterationDTO DTOentity = new CustomerForAlterationDTO(
                 id,
                 name,
                 address,
                 zipcode,
-                city
+                city,
+                userId
         );
 
         assertFalse(DTOentity.validateForUpdate());
@@ -74,13 +78,15 @@ class CustomerForAlterationDTOTest {
         String address = "";
         String zipcode = "1234 AB";
         String city = "Testvile";
+        int userId = 0;
 
         CustomerForAlterationDTO DTOentity = new CustomerForAlterationDTO(
                 id,
                 name,
                 address,
                 zipcode,
-                city
+                city,
+                userId
         );
 
         assertTrue(DTOentity.validateForUpdate());
@@ -93,13 +99,15 @@ class CustomerForAlterationDTOTest {
         String address = "testlane 64";
         String zipcode = "1234 AB";
         String city = "Testvile";
+        int userId = 0;
 
         CustomerForAlterationDTO DTOentity = new CustomerForAlterationDTO(
                 id,
                 name,
                 address,
                 zipcode,
-                city
+                city,
+                userId
         );
 
         assertFalse(DTOentity.validateForCreation());
@@ -112,13 +120,15 @@ class CustomerForAlterationDTOTest {
         String address = "";
         String zipcode = "1234 AB";
         String city = "Testvile";
+        int userId = 0;
 
         CustomerForAlterationDTO DTOentity = new CustomerForAlterationDTO(
                 id,
                 name,
                 address,
                 zipcode,
-                city
+                city,
+                userId
         );
 
         assertTrue(DTOentity.validateForCreation());

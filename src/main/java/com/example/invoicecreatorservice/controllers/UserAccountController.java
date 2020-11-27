@@ -1,5 +1,6 @@
 package com.example.invoicecreatorservice.controllers;
 
+import com.example.invoicecreatorservice.objects.data_transfer_objects.ResponseDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.UserAccountDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.UserAccountForAlterationDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.UserDTO;
@@ -23,14 +24,14 @@ public class UserAccountController {
     private final UserService userService = new UserService();
 
     @DeleteMapping(path = "/{id}")
-    public @ResponseBody ResponseEntity<String> deleteUser(@PathVariable int id, @RequestBody UserAccountForAlterationDTO account) {
+    public @ResponseBody ResponseEntity<ResponseDTO> deleteUser(@PathVariable int id, @RequestBody UserAccountForAlterationDTO account) {
         boolean success = service.deleteUser(id, account);
 
         if (!success) {
             if (account.getId() == id) {
-                return new ResponseEntity<>("The user you are trying to delete does not exist.", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(new ResponseDTO(false, "The user you are trying to delete does not exist."), HttpStatus.BAD_REQUEST);
             } else {
-                return new ResponseEntity<>("Please login with the account you are trying to delete.", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(new ResponseDTO(false, "Please login with the account you are trying to delete."), HttpStatus.BAD_REQUEST);
             }
         }else{
 
@@ -39,17 +40,17 @@ public class UserAccountController {
         }
 
 
-        return new ResponseEntity<>("Account has been deleted successfully.", HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDTO(true, "Account has been deleted successfully."), HttpStatus.OK);
     }
 
     @PostMapping(path="")
-    public @ResponseBody ResponseEntity<Object> createUserAccount(@RequestBody UserAccountForAlterationDTO accountDTO) {
+    public @ResponseBody ResponseEntity<ResponseDTO> createUserAccount(@RequestBody UserAccountForAlterationDTO accountDTO) {
         if(accountDTO.getContactCode() == null){
             accountDTO.generateContactCode();
         }
 
         if(accountDTO.validateForCreation() && !service.validateUsername(accountDTO.getUsername()) && accountDTO.getUser().validateForCreation()){
-            return new ResponseEntity<>("Incomplete data or username already exists", HttpStatus.CONFLICT);
+            return new ResponseEntity<>(new ResponseDTO(false, "Incomplete data or username already exists"), HttpStatus.CONFLICT);
         }
 
         UserDTO user = userService.createUser(accountDTO.getUser());
@@ -57,26 +58,26 @@ public class UserAccountController {
 
         if (newObject == null){
             userService.deleteUser(user.getId());
-            return new ResponseEntity<>("something went wrong wile creating a new user account", HttpStatus.CONFLICT);
+            return new ResponseEntity<>(new ResponseDTO(false, "something went wrong wile creating a new user account"), HttpStatus.CONFLICT);
         }
 
         newObject.setUser(userService.getUser(user.getId()));
 
-        return new ResponseEntity<>(newObject, HttpStatus.CREATED);
+        return new ResponseEntity<>(new ResponseDTO(true, "User account has been created"), HttpStatus.CREATED);
     }
 
     @PutMapping(path ="")
-    public @ResponseBody ResponseEntity<String> updateUserAccount(@RequestBody UserAccountForAlterationDTO accountDTO) {
+    public @ResponseBody ResponseEntity<ResponseDTO> updateUserAccount(@RequestBody UserAccountForAlterationDTO accountDTO) {
         if(accountDTO.validateForUpdate() && accountDTO.getUser().validateForUpdate()){
-            return new ResponseEntity<>("Please provide valid account details.", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponseDTO(false, "Please provide valid account details."), HttpStatus.NOT_FOUND);
         }
 
         boolean success = service.updateUserAccount(accountDTO);
 
         if (!success){
-            return new ResponseEntity<>("Something went wrong while updating your account", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponseDTO(false, "Something went wrong while updating your account"), HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>("Account has successfully been updated.", HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDTO(true, "Account has successfully been updated."), HttpStatus.OK);
     }
 }

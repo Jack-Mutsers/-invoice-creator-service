@@ -34,11 +34,11 @@ class CustomerServiceTest {
     private final List<Customer> entityList = new ArrayList<>();
 
     private CustomerServiceTest(){
-        entityList.add(new Customer(1, "Jhon Doe", "kerkstraat", "5926 DF", "Asten"));
-        entityList.add(new Customer(2, "Arnold Schwarzenegger", "titanusstraat", "6943 RC", "Geldrop"));
-        entityList.add(new Customer(3, "Tommy Blinder", "zonnenbloemlaan", "3496 PL", "heeze"));
-        entityList.add(new Customer(4, "jhon snow", "st.martinlaan", "8512 BM", "Eindhoven"));
-        entityList.add(new Customer(5, "henk jansen", "testlane 64", "1234 AB", "Testvile"));
+        entityList.add(new Customer(1, "Jhon Doe", "kerkstraat", "5926 DF", "Asten", 1));
+        entityList.add(new Customer(2, "Arnold Schwarzenegger", "titanusstraat", "6943 RC", "Geldrop", 0));
+        entityList.add(new Customer(3, "Tommy Blinder", "zonnenbloemlaan", "3496 PL", "heeze", 0));
+        entityList.add(new Customer(4, "jhon snow", "st.martinlaan", "8512 BM", "Eindhoven", 3));
+        entityList.add(new Customer(5, "henk jansen", "testlane 64", "1234 AB", "Testvile", 5));
     }
 
     @Test
@@ -113,7 +113,8 @@ class CustomerServiceTest {
                 entity.getName(),
                 entity.getAddress(),
                 entity.getZipcode(),
-                entity.getCity()
+                entity.getCity(),
+                entity.getUserId()
         );
 
         //Prepare overwrites
@@ -155,7 +156,8 @@ class CustomerServiceTest {
                 entity.getName(),
                 entity.getAddress(),
                 entity.getZipcode(),
-                entity.getCity()
+                entity.getCity(),
+                entity.getUserId()
         );
 
         //Prepare overwrites
@@ -177,7 +179,8 @@ class CustomerServiceTest {
                 entity.getName(),
                 entity.getAddress(),
                 "",
-                entity.getCity()
+                entity.getCity(),
+                entity.getUserId()
         );
 
         //Prepare overwrites

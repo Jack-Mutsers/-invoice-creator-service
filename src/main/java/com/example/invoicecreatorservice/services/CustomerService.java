@@ -1,5 +1,6 @@
 package com.example.invoicecreatorservice.services;
 
+import com.example.invoicecreatorservice.contracts.services.ICustomerService;
 import com.example.invoicecreatorservice.helpers.logger.LoggerService;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.CustomerDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.CustomerForAlterationDTO;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class CustomerService {
+public class CustomerService implements ICustomerService {
     @Autowired
     private CustomerRepo customerRepo;
 
@@ -42,6 +43,10 @@ public class CustomerService {
     public CustomerDTO createCustomer(CustomerForAlterationDTO customerDTO) {
         try{
             Customer customer = new Customer(customerDTO);
+
+            // set id to 0 to prevent update of existing record on create
+            customer.setId(0);
+
             Customer newObject = customerRepo.save(customer);
             return new CustomerDTO(newObject);
         }catch (Exception ex){
@@ -53,9 +58,6 @@ public class CustomerService {
     public boolean updateCustomer(CustomerForAlterationDTO customerDTO) {
         try {
             Customer customer = new Customer(customerDTO);
-
-            // set id to 0 to prevent update of existing record on create
-            customer.setId(0);
 
             customerRepo.save(customer);
             return true;

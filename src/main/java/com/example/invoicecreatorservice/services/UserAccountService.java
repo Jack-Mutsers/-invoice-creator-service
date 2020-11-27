@@ -1,5 +1,6 @@
 package com.example.invoicecreatorservice.services;
 
+import com.example.invoicecreatorservice.contracts.services.IUserAccountService;
 import com.example.invoicecreatorservice.helpers.logger.LoggerService;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.*;
 import com.example.invoicecreatorservice.objects.models.UserAccount;
@@ -9,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserAccountService {
+public class UserAccountService implements IUserAccountService {
 
     @Autowired
     private UserAccountRepo userAccountRepo;

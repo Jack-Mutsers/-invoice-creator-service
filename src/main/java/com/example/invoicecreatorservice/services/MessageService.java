@@ -1,5 +1,6 @@
 package com.example.invoicecreatorservice.services;
 
+import com.example.invoicecreatorservice.contracts.services.IMessageService;
 import com.example.invoicecreatorservice.helpers.logger.LoggerService;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.MessageDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.MessageForAlterationDTO;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class MessageService {
+public class MessageService implements IMessageService {
     @Autowired
     private MessageRepo messageRepo;
 

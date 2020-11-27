@@ -1,5 +1,6 @@
 package com.example.invoicecreatorservice.services;
 
+import com.example.invoicecreatorservice.contracts.services.ICompanyService;
 import com.example.invoicecreatorservice.helpers.logger.LoggerService;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.CompanyDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.CompanyForAlterationDTO;
@@ -12,7 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class CompanyService {
+public class CompanyService implements ICompanyService {
+
     @Autowired
     private CompanyRepo companyRepo;
 

@@ -1,21 +1,11 @@
 package com.example.invoicecreatorservice.objects.data_transfer_objects;
 
-import lombok.Getter;
+import com.example.invoicecreatorservice.objects.base.Person;
 
-@Getter
-public class UserForAlterationDTO {
-    private int id;
-    private String name;
-    private String address;
-    private String zipcode;
-    private String city;
+public class UserForAlterationDTO extends Person {
 
     public UserForAlterationDTO(int id, String name, String address, String zipcode, String city) {
-        this.id = id;
-        this.name = name;
-        this.address = address;
-        this.zipcode = zipcode;
-        this.city = city;
+        super(id, name, address, zipcode, city);
     }
 
     public UserForAlterationDTO(){}
@@ -27,10 +17,6 @@ public class UserForAlterationDTO {
     public boolean validateForCreation(){
         return ( this.name == null || this.address == null || this.zipcode == null || this.city == null ||
                 this.name.isBlank() || this.address.isBlank() || this.zipcode.isBlank() || this.city.isBlank());
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
 }

@@ -19,13 +19,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
-import static com.example.invoicecreatorservice.objects.models.UserAccount.*;
-
 @CrossOrigin
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private static final String ADMIN    = "ADMIN";
+    private static final String OWNER    = "OWNER";
+    private static final String EMPLOYEE = "EMPLOYEE";
+    private static final String USER     = "USER";
 
     @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -62,35 +65,33 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // dont authenticate this particular request
         .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
         .antMatchers("/authenticate").permitAll()
-        .antMatchers("/authenticate/").permitAll()
         .antMatchers("/authenticate/*").permitAll()
 
         // Company permissions
-        .antMatchers(HttpMethod.GET, "/company/").hasAnyRole(ADMIN, OWNER, EMPLOYEE, USER)
+        .antMatchers(HttpMethod.GET, "/company").hasAnyRole(ADMIN, OWNER, EMPLOYEE, USER)
         .antMatchers(HttpMethod.POST, "/company/{userId}").hasAnyRole(ADMIN, OWNER, EMPLOYEE, USER)
         .antMatchers("/company/*").hasAnyRole(ADMIN, OWNER, EMPLOYEE)
-        .antMatchers(HttpMethod.DELETE, "/company/").hasAnyRole(ADMIN, OWNER)
+        .antMatchers(HttpMethod.DELETE, "/company").hasAnyRole(ADMIN, OWNER)
 
         // Customer permissions
-        .antMatchers("/customers/").hasAnyRole(ADMIN, OWNER, EMPLOYEE)
+        .antMatchers("/customers").hasAnyRole(ADMIN, OWNER, EMPLOYEE)
         .antMatchers("/customers/*").hasAnyRole(ADMIN, OWNER, EMPLOYEE)
 
         // Message permission
-        .antMatchers("/messenger/").hasAnyRole(ADMIN, OWNER, EMPLOYEE, USER)
+        .antMatchers("/messenger").hasAnyRole(ADMIN, OWNER, EMPLOYEE, USER)
         .antMatchers("/messenger/*").hasAnyRole(ADMIN, OWNER, EMPLOYEE, USER)
 
         // Product category permissions
-        .antMatchers("/productcategory/").hasAnyRole(ADMIN, OWNER, EMPLOYEE)
+        .antMatchers("/productcategory").hasAnyRole(ADMIN, OWNER, EMPLOYEE)
         .antMatchers("/productcategory/*").hasAnyRole(ADMIN, OWNER, EMPLOYEE)
 
         // Product permissions
-        .antMatchers("/products/").hasAnyRole(ADMIN, OWNER, EMPLOYEE)
+        .antMatchers("/products").hasAnyRole(ADMIN, OWNER, EMPLOYEE)
         .antMatchers("/products/*").hasAnyRole(ADMIN, OWNER, EMPLOYEE)
 
         // Useraccount permissions
-        .antMatchers(HttpMethod.POST,"/useraccount/").permitAll()
         .antMatchers(HttpMethod.POST,"/useraccount").permitAll()
-        .antMatchers("/useraccount/").hasAnyRole(ADMIN, OWNER, EMPLOYEE, USER)
+        .antMatchers("/useraccount").hasAnyRole(ADMIN, OWNER, EMPLOYEE, USER)
         .antMatchers("/useraccount/*").hasAnyRole(ADMIN, OWNER, EMPLOYEE, USER)
 
         // all other requests need to be authenticated
@@ -99,6 +100,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // store user's state.
         .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
         // Add a filter to validate the tokens with every request
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }

@@ -1,8 +1,9 @@
 package com.example.invoicecreatorservice.helpers.tools;
 
+import com.example.invoicecreatorservice.contracts.tools.IPasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-public class BCryptEncoder {
+public class BCryptEncoder implements IPasswordEncoder {
 
     private static BCryptEncoder myself;
     private BCryptPasswordEncoder passwordEncoder;

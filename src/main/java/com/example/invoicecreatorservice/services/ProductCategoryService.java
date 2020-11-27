@@ -1,5 +1,6 @@
 package com.example.invoicecreatorservice.services;
 
+import com.example.invoicecreatorservice.contracts.services.IProductCategoryService;
 import com.example.invoicecreatorservice.helpers.logger.LoggerService;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.ProductCategoryDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.ProductCategoryForAlterationDTO;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ProductCategoryService {
+public class ProductCategoryService implements IProductCategoryService {
 
     @Autowired
     private ProductCategoryRepo productCategoryRepo;

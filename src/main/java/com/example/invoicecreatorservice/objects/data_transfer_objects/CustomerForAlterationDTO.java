@@ -9,13 +9,15 @@ public class CustomerForAlterationDTO {
     private String address;
     private String zipcode;
     private String city;
+    private int userId;
 
-    public CustomerForAlterationDTO(int id, String name, String address, String zipcode, String city) {
+    public CustomerForAlterationDTO(int id, String name, String address, String zipcode, String city, int userId) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.zipcode = zipcode;
         this.city = city;
+        this.userId = userId;
     }
 
     public CustomerForAlterationDTO(){}

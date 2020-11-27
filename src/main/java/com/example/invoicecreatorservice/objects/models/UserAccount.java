@@ -14,10 +14,10 @@ import javax.persistence.*;
 @Getter
 @Setter
 public class UserAccount {
-    public static final String ADMIN = "ROLE_ADMIN";
-    public static final String OWNER = "ROLE_OWNER";
+    public static final String ADMIN    = "ROLE_ADMIN";
+    public static final String OWNER    = "ROLE_OWNER";
     public static final String EMPLOYEE = "ROLE_EMPLOYEE";
-    public static final String USER = "ROLE_USER";
+    public static final String USER     = "ROLE_USER";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
