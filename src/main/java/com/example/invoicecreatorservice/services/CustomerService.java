@@ -8,6 +8,7 @@ import com.example.invoicecreatorservice.objects.models.Customer;
 import com.example.invoicecreatorservice.repositories.CustomerRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -21,17 +22,23 @@ public class CustomerService implements ICustomerService {
         return new CustomerDTO(customer);
     }
 
-    public Iterable<Customer> getAllCustomers() {
-        List<Customer> customers = (List) customerRepo.findAll();
+    public Iterable<Customer> getAllCustomers(int id) {
+        List<Customer> customers = (List) customerRepo.findAllByCompanyId(id);
 
         if(customers.isEmpty()){ return null; }
 
         return customers;
     }
 
-    public boolean deleteCustomer(int id) {
+    public boolean deleteCustomer(int customerId, int companyId) {
         try{
-            customerRepo.deleteById(id);
+            Customer customer = customerRepo.findById(customerId);
+
+            if(customer.getCompanyId() == companyId){
+                customerRepo.deleteById(customerId);
+            }else{
+                return false;
+            }
 
             return true;
         }catch (Exception ex){

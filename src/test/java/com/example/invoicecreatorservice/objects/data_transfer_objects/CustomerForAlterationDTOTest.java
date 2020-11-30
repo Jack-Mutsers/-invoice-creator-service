@@ -16,6 +16,7 @@ class CustomerForAlterationDTOTest {
         String zipcode = "1234 AB";
         String city = "Testvile";
         int userId = 0;
+        int companyId = 1;
 
         CustomerForAlterationDTO DTOentity = new CustomerForAlterationDTO(
             id,
@@ -23,7 +24,8 @@ class CustomerForAlterationDTOTest {
             address,
             zipcode,
             city,
-            userId
+            userId,
+            companyId
         );
 
         assertEquals(id, DTOentity.getId());
@@ -58,6 +60,7 @@ class CustomerForAlterationDTOTest {
         String zipcode = "1234 AB";
         String city = "Testvile";
         int userId = 0;
+        int companyId = 1;
 
         CustomerForAlterationDTO DTOentity = new CustomerForAlterationDTO(
                 id,
@@ -65,7 +68,8 @@ class CustomerForAlterationDTOTest {
                 address,
                 zipcode,
                 city,
-                userId
+                userId,
+                companyId
         );
 
         assertFalse(DTOentity.validateForUpdate());
@@ -79,6 +83,7 @@ class CustomerForAlterationDTOTest {
         String zipcode = "1234 AB";
         String city = "Testvile";
         int userId = 0;
+        int companyId = 1;
 
         CustomerForAlterationDTO DTOentity = new CustomerForAlterationDTO(
                 id,
@@ -86,7 +91,8 @@ class CustomerForAlterationDTOTest {
                 address,
                 zipcode,
                 city,
-                userId
+                userId,
+                companyId
         );
 
         assertTrue(DTOentity.validateForUpdate());
@@ -100,6 +106,7 @@ class CustomerForAlterationDTOTest {
         String zipcode = "1234 AB";
         String city = "Testvile";
         int userId = 0;
+        int companyId = 1;
 
         CustomerForAlterationDTO DTOentity = new CustomerForAlterationDTO(
                 id,
@@ -107,7 +114,8 @@ class CustomerForAlterationDTOTest {
                 address,
                 zipcode,
                 city,
-                userId
+                userId,
+                companyId
         );
 
         assertFalse(DTOentity.validateForCreation());
@@ -121,6 +129,7 @@ class CustomerForAlterationDTOTest {
         String zipcode = "1234 AB";
         String city = "Testvile";
         int userId = 0;
+        int companyId = 1;
 
         CustomerForAlterationDTO DTOentity = new CustomerForAlterationDTO(
                 id,
@@ -128,7 +137,8 @@ class CustomerForAlterationDTOTest {
                 address,
                 zipcode,
                 city,
-                userId
+                userId,
+                companyId
         );
 
         assertTrue(DTOentity.validateForCreation());

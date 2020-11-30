@@ -18,9 +18,9 @@ public class CustomerController {
     @Autowired
     private final CustomerService service = new CustomerService();
 
-    @GetMapping(path="/{id}")
-    public @ResponseBody ResponseEntity<ResponseDTO> getCustomer(@PathVariable int id) {
-        CustomerDTO customer = service.getCustomer(id);
+    @GetMapping(path="/{customerId}/{companyId}")
+    public @ResponseBody ResponseEntity<ResponseDTO> getCustomer(@PathVariable int customerId, @PathVariable int companyId) {
+        CustomerDTO customer = service.getCustomer(customerId);
 
         if (customer == null) {
             return new ResponseEntity<>(new ResponseDTO(false, "Please provide a valid customer identifier."), HttpStatus.NOT_FOUND);
@@ -29,9 +29,9 @@ public class CustomerController {
         return new ResponseEntity<>(new ResponseDTO(true, customer), HttpStatus.OK);
     }
 
-    @GetMapping(path="")
-    public  @ResponseBody ResponseEntity<ResponseDTO> getAllCustomers() {
-        Iterable<Customer> customers = service.getAllCustomers();
+    @GetMapping(path="/{id}")
+    public  @ResponseBody ResponseEntity<ResponseDTO> getAllCustomers(@PathVariable int id) {
+        Iterable<Customer> customers = service.getAllCustomers(id);
 
         if(customers == null){
             return new ResponseEntity<>(new ResponseDTO(false, "There are currently no customers availible"), HttpStatus.OK);
@@ -40,9 +40,9 @@ public class CustomerController {
         return new ResponseEntity<>(new ResponseDTO(true, customers), HttpStatus.OK);
     }
 
-    @DeleteMapping(path = "/{id}")
-    public @ResponseBody ResponseEntity<ResponseDTO> deleteCustomer(@PathVariable int id) {
-        boolean success = service.deleteCustomer(id);
+    @DeleteMapping(path = "/{customerId}/{companyId}")
+    public @ResponseBody ResponseEntity<ResponseDTO> deleteCustomer(@PathVariable int customerId, @PathVariable int companyId) {
+        boolean success = service.deleteCustomer(customerId, companyId);
 
         if(!success){
             return new ResponseEntity<>(new ResponseDTO(false, "customer not found."), HttpStatus.NOT_FOUND);

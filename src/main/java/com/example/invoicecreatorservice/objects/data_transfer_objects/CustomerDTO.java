@@ -14,6 +14,7 @@ public class CustomerDTO {
     private String address;
     private String zipcode;
     private String city;
+    private int companyId;
 
     public CustomerDTO(Customer customer) {
         this.id = customer.getId();
@@ -21,6 +22,7 @@ public class CustomerDTO {
         this.address = customer.getAddress();
         this.zipcode = customer.getZipcode();
         this.city = customer.getCity();
+        this.companyId = customer.getCompanyId();
     }
 
     public CustomerDTO(){}

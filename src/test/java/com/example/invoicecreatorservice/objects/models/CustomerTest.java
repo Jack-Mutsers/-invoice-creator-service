@@ -17,6 +17,7 @@ class CustomerTest {
         String zipcode = "1234 AB";
         String city = "Testvile";
         int userId = 0;
+        int companyId = 1;
 
         Customer entity = new Customer(
             id,
@@ -24,7 +25,8 @@ class CustomerTest {
             address,
             zipcode,
             city,
-            userId
+            userId,
+            companyId
         );
 
         assertEquals(id, entity.getId());
@@ -59,6 +61,7 @@ class CustomerTest {
         String zipcode = "1234 AB";
         String city = "Testvile";
         int userId = 0;
+        int companyId = 1;
 
         CustomerForAlterationDTO entityDTO = new CustomerForAlterationDTO(
             id,
@@ -66,7 +69,8 @@ class CustomerTest {
             address,
             zipcode,
             city,
-            userId
+            userId,
+            companyId
         );
 
         Customer entity = new Customer(entityDTO);

@@ -34,11 +34,11 @@ class CustomerServiceTest {
     private final List<Customer> entityList = new ArrayList<>();
 
     private CustomerServiceTest(){
-        entityList.add(new Customer(1, "Jhon Doe", "kerkstraat", "5926 DF", "Asten", 1));
-        entityList.add(new Customer(2, "Arnold Schwarzenegger", "titanusstraat", "6943 RC", "Geldrop", 0));
-        entityList.add(new Customer(3, "Tommy Blinder", "zonnenbloemlaan", "3496 PL", "heeze", 0));
-        entityList.add(new Customer(4, "jhon snow", "st.martinlaan", "8512 BM", "Eindhoven", 3));
-        entityList.add(new Customer(5, "henk jansen", "testlane 64", "1234 AB", "Testvile", 5));
+        entityList.add(new Customer(1, "Jhon Doe", "kerkstraat", "5926 DF", "Asten", 1, 1));
+        entityList.add(new Customer(2, "Arnold Schwarzenegger", "titanusstraat", "6943 RC", "Geldrop", 0, 1));
+        entityList.add(new Customer(3, "Tommy Blinder", "zonnenbloemlaan", "3496 PL", "heeze", 0, 2));
+        entityList.add(new Customer(4, "jhon snow", "st.martinlaan", "8512 BM", "Eindhoven", 3, 2));
+        entityList.add(new Customer(5, "henk jansen", "testlane 64", "1234 AB", "Testvile", 5, 1));
     }
 
     @Test
@@ -64,10 +64,11 @@ class CustomerServiceTest {
     @Test
     void getAllCustomersTest(){
         //Prepare
+
         when(repo.findAll()).thenReturn(entityList);
 
         //Act
-        List<Customer> resultEntity = (List) service.getAllCustomers();
+        List<Customer> resultEntity = (List) service.getAllCustomers(1);
 
         //Assert
         assertEquals(entityList.size(), resultEntity.size());
@@ -82,7 +83,7 @@ class CustomerServiceTest {
         when(repo.findById(entity.getId())).thenReturn(entity);
 
         //Act
-        boolean result = service.deleteCustomer(entity.getId());
+        boolean result = service.deleteCustomer(entity.getId(), entity.getCompanyId());
 
         //Assert
         assertTrue(result);
@@ -98,7 +99,7 @@ class CustomerServiceTest {
         doThrow(new EmptyResultDataAccessException(1000)).when(repo).deleteById(notNull());
 
         //Act
-        Boolean result = service.deleteCustomer(entity.getId());
+        Boolean result = service.deleteCustomer(entity.getId(), entity.getCompanyId());
 
         //Assert
         assertFalse(result);
@@ -114,7 +115,8 @@ class CustomerServiceTest {
                 entity.getAddress(),
                 entity.getZipcode(),
                 entity.getCity(),
-                entity.getUserId()
+                entity.getUserId(),
+                entity.getCompanyId()
         );
 
         //Prepare overwrites
@@ -157,7 +159,8 @@ class CustomerServiceTest {
                 entity.getAddress(),
                 entity.getZipcode(),
                 entity.getCity(),
-                entity.getUserId()
+                entity.getUserId(),
+                entity.getCompanyId()
         );
 
         //Prepare overwrites
@@ -180,7 +183,8 @@ class CustomerServiceTest {
                 entity.getAddress(),
                 "",
                 entity.getCity(),
-                entity.getUserId()
+                entity.getUserId(),
+                entity.getCompanyId()
         );
 
         //Prepare overwrites

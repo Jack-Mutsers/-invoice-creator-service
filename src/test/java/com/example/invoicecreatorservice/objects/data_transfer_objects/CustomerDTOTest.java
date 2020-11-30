@@ -17,6 +17,7 @@ class CustomerDTOTest {
         String zipcode = "1234 AB";
         String city = "Testvile";
         int userId = 0;
+        int companyId = 1;
 
         Customer entity = new Customer(
                 id,
@@ -24,7 +25,8 @@ class CustomerDTOTest {
                 address,
                 zipcode,
                 city,
-                userId
+                userId,
+                companyId
         );
 
         CustomerDTO DTOentity = new CustomerDTO(entity);
