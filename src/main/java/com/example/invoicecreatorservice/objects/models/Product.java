@@ -20,16 +20,18 @@ public class Product {
     private String name;
     private int price;
 
-    @Column(unique=true, nullable = false)
     private String productCode;
     private int categoryId;
+    private int companyId;
 
-    public Product(int id, String name, double price, int categoryId, String productCode){
+    public Product(int id, String name, double price, int categoryId, String productCode, int companyId){
         this.id = id;
         this.name = name;
         this.price = (int)Math.round(price * 100.0);
         this.categoryId = categoryId;
         this.productCode = productCode;
+        this.categoryId = categoryId;
+        this.companyId = companyId;
     }
 
     public Product(ProductForAlterationDTO productDTO){
@@ -38,6 +40,7 @@ public class Product {
         this.price = productDTO.getPrice();
         this.categoryId = productDTO.getCategoryId();
         this.productCode = productDTO.getProductCode();
+        this.companyId = productDTO.getCompanyId();
     }
 
     public Product(){}

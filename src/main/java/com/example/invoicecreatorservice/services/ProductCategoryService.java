@@ -23,17 +23,24 @@ public class ProductCategoryService implements IProductCategoryService {
         return new ProductCategoryDTO(category);
     }
 
-    public Iterable<ProductCategory> getAllCategory() {
-        List<ProductCategory> categories = (List) productCategoryRepo.findAll();
+    public Iterable<ProductCategory> getAllCategory(int id) {
+        List<ProductCategory> categories = (List) productCategoryRepo.findAllByCompanyId(id);
 
         if(categories.isEmpty()){ return null; }
 
         return categories;
     }
 
-    public boolean deleteCategory(int id) {
+    public boolean deleteCategory(int id, int companyId) {
         try{
-            productCategoryRepo.deleteById(id);
+            ProductCategory category = productCategoryRepo.findById(id);
+
+            if(category.getCompanyId() == companyId){
+                productCategoryRepo.deleteById(id);
+            }else {
+                return false;
+            }
+
             return true;
         }catch (Exception ex){
             LoggerService.warn(ex.getMessage());

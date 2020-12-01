@@ -9,14 +9,16 @@ public class ProductForAlterationDTO {
     private int price;
     private int categoryId;
     private String productCode;
+    private int companyId;
 
-    public ProductForAlterationDTO(int id, String name, double price, int categoryId, String productCode){
+    public ProductForAlterationDTO(int id, String name, double price, int categoryId, String productCode, int companyId){
 
         this.id = id;
         this.name = name;
         this.price = (int)Math.round(price * 100.0);
         this.categoryId = categoryId;
         this.productCode = productCode;
+        this.categoryId = companyId;
     }
 
     public ProductForAlterationDTO(){}
@@ -37,4 +39,7 @@ public class ProductForAlterationDTO {
         this.price = (int)Math.round(price * 100.0);
     }
 
+    public void setCompanyId(int companyId) {
+        this.companyId = companyId;
+    }
 }

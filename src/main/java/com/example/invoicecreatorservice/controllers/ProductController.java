@@ -10,10 +10,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @CrossOrigin
 @Controller
 @RequestMapping("/products")
-public class ProductController {
+public class ProductController extends BaseCompanyController {
 
     @Autowired
     private final ProductService service = new ProductService();
@@ -30,29 +32,45 @@ public class ProductController {
     }
 
     @GetMapping(path="")
-    public @ResponseBody ResponseEntity<ResponseDTO> getAllProducts() {
-        Iterable<ProductDTO> products = service.getAllProducts();
+    public @ResponseBody ResponseEntity<ResponseDTO> getAllProducts(HttpServletRequest request) {
+        int companyId = super.getCompanyId(request);
+
+        if(companyId == 0){
+            return new ResponseEntity<>(new ResponseDTO(false, "There are currently no products availible"), HttpStatus.NOT_FOUND);
+        }
+
+        Iterable<ProductDTO> products = service.getAllProducts(companyId);
 
         if(products == null){
-            return new ResponseEntity<>(new ResponseDTO(false, "There are currently no products availible"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponseDTO(true, "There are currently no products availible"), HttpStatus.OK);
         }
 
         return new ResponseEntity<>(new ResponseDTO(true, products), HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/{id}")
-    public @ResponseBody ResponseEntity<ResponseDTO> deleteProduct(@PathVariable int id) {
-        boolean success = service.deleteProduct(id);
+    public @ResponseBody ResponseEntity<ResponseDTO> deleteProduct(HttpServletRequest request, @PathVariable int id) {
+        int companyId = super.getCompanyId(request);
+
+        if(companyId == 0){
+            return new ResponseEntity<>(new ResponseDTO(false, "There are currently no products availible"), HttpStatus.NOT_FOUND);
+        }
+
+        boolean success = service.deleteProduct(id, companyId);
 
         if(!success){
-            return new ResponseEntity<>(new ResponseDTO(false, "Product not found."), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponseDTO(false, "Product not found."), HttpStatus.OK);
         }
 
         return new ResponseEntity<>(new ResponseDTO(true, "Product has been deleted successfully."), HttpStatus.OK);
     }
 
     @PostMapping(path="")
-    public @ResponseBody ResponseEntity<ResponseDTO> createProduct(@RequestBody ProductForAlterationDTO productDTO) {
+    public @ResponseBody ResponseEntity<ResponseDTO> createProduct(HttpServletRequest request, @RequestBody ProductForAlterationDTO productDTO) {
+        int companyId = super.getCompanyId(request);
+
+        productDTO.setCompanyId(companyId);
+
         if (productDTO.validateForCreation()) {
             return new ResponseEntity<>(new ResponseDTO(false, "The product can not be added"), HttpStatus.CONFLICT);
         }
@@ -67,7 +85,11 @@ public class ProductController {
     }
 
     @PutMapping(path ="")
-    public @ResponseBody ResponseEntity<ResponseDTO> updateProduct(@RequestBody ProductForAlterationDTO productDTO) {
+    public @ResponseBody ResponseEntity<ResponseDTO> updateProduct(HttpServletRequest request, @RequestBody ProductForAlterationDTO productDTO) {
+        int companyId = super.getCompanyId(request);
+
+        productDTO.setCompanyId(companyId);
+
         if (productDTO.validateForUpdate()) {
             return new ResponseEntity<>(new ResponseDTO(false, "Please provide a valid product."), HttpStatus.NOT_FOUND);
         }

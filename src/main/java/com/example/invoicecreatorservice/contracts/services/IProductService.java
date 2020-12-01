@@ -5,8 +5,8 @@ import com.example.invoicecreatorservice.objects.data_transfer_objects.ProductFo
 
 public interface IProductService {
     ProductDTO getProduct(int id);
-    Iterable<ProductDTO> getAllProducts();
-    boolean deleteProduct(int id);
+    Iterable<ProductDTO> getAllProducts(int companyId);
+    boolean deleteProduct(int id, int companyId);
     ProductDTO createProduct(ProductForAlterationDTO productDTO);
     boolean updateProduct(ProductForAlterationDTO productDTO);
 }

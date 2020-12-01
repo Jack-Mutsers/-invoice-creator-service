@@ -7,11 +7,13 @@ public class ProductCategoryForAlterationDTO {
     private int id;
     private String name;
     private int btw;
+    private int companyId;
 
-    public ProductCategoryForAlterationDTO(int id, String name, int btw){
+    public ProductCategoryForAlterationDTO(int id, String name, int btw, int companyId){
         this.id = id;
         this.name = name;
         this.btw = btw;
+        this.companyId = companyId;
     }
 
     public ProductCategoryForAlterationDTO(){}
@@ -21,11 +23,14 @@ public class ProductCategoryForAlterationDTO {
     }
 
     public boolean validateForCreation(){
-        return ( this.name == null || this.name.isBlank() || this.btw == 0 );
+        return ( this.name == null || this.name.isBlank() || this.btw == 0 || this.companyId == 0 );
     }
 
     public void setId(int id) {
         this.id = id;
     }
 
+    public void setCompanyId(int companyId) {
+        this.companyId = companyId;
+    }
 }

@@ -40,8 +40,8 @@ class UserAccountForAlterationDTOTest {
             password,
             userDTO,
             contactCode,
-            companyId,
-            role
+            role,
+            companyId
         );
 
         assertEquals(id, DTOentity.getId());
@@ -104,8 +104,8 @@ class UserAccountForAlterationDTOTest {
                 password,
                 userDTO,
                 contactCode,
-                companyId,
-                role
+                role,
+                companyId
         );
 
         assertFalse(DTOentity.validateForUpdate());
@@ -144,8 +144,8 @@ class UserAccountForAlterationDTOTest {
                 password,
                 userDTO,
                 contactCode,
-                companyId,
-                role
+                role,
+                companyId
         );
 
         assertTrue(DTOentity.validateForUpdate());
@@ -184,8 +184,8 @@ class UserAccountForAlterationDTOTest {
                 password,
                 userDTO,
                 contactCode,
-                companyId,
-                role
+                role,
+                companyId
         );
 
         assertFalse(DTOentity.validateForCreation());
@@ -224,8 +224,8 @@ class UserAccountForAlterationDTOTest {
                 password,
                 userDTO,
                 contactCode,
-                companyId,
-                role
+                role,
+                companyId
         );
 
         assertTrue(DTOentity.validateForCreation());
@@ -249,8 +249,8 @@ class UserAccountForAlterationDTOTest {
                 password,
                 userDTO,
                 contactCode,
-                companyId,
-                role
+                role,
+                companyId
         );
 
         assertFalse(DTOentity.validateLoginData());
@@ -275,8 +275,8 @@ class UserAccountForAlterationDTOTest {
                 password,
                 userDTO,
                 contactCode,
-                companyId,
-                role
+                role,
+                companyId
         );
 
         assertTrue(DTOentity.validateLoginData());

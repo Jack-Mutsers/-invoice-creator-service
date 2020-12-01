@@ -50,7 +50,6 @@ class CompanyServiceTest {
         CompanyDTO expectedEntity = new CompanyDTO(entity);
 
         //Assert
-        assertEquals(expectedEntity.getId(), resultEntity.getId());
         assertEquals(expectedEntity.getName(), resultEntity.getName());
         assertEquals(expectedEntity.getAddress(), resultEntity.getAddress());
         assertEquals(expectedEntity.getZipcode(), resultEntity.getZipcode());
@@ -140,18 +139,16 @@ class CompanyServiceTest {
         when(repo.save((Company)notNull())).thenReturn(entity);
 
         //Act
-        CompanyDTO resultEntity = service.createCompany(entityDTO, userId);
-        CompanyDTO expectedEntity = new CompanyDTO(entity);
+        Company resultEntity = service.createCompany(entityDTO, userId);
 
         //Assert
-        assertEquals(expectedEntity.getId(), resultEntity.getId());
-        assertEquals(expectedEntity.getName(), resultEntity.getName());
-        assertEquals(expectedEntity.getAddress(), resultEntity.getAddress());
-        assertEquals(expectedEntity.getZipcode(), resultEntity.getZipcode());
-        assertEquals(expectedEntity.getCity(), resultEntity.getCity());
-        assertEquals(expectedEntity.getTelephoneNumber(), resultEntity.getTelephoneNumber());
-        assertEquals(expectedEntity.getContactCode(), resultEntity.getContactCode());
-        assertEquals(expectedEntity.getOwnerId(), resultEntity.getOwnerId());
+        assertEquals(entity.getName(), resultEntity.getName());
+        assertEquals(entity.getAddress(), resultEntity.getAddress());
+        assertEquals(entity.getZipcode(), resultEntity.getZipcode());
+        assertEquals(entity.getCity(), resultEntity.getCity());
+        assertEquals(entity.getTelephoneNumber(), resultEntity.getTelephoneNumber());
+        assertEquals(entity.getContactCode(), resultEntity.getContactCode());
+        assertEquals(entity.getOwnerId(), resultEntity.getOwnerId());
     }
 
     @Test
@@ -163,7 +160,7 @@ class CompanyServiceTest {
         when(repo.save((Company)isNull())).thenThrow(new IllegalArgumentException("Target object must not be null"));
 
         //Act
-        CompanyDTO resultEntity = service.createCompany(null, userId);
+        Company resultEntity = service.createCompany(null, userId);
 
         //Assert
         assertNull(resultEntity);

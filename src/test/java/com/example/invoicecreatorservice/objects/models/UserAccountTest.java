@@ -81,8 +81,8 @@ class UserAccountTest {
             password,
             userDto,
             contactCode,
-            companyId,
-            role
+            role,
+            companyId
         );
 
         UserAccount entity = new UserAccount(entityDTO);

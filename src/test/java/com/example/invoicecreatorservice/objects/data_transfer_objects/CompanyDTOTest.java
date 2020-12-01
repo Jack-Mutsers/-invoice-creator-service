@@ -32,7 +32,6 @@ class CompanyDTOTest {
 
         CompanyDTO DTOentity = new CompanyDTO(entity);
 
-        assertEquals(id, DTOentity.getId());
         assertEquals(name, DTOentity.getName());
         assertEquals(address, DTOentity.getAddress());
         assertEquals(zipcode, DTOentity.getZipcode());
@@ -55,7 +54,6 @@ class CompanyDTOTest {
 
         CompanyDTO DTOentity = new CompanyDTO();
 
-        assertEquals(id, DTOentity.getId());
         assertEquals(name, DTOentity.getName());
         assertEquals(address, DTOentity.getAddress());
         assertEquals(zipcode, DTOentity.getZipcode());
@@ -78,7 +76,6 @@ class CompanyDTOTest {
 
         CompanyDTO DTOentity = new CompanyDTO();
 
-        DTOentity.setId(id);
         DTOentity.setName(name);
         DTOentity.setAddress(address);
         DTOentity.setZipcode(zipcode);
@@ -87,7 +84,6 @@ class CompanyDTOTest {
         DTOentity.setContactCode(contactCode);
         DTOentity.setOwnerId(ownerId);
 
-        assertEquals(id, DTOentity.getId());
         assertEquals(name, DTOentity.getName());
         assertEquals(address, DTOentity.getAddress());
         assertEquals(zipcode, DTOentity.getZipcode());

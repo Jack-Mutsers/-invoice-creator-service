@@ -1,9 +1,11 @@
 package com.example.invoicecreatorservice.controllers;
 
+import com.example.invoicecreatorservice.helpers.components.JwtTokenUtil;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.CompanyDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.CompanyForAlterationDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.ResponseDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.UserAccountDTO;
+import com.example.invoicecreatorservice.objects.models.Company;
 import com.example.invoicecreatorservice.services.CompanyService;
 import com.example.invoicecreatorservice.services.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,21 +14,23 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @CrossOrigin
 @Controller
 @RequestMapping("/company")
-public class CompanyController {
+public class CompanyController extends BaseCompanyController {
     @Autowired
     private final CompanyService service = new CompanyService();
 
     @Autowired
     private UserAccountService userAccountService = new UserAccountService();
 
-    @GetMapping(path="/{companyId}/{userId}")
-    public @ResponseBody ResponseEntity<ResponseDTO> getCompany(@PathVariable int companyId, @PathVariable int userId) {
-        UserAccountDTO accountDTO = userAccountService.getUserAccount(userId);
+    @GetMapping(path="")
+    public @ResponseBody ResponseEntity<ResponseDTO> getCompany(HttpServletRequest request) {
+        int companyId = super.getCompanyId(request);
 
-        if(accountDTO.getCompany().getId() != companyId){
+        if(companyId == 0){
             return new ResponseEntity<>(new ResponseDTO(false, "Please provide a valid User."), HttpStatus.FORBIDDEN);
         }
 
@@ -39,7 +43,7 @@ public class CompanyController {
         return new ResponseEntity<>(new ResponseDTO(true, company), HttpStatus.OK);
     }
 
-    @GetMapping(path="")
+    @GetMapping(path="/all")
     public  @ResponseBody ResponseEntity<ResponseDTO> getAllCompanies() {
         Iterable<CompanyDTO> companies = service.getAllCompanies();
 
@@ -50,8 +54,14 @@ public class CompanyController {
         return new ResponseEntity<>(new ResponseDTO(true, companies), HttpStatus.OK);
     }
 
-    @DeleteMapping(path = "/{companyId}/{userId}")
-    public @ResponseBody ResponseEntity<ResponseDTO> deleteCompany(@PathVariable int companyId, @PathVariable int userId) {
+    @DeleteMapping(path = "/{userId}")
+    public @ResponseBody ResponseEntity<ResponseDTO> deleteCompany(HttpServletRequest request, @PathVariable int userId) {
+        int companyId = super.getCompanyId(request);
+
+        if(companyId == 0){
+            return new ResponseEntity<>(new ResponseDTO(false, "Please provide a valid User."), HttpStatus.FORBIDDEN);
+        }
+
         boolean success = service.deleteCompany(companyId, userId);
 
         if(!success){
@@ -71,7 +81,7 @@ public class CompanyController {
             companyDTO.generateContactCode();
         }
 
-        CompanyDTO newObject = service.createCompany(companyDTO, userId);
+        Company newObject = service.createCompany(companyDTO, userId);
 
         if (newObject == null){
             return new ResponseEntity<>(new ResponseDTO(false, "Something went wrong with the creation of the company."), HttpStatus.CONFLICT);
@@ -82,19 +92,15 @@ public class CompanyController {
             return new ResponseEntity<>(new ResponseDTO(false, "Something went wrong with the creation of the company."), HttpStatus.CONFLICT);
         }
 
-        return new ResponseEntity<>(new ResponseDTO(true, newObject), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ResponseDTO(true, new CompanyDTO(newObject)), HttpStatus.CREATED);
     }
 
-    @PutMapping(path ="/{userId}")
-    public @ResponseBody ResponseEntity<ResponseDTO> updateCompany(@PathVariable int userId, @RequestBody CompanyForAlterationDTO companyDTO) {
-        if(companyDTO.validateForUpdate()){
-            return new ResponseEntity<>(new ResponseDTO(false, "Please provide valid data for the update"), HttpStatus.CONFLICT);
-        }
+    @PutMapping(path ="")
+    public @ResponseBody ResponseEntity<ResponseDTO> updateCompany(HttpServletRequest request, @RequestBody CompanyForAlterationDTO companyDTO) {
+        int companyId = super.getCompanyId(request);
 
-        UserAccountDTO accountDTO = userAccountService.getUserAccount(userId);
-
-        if(accountDTO.getCompany().getId() != companyDTO.getId()){
-            return new ResponseEntity<>(new ResponseDTO(false, "Please provide a valid User."), HttpStatus.FORBIDDEN);
+        if(companyDTO.validateForUpdate() || companyId != companyDTO.getId()){
+            return new ResponseEntity<>(new ResponseDTO(false, "Data is invalid or you dont have permissions to perform this action"), HttpStatus.CONFLICT);
         }
 
         Boolean success = service.updateCompany(companyDTO);

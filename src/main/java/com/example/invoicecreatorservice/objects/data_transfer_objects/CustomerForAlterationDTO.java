@@ -30,11 +30,14 @@ public class CustomerForAlterationDTO {
 
     public boolean validateForCreation(){
         return (this.name == null || this.address == null || this.zipcode == null || this.city == null ||
-                this.name.isBlank() || this.address.isBlank() || this.zipcode.isBlank() || this.city.isBlank() || this.companyId == 0);
+                this.name.isBlank() || this.address.isBlank() || this.zipcode.isBlank() || this.city.isBlank());
     }
 
     public void setId(int id) {
         this.id = id;
     }
 
+    public void setCompanyId(int companyId) {
+        this.companyId = companyId;
+    }
 }

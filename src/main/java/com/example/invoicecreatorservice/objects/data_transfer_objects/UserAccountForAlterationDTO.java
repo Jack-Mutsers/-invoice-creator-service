@@ -17,8 +17,8 @@ public class UserAccountForAlterationDTO {
     private String password;
     private UserForAlterationDTO user;
     private String contactCode;
-    private int companyId;
     private String role = USER;
+    private int companyId;
 
     public boolean validateForUpdate(){
         return ( this.id == 0 || this.validateForCreation() || this.contactCode.isBlank() || this.role.isBlank() );
@@ -44,10 +44,6 @@ public class UserAccountForAlterationDTO {
     public void generateContactCode(){
         ContactGenerator generator = new ContactGenerator();
         this.contactCode = generator.generateCode();
-    }
-
-    public void setCompanyId(int companyId) {
-        this.companyId = companyId;
     }
 
 }

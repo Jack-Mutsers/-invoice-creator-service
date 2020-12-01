@@ -28,9 +28,9 @@ public class ProductService implements IProductService {
         return newProductDTO;
     }
 
-    public Iterable<ProductDTO> getAllProducts() {
+    public Iterable<ProductDTO> getAllProducts(int companyId) {
         ProductDTO productDTO = new ProductDTO();
-        List<ProductDTO> products = productDTO.getProductList((List<Product>) productRepo.findAll());
+        List<ProductDTO> products = productDTO.getProductList((List<Product>) productRepo.findAllByCompanyId(companyId));
 
         for (ProductDTO product : products)
         {
@@ -42,9 +42,16 @@ public class ProductService implements IProductService {
         return products;
     }
 
-    public boolean deleteProduct(int id) {
+    public boolean deleteProduct(int id, int companyId) {
         try{
-            productRepo.deleteById(id);
+            Product product = productRepo.findById(id);
+
+            if(product.getCompanyId() == companyId){
+                productRepo.deleteById(id);
+            }else{
+                return false;
+            }
+
             return true;
         }catch (Exception ex){
             LoggerService.warn(ex.getMessage());

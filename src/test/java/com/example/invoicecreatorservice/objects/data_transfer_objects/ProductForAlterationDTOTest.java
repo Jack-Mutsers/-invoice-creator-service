@@ -16,13 +16,15 @@ class ProductForAlterationDTOTest {
         int priceResult = 1360;
         int categoryId = 5;
         String productCode = "hlth002";
+        int companyId = 1;
 
         ProductForAlterationDTO DTOentity = new ProductForAlterationDTO(
             id,
             name,
             price,
             categoryId,
-            productCode
+            productCode,
+            companyId
         );
 
         assertEquals(id, DTOentity.getId());
@@ -39,6 +41,7 @@ class ProductForAlterationDTOTest {
         float price = 0;
         int categoryId = 0;
         String productCode = null;
+        int companyId = 1;
 
         ProductForAlterationDTO DTOentity = new ProductForAlterationDTO();
 
@@ -62,7 +65,8 @@ class ProductForAlterationDTOTest {
             name,
             price,
             categoryId,
-            productCode
+            productCode,
+            categoryId
         );
 
         assertFalse(DTOentity.validateForUpdate());
@@ -75,13 +79,15 @@ class ProductForAlterationDTOTest {
         double price = 0.0;
         int categoryId = 0;
         String productCode = "hlth002";
+        int companyId = 1;
 
         ProductForAlterationDTO DTOentity = new ProductForAlterationDTO(
                 id,
                 name,
                 price,
                 categoryId,
-                productCode
+                productCode,
+                companyId
         );
 
         assertTrue(DTOentity.validateForUpdate());
@@ -94,13 +100,15 @@ class ProductForAlterationDTOTest {
         double price = 13.6;
         int categoryId = 5;
         String productCode = "hlth002";
+        int companyId = 1;
 
         ProductForAlterationDTO DTOentity = new ProductForAlterationDTO(
             id,
             name,
             price,
             categoryId,
-            productCode
+            productCode,
+            companyId
         );
 
         assertFalse(DTOentity.validateForCreation());
@@ -113,13 +121,15 @@ class ProductForAlterationDTOTest {
         double price = 0.0;
         int categoryId = 0;
         String productCode = "hlth002";
+        int companyId = 1;
 
         ProductForAlterationDTO DTOentity = new ProductForAlterationDTO(
                 id,
                 name,
                 price,
                 categoryId,
-                productCode
+                productCode,
+                companyId
         );
 
         assertTrue(DTOentity.validateForCreation());

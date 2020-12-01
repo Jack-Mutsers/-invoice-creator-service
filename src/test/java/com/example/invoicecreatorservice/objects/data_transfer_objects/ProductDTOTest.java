@@ -16,13 +16,15 @@ class ProductDTOTest {
         double price = 13.6;
         int categoryId = 5;
         String productCode = "hlth002";
+        int companyId = 1;
 
         Product entity = new Product(
                 id,
                 name,
                 price,
                 categoryId,
-                productCode
+                productCode,
+                companyId
         );
 
         ProductDTO DTOentity = new ProductDTO(entity);

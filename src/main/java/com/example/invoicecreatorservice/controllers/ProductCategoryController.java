@@ -11,10 +11,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @CrossOrigin
 @Controller
 @RequestMapping("/productcategory")
-public class ProductCategoryController {
+public class ProductCategoryController extends BaseCompanyController {
 
     @Autowired
     private final ProductCategoryService service = new ProductCategoryService();
@@ -31,19 +33,31 @@ public class ProductCategoryController {
     }
 
     @GetMapping(path="")
-    public @ResponseBody ResponseEntity<ResponseDTO> getAllCategory() {
-        Iterable<ProductCategory> categories = service.getAllCategory();
+    public @ResponseBody ResponseEntity<ResponseDTO> getAllCategory(HttpServletRequest request) {
+        int companyId = super.getCompanyId(request);
+
+        if(companyId == 0){
+            return new ResponseEntity<>(new ResponseDTO(false, "There are currently no product categories availible"), HttpStatus.NOT_FOUND);
+        }
+
+        Iterable<ProductCategory> categories = service.getAllCategory(companyId);
 
         if(categories == null){
-            return new ResponseEntity<>(new ResponseDTO(false, "There are currently no customers availible"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponseDTO(true, "There are currently no product categories availible"), HttpStatus.OK);
         }
 
         return new ResponseEntity<>(new ResponseDTO(true, categories), HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/{id}")
-    public @ResponseBody ResponseEntity<ResponseDTO> deleteCategory(@PathVariable int id) {
-        boolean success = service.deleteCategory(id);
+    public @ResponseBody ResponseEntity<ResponseDTO> deleteCategory(HttpServletRequest request, @PathVariable int id) {
+        int companyId = super.getCompanyId(request);
+
+        if(companyId == 0){
+            return new ResponseEntity<>(new ResponseDTO(false, "Product category was not found."), HttpStatus.NOT_FOUND);
+        }
+
+        boolean success = service.deleteCategory(id, companyId);
 
         if(!success){
             return new ResponseEntity<>(new ResponseDTO(false, "Product category was not found."), HttpStatus.NOT_FOUND);
@@ -53,7 +67,11 @@ public class ProductCategoryController {
     }
 
     @PostMapping(path="")
-    public @ResponseBody ResponseEntity<ResponseDTO> createCategory(@RequestBody ProductCategoryForAlterationDTO categoryDTO) {
+    public @ResponseBody ResponseEntity<ResponseDTO> createCategory(HttpServletRequest request, @RequestBody ProductCategoryForAlterationDTO categoryDTO) {
+        int companyId = super.getCompanyId(request);
+
+        categoryDTO.setCompanyId(companyId);
+
         if (categoryDTO.validateForCreation()) {
             return new ResponseEntity<>(new ResponseDTO(false, "Please provide valid data for the creation"), HttpStatus.CONFLICT);
         }
@@ -68,7 +86,10 @@ public class ProductCategoryController {
     }
 
     @PutMapping(path ="")
-    public @ResponseBody ResponseEntity<ResponseDTO> updateCategory(@RequestBody ProductCategoryForAlterationDTO categoryDTO) {
+    public @ResponseBody ResponseEntity<ResponseDTO> updateCategory(HttpServletRequest request, @RequestBody ProductCategoryForAlterationDTO categoryDTO) {
+        int companyId = super.getCompanyId(request);
+
+        categoryDTO.setCompanyId(companyId);
         if (categoryDTO.validateForUpdate()) {
             return new ResponseEntity<>(new ResponseDTO(false, "Please provide valid data for the update"), HttpStatus.CONFLICT);
         }

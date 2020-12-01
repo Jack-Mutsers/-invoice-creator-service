@@ -39,7 +39,7 @@ public class CompanyForAlterationDTO {
     }
 
     public boolean validateForUpdate(){
-        return ( this.id == 0 || this.validateForCreation() || this.contactCode == null || this.contactCode.isBlank());
+        return ( this.validateForCreation() || this.contactCode == null || this.contactCode.isBlank());
     }
 
     public boolean validateForCreation(){

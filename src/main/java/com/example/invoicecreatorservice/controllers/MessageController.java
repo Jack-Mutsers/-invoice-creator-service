@@ -20,7 +20,7 @@ public class MessageController {
         Iterable<MessageDTO> messages = service.getNotifications(contactCode);
 
         if(messages == null){
-            return new ResponseEntity<>(new ResponseDTO(false, "No Notifications could be found"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponseDTO(false, "No Notifications could be found"), HttpStatus.OK);
         }
 
         return new ResponseEntity<>(new ResponseDTO(true, messages), HttpStatus.OK);
@@ -31,7 +31,7 @@ public class MessageController {
         Iterable<MessageDTO> messages = service.getOutgoingRequests(id);
 
         if(messages == null){
-            return new ResponseEntity<>(new ResponseDTO(false, "No outgoing requests could be found"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponseDTO(false, "No outgoing requests could be found"), HttpStatus.OK);
         }
 
         return new ResponseEntity<>(new ResponseDTO(true, messages), HttpStatus.OK);

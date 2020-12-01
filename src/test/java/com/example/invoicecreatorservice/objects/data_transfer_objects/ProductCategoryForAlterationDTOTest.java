@@ -12,11 +12,13 @@ class ProductCategoryForAlterationDTOTest {
         int id = 5;
         String name = "healthcare";
         int btw = 23;
+        int companyId = 1;
 
         ProductCategoryForAlterationDTO DTOentity = new ProductCategoryForAlterationDTO(
             id,
             name,
-            btw
+            btw,
+            companyId
         );
 
         assertEquals(id, DTOentity.getId());
@@ -42,11 +44,13 @@ class ProductCategoryForAlterationDTOTest {
         int id = 5;
         String name = "healthcare";
         int btw = 23;
+        int companyId = 1;
 
         ProductCategoryForAlterationDTO DTOentity = new ProductCategoryForAlterationDTO(
                 id,
                 name,
-                btw
+                btw,
+                companyId
         );
 
         assertFalse(DTOentity.validateForUpdate());
@@ -57,11 +61,13 @@ class ProductCategoryForAlterationDTOTest {
         int id = 0;
         String name = "healthcare";
         int btw = 23;
+        int companyId = 1;
 
         ProductCategoryForAlterationDTO DTOentity = new ProductCategoryForAlterationDTO(
                 id,
                 name,
-                btw
+                btw,
+                companyId
         );
 
         assertTrue(DTOentity.validateForUpdate());
@@ -72,11 +78,13 @@ class ProductCategoryForAlterationDTOTest {
         int id = 0;
         String name = "healthcare";
         int btw = 23;
+        int companyId = 1;
 
         ProductCategoryForAlterationDTO DTOentity = new ProductCategoryForAlterationDTO(
                 id,
                 name,
-                btw
+                btw,
+                companyId
         );
 
         assertFalse(DTOentity.validateForCreation());
@@ -87,11 +95,13 @@ class ProductCategoryForAlterationDTOTest {
         int id = 0;
         String name = "healthcare";
         int btw = 0;
+        int companyId = 1;
 
         ProductCategoryForAlterationDTO DTOentity = new ProductCategoryForAlterationDTO(
                 id,
                 name,
-                btw
+                btw,
+                companyId
         );
 
         assertTrue(DTOentity.validateForCreation());

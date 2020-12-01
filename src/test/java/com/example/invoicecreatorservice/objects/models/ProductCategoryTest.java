@@ -13,11 +13,13 @@ class ProductCategoryTest {
         int id = 5;
         String name = "healthcare";
         int btw = 23;
+        int companyId = 1;
 
         ProductCategory entity = new ProductCategory(
             id,
             name,
-            btw
+            btw,
+            companyId
         );
 
         assertEquals(id, entity.getId());
@@ -43,11 +45,13 @@ class ProductCategoryTest {
         int id = 5;
         String name = "healthcare";
         int btw = 23;
+        int companyId = 1;
 
         ProductCategoryForAlterationDTO entityDTO = new ProductCategoryForAlterationDTO(
             id,
             name,
-            btw
+            btw,
+            companyId
         );
 
         ProductCategory entity = new ProductCategory(entityDTO);

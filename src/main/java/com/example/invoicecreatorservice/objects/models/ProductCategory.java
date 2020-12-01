@@ -20,17 +20,20 @@ public class ProductCategory {
     @Column(unique=true, nullable = false)
     private String name;
     private int btw;
+    private int companyId;
 
-    public ProductCategory(int id, String name, int btw){
+    public ProductCategory(int id, String name, int btw, int companyId){
         this.id = id;
         this.name = name;
         this.btw = btw;
+        this.companyId = companyId;
     }
 
     public ProductCategory(ProductCategoryForAlterationDTO productDTO){
         this.id = productDTO.getId();
         this.name = productDTO.getName();
         this.btw = productDTO.getBtw();
+        this.companyId = productDTO.getCompanyId();
     }
 
     public ProductCategory(){}

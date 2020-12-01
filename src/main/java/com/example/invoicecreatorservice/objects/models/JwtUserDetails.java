@@ -15,6 +15,7 @@ public class JwtUserDetails implements UserDetails {
     private boolean active;
     private String username;
     private String password;
+    private int companyId;
     private List<GrantedAuthority> authorities;
 
     public JwtUserDetails(UserAccount user) {
@@ -22,6 +23,7 @@ public class JwtUserDetails implements UserDetails {
         this.username = user.getUsername();
         this.password = user.getPassword();
         this.active = user.isActive();
+        this.companyId = user.getCompanyId();
         this.authorities = Arrays.stream(user.getRole().split(","))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
@@ -64,5 +66,9 @@ public class JwtUserDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return active;
+    }
+
+    public int getCompanyId() {
+        return companyId;
     }
 }

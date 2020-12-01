@@ -12,11 +12,13 @@ public class ProductCategoryDTO {
     private int id;
     private String name;
     private int btw;
+    private int companyId;
 
     public ProductCategoryDTO(ProductCategory productCategory){
         this.id = productCategory.getId();
         this.name = productCategory.getName();
         this.btw = productCategory.getBtw();
+        this.companyId = productCategory.getCompanyId();
     }
 
     public ProductCategoryDTO(){}

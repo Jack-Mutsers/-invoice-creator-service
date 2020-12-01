@@ -50,7 +50,7 @@ public class CompanyService implements ICompanyService {
         }
     }
 
-    public CompanyDTO createCompany(CompanyForAlterationDTO companyDTO, int userId) {
+    public Company createCompany(CompanyForAlterationDTO companyDTO, int userId) {
         try{
             Company company = new Company(companyDTO);
             company.setOwnerId(userId);
@@ -59,9 +59,7 @@ public class CompanyService implements ICompanyService {
             company.setId(0);
 
             Company newObject = companyRepo.save(company);
-            CompanyDTO newObjectDTO = new CompanyDTO(newObject);
-            newObjectDTO.setOwnerId(userId);
-            return newObjectDTO;
+            return newObject;
         }catch (Exception ex){
             LoggerService.warn(ex.getMessage());
             return null;

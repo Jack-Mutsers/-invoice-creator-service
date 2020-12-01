@@ -16,13 +16,15 @@ class ProductTest {
         double price = 13.6;
         int categoryId = 5;
         String productCode = "hlth002";
+        int companyId = 1;
 
         Product entity = new Product(
             id,
             name,
             price,
             categoryId,
-            productCode
+            productCode,
+            companyId
         );
 
         assertEquals(id, entity.getId());
@@ -56,13 +58,15 @@ class ProductTest {
         double price = 13.6;
         int categoryId = 5;
         String productCode = "hlth002";
+        int companyId = 1;
 
         ProductForAlterationDTO entityDTO = new ProductForAlterationDTO(
                 id,
                 name,
                 price,
                 categoryId,
-                productCode
+                productCode,
+                companyId
         );
 
         Product entity = new Product(entityDTO);

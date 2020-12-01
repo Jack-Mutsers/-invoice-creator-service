@@ -11,15 +11,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @CrossOrigin
 @Controller
 @RequestMapping("/customers")
-public class CustomerController {
+public class CustomerController extends BaseCompanyController {
     @Autowired
     private final CustomerService service = new CustomerService();
 
-    @GetMapping(path="/{customerId}/{companyId}")
-    public @ResponseBody ResponseEntity<ResponseDTO> getCustomer(@PathVariable int customerId, @PathVariable int companyId) {
+    @GetMapping(path="/{customerId}")
+    public @ResponseBody ResponseEntity<ResponseDTO> getCustomer(@PathVariable int customerId) {
         CustomerDTO customer = service.getCustomer(customerId);
 
         if (customer == null) {
@@ -29,19 +31,27 @@ public class CustomerController {
         return new ResponseEntity<>(new ResponseDTO(true, customer), HttpStatus.OK);
     }
 
-    @GetMapping(path="/{id}")
-    public  @ResponseBody ResponseEntity<ResponseDTO> getAllCustomers(@PathVariable int id) {
-        Iterable<Customer> customers = service.getAllCustomers(id);
+    @GetMapping(path="")
+    public  @ResponseBody ResponseEntity<ResponseDTO> getAllCustomers(HttpServletRequest request) {
+        int companyId = super.getCompanyId(request);
+
+        Iterable<Customer> customers = service.getAllCustomers(companyId);
 
         if(customers == null){
-            return new ResponseEntity<>(new ResponseDTO(false, "There are currently no customers availible"), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseDTO(true, "There are currently no customers availible"), HttpStatus.OK);
         }
 
         return new ResponseEntity<>(new ResponseDTO(true, customers), HttpStatus.OK);
     }
 
-    @DeleteMapping(path = "/{customerId}/{companyId}")
-    public @ResponseBody ResponseEntity<ResponseDTO> deleteCustomer(@PathVariable int customerId, @PathVariable int companyId) {
+    @DeleteMapping(path = "/{customerId}")
+    public @ResponseBody ResponseEntity<ResponseDTO> deleteCustomer(HttpServletRequest request, @PathVariable int customerId) {
+        int companyId = super.getCompanyId(request);
+
+        if(companyId == 0){
+            return new ResponseEntity<>(new ResponseDTO(false, "customer not found."), HttpStatus.NOT_FOUND);
+        }
+
         boolean success = service.deleteCustomer(customerId, companyId);
 
         if(!success){
@@ -52,7 +62,11 @@ public class CustomerController {
     }
 
     @PostMapping(path="")
-    public @ResponseBody ResponseEntity<ResponseDTO> createCustomer(@RequestBody CustomerForAlterationDTO customerDTO) {
+    public @ResponseBody ResponseEntity<ResponseDTO> createCustomer(HttpServletRequest request, @RequestBody CustomerForAlterationDTO customerDTO) {
+        int companyId = super.getCompanyId(request);
+
+        customerDTO.setCompanyId(companyId);
+
         if(customerDTO.validateForCreation()){
             return new ResponseEntity<>(new ResponseDTO(false, "Please provide valid data for the creation"), HttpStatus.CONFLICT);
         }
@@ -67,7 +81,10 @@ public class CustomerController {
     }
 
     @PutMapping(path ="")
-    public @ResponseBody ResponseEntity<ResponseDTO> updateCustomer(@RequestBody CustomerForAlterationDTO customerDTO) {
+    public @ResponseBody ResponseEntity<ResponseDTO> updateCustomer(HttpServletRequest request, @RequestBody CustomerForAlterationDTO customerDTO) {
+        int companyId = super.getCompanyId(request);
+        customerDTO.setCompanyId(companyId);
+
         if(customerDTO.validateForUpdate()){
             return new ResponseEntity<>(new ResponseDTO(false, "Please provide valid data for the update"), HttpStatus.CONFLICT);
         }
