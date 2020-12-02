@@ -18,7 +18,7 @@ public class ProductForAlterationDTO {
         this.price = (int)Math.round(price * 100.0);
         this.categoryId = categoryId;
         this.productCode = productCode;
-        this.categoryId = companyId;
+        this.companyId = companyId;
     }
 
     public ProductForAlterationDTO(){}

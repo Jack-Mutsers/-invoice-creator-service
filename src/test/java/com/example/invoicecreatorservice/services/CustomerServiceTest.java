@@ -1,10 +1,7 @@
 package com.example.invoicecreatorservice.services;
 
-import com.example.invoicecreatorservice.objects.data_transfer_objects.CompanyDTO;
-import com.example.invoicecreatorservice.objects.data_transfer_objects.CompanyForAlterationDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.CustomerDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.CustomerForAlterationDTO;
-import com.example.invoicecreatorservice.objects.models.Company;
 import com.example.invoicecreatorservice.objects.models.Customer;
 import com.example.invoicecreatorservice.repositories.CustomerRepo;
 import org.junit.jupiter.api.Test;
@@ -17,8 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.isNull;
-import static org.mockito.ArgumentMatchers.notNull;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
@@ -64,11 +60,12 @@ class CustomerServiceTest {
     @Test
     void getAllCustomersTest(){
         //Prepare
+        int companyId = 1;
 
-        when(repo.findAll()).thenReturn(entityList);
+        when(repo.findAllByCompanyId(companyId)).thenReturn(entityList);
 
         //Act
-        List<Customer> resultEntity = (List) service.getAllCustomers(1);
+        List<Customer> resultEntity = (List) service.getAllCustomers(companyId);
 
         //Assert
         assertEquals(entityList.size(), resultEntity.size());
