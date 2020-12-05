@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 @CrossOrigin
 @Controller
 @RequestMapping("/productcategory")
-public class ProductCategoryController extends BaseCompanyController {
+public class ProductCategoryController extends BaseController {
 
     @Autowired
     private final ProductCategoryService service = new ProductCategoryService();

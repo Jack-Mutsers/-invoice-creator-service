@@ -94,6 +94,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/useraccount").hasAnyRole(ADMIN, OWNER, EMPLOYEE, USER)
         .antMatchers("/useraccount/*").hasAnyRole(ADMIN, OWNER, EMPLOYEE, USER)
 
+        .antMatchers("/upload").permitAll()
+        .antMatchers("/upload/*").permitAll()
+
         // all other requests need to be authenticated
         .anyRequest().authenticated().and()
         // make sure we use stateless session; session won't be used to

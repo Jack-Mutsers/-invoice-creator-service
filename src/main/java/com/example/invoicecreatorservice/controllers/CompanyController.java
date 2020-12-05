@@ -1,10 +1,8 @@
 package com.example.invoicecreatorservice.controllers;
 
-import com.example.invoicecreatorservice.helpers.components.JwtTokenUtil;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.CompanyDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.CompanyForAlterationDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.ResponseDTO;
-import com.example.invoicecreatorservice.objects.data_transfer_objects.UserAccountDTO;
 import com.example.invoicecreatorservice.objects.models.Company;
 import com.example.invoicecreatorservice.services.CompanyService;
 import com.example.invoicecreatorservice.services.UserAccountService;
@@ -19,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 @CrossOrigin
 @Controller
 @RequestMapping("/company")
-public class CompanyController extends BaseCompanyController {
+public class CompanyController extends BaseController {
     @Autowired
     private final CompanyService service = new CompanyService();
 
