@@ -1,5 +1,0 @@
-build:
-  script: "mvn compile"
-test:
-  script: "mvn test"
-  stage: test
