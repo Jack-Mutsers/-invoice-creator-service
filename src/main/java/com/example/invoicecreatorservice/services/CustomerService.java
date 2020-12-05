@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,6 +30,17 @@ public class CustomerService implements ICustomerService {
         if(customers.isEmpty()){ return null; }
 
         return customers;
+    }
+
+    public List<Integer> getMyCustomerIds(int userId){
+        List<Customer> customers = (List) customerRepo.findAllByUserId(userId);
+        List<Integer> ids = new ArrayList<>();
+
+        for(Customer customer : emptyIfNull(customers)){
+            ids.add(customer.getId());
+        }
+
+        return ids;
     }
 
     public boolean deleteCustomer(int customerId, int companyId) {
@@ -72,5 +85,9 @@ public class CustomerService implements ICustomerService {
             LoggerService.warn(ex.getMessage());
             return false;
         }
+    }
+
+    private <T> Iterable<T> emptyIfNull(Iterable<T> iterable) {
+        return iterable == null ? List.of() : iterable;
     }
 }
