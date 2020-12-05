@@ -58,8 +58,7 @@ public class CompanyService implements ICompanyService {
             // set id to 0 to prevent update of existing record on create
             company.setId(0);
 
-            Company newObject = companyRepo.save(company);
-            return newObject;
+            return companyRepo.save(company);
         }catch (Exception ex){
             LoggerService.warn(ex.getMessage());
             return null;

@@ -44,11 +44,17 @@ public class FileSystemStorageService implements StorageService {
 			Date currentDate = new Date();
 			String formattedDate = new SimpleDateFormat("-yyyyMMddHHmms").format(new Date());
 
-			String filename = file.getOriginalFilename().replace(file.getOriginalFilename(), FilenameUtils.getBaseName(file.getOriginalFilename()).concat(formattedDate) + "." + FilenameUtils.getExtension(file.getOriginalFilename()).toLowerCase());
-			String replacedWhiteSpaces = filename.replace(" ", "_");
+			String originalFilename = file.getOriginalFilename();
+
+			if(originalFilename == null){
+				return null;
+			}
+
+			String filename = originalFilename.replace(file.getOriginalFilename(), FilenameUtils.getBaseName(file.getOriginalFilename()).concat(formattedDate) + "." + FilenameUtils.getExtension(file.getOriginalFilename()).toLowerCase());
+			filename = filename.replace(" ", "_");
 
 			Path destinationFile = this.rootLocation.resolve(
-					Paths.get(replacedWhiteSpaces))
+					Paths.get(filename))
 					.normalize().toAbsolutePath();
 			if (!destinationFile.getParent().equals(this.rootLocation.toAbsolutePath())) {
 				// This is a security check
@@ -62,11 +68,11 @@ public class FileSystemStorageService implements StorageService {
 
 			return new FileRecord(
 				0,
-				file.getOriginalFilename(),
-				replacedWhiteSpaces,
-				"http://localhost:9090/upload/files/" + replacedWhiteSpaces,
+				originalFilename,
+				filename,
+				"http://localhost:9090/upload/files/" + filename,
 				FilenameUtils.getExtension(file.getOriginalFilename()),
-				new SimpleDateFormat("dd-MM-YYYY").format(currentDate),
+				new SimpleDateFormat("dd-MM-yyyy").format(currentDate),
 				0,
 				0
 			);
@@ -74,6 +80,9 @@ public class FileSystemStorageService implements StorageService {
 		}
 		catch (IOException e) {
 			throw new StorageException("Failed to store file.", e);
+		}
+		catch (NullPointerException ex){
+			throw new StorageException("Failed to store file.", ex);
 		}
 	}
 

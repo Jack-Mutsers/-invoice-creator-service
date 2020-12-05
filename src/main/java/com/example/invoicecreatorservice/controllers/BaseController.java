@@ -1,12 +1,9 @@
 package com.example.invoicecreatorservice.controllers;
 
 import com.example.invoicecreatorservice.helpers.components.JwtTokenUtil;
-import com.example.invoicecreatorservice.objects.models.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
 
 public class BaseController {
     @Autowired

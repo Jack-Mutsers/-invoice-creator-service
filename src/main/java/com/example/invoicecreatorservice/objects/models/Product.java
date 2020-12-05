@@ -30,7 +30,6 @@ public class Product {
         this.price = (int)Math.round(price * 100.0);
         this.categoryId = categoryId;
         this.productCode = productCode;
-        this.categoryId = categoryId;
         this.companyId = companyId;
     }
 

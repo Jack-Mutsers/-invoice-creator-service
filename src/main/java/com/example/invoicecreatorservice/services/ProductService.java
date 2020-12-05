@@ -30,7 +30,7 @@ public class ProductService implements IProductService {
 
     public Iterable<ProductDTO> getAllProducts(int companyId) {
         ProductDTO productDTO = new ProductDTO();
-        List<ProductDTO> products = productDTO.getProductList((List<Product>) productRepo.findAllByCompanyId(companyId));
+        List<ProductDTO> products = productDTO.getProductList(productRepo.findAllByCompanyId(companyId));
 
         for (ProductDTO product : products)
         {

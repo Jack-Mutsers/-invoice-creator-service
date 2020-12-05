@@ -3,7 +3,6 @@ package com.example.invoicecreatorservice.services;
 import com.example.invoicecreatorservice.contracts.services.IUserAccountService;
 import com.example.invoicecreatorservice.helpers.logger.LoggerService;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.*;
-import com.example.invoicecreatorservice.objects.models.User;
 import com.example.invoicecreatorservice.objects.models.UserAccount;
 import com.example.invoicecreatorservice.repositories.UserAccountRepo;
 import com.example.invoicecreatorservice.helpers.tools.BCryptEncoder;

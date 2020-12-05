@@ -1,5 +1,6 @@
 package com.example.invoicecreatorservice.services;
 
+import com.example.invoicecreatorservice.helpers.logger.LoggerService;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.FileRecordDTO;
 import com.example.invoicecreatorservice.objects.models.FileRecord;
 import com.example.invoicecreatorservice.repositories.FileRepo;
@@ -8,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class FileRecordService {
@@ -22,7 +22,7 @@ public class FileRecordService {
     }
 
     public Iterable<FileRecordDTO> getAllMyFileRecords(int ownerId){
-        List<FileRecord> records = (List) repo.findAllByOwnerId(ownerId);
+        List<FileRecord> records = repo.findAllByOwnerId(ownerId);
 
         if(records.isEmpty()){ return null; }
 
@@ -32,7 +32,7 @@ public class FileRecordService {
     public Iterable<FileRecordDTO> getAllSharedFileRecords(List<Integer> ids){
         List<FileRecord> records = null;
 
-        if(ids.size() > 0){
+        if(!ids.isEmpty()){
             records = repo.findAllByCustomerIdIn(ids);
         }
 
@@ -52,7 +52,7 @@ public class FileRecordService {
 
             return true;
         }catch (Exception ex){
-            // LoggerService.warn(ex.getMessage());
+             LoggerService.warn(ex.getMessage());
             return false;
         }
     }

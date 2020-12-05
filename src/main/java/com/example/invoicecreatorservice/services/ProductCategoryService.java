@@ -24,7 +24,7 @@ public class ProductCategoryService implements IProductCategoryService {
     }
 
     public Iterable<ProductCategory> getAllCategory(int id) {
-        List<ProductCategory> categories = (List) productCategoryRepo.findAllByCompanyId(id);
+        List<ProductCategory> categories = productCategoryRepo.findAllByCompanyId(id);
 
         if(categories.isEmpty()){ return null; }
 

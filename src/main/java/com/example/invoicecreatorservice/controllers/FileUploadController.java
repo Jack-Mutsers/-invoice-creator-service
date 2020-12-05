@@ -96,7 +96,7 @@ public class FileUploadController extends BaseController {
 	}
 
 	@ExceptionHandler(StorageFileNotFoundException.class)
-	public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
+	public ResponseEntity<ResponseDTO> handleStorageFileNotFound(StorageFileNotFoundException exc) {
 		return new ResponseEntity<>(new ResponseDTO(false, "Requested file could not be found"), HttpStatus.NOT_FOUND);
 	}
 

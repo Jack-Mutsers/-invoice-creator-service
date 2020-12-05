@@ -8,9 +8,7 @@ import com.example.invoicecreatorservice.objects.models.Customer;
 import com.example.invoicecreatorservice.repositories.CustomerRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +23,7 @@ public class CustomerService implements ICustomerService {
     }
 
     public Iterable<Customer> getAllCustomers(int id) {
-        List<Customer> customers = (List) customerRepo.findAllByCompanyId(id);
+        List<Customer> customers = customerRepo.findAllByCompanyId(id);
 
         if(customers.isEmpty()){ return null; }
 
@@ -33,7 +31,7 @@ public class CustomerService implements ICustomerService {
     }
 
     public List<Integer> getMyCustomerIds(int userId){
-        List<Customer> customers = (List) customerRepo.findAllByUserId(userId);
+        List<Customer> customers = customerRepo.findAllByUserId(userId);
         List<Integer> ids = new ArrayList<>();
 
         for(Customer customer : emptyIfNull(customers)){
