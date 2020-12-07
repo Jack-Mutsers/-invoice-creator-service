@@ -11,7 +11,9 @@ public class FileRecordDTO {
     private String fileType;
     private String creationDate;
     private int customerId;
+    private CustomerDTO customer = new CustomerDTO();
     private int ownerId;
+    private CompanyDTO owner = new CompanyDTO();
 
     public FileRecordDTO(int id, String name, String fileName, String url, String fileType, String creationDate, int customerId, int ownerId) {
         this.id = id;
@@ -67,5 +69,21 @@ public class FileRecordDTO {
 
     public int getOwnerId() {
         return ownerId;
+    }
+
+    public CustomerDTO getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(CustomerDTO customer) {
+        this.customer = customer;
+    }
+
+    public CompanyDTO getOwner() {
+        return owner;
+    }
+
+    public void setOwner(CompanyDTO owner) {
+        this.owner = owner;
     }
 }

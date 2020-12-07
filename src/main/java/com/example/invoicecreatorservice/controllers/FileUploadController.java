@@ -5,6 +5,7 @@ import com.example.invoicecreatorservice.helpers.handlers.StorageFileNotFoundExc
 import com.example.invoicecreatorservice.objects.data_transfer_objects.FileRecordDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.ResponseDTO;
 import com.example.invoicecreatorservice.objects.models.FileRecord;
+import com.example.invoicecreatorservice.services.CompanyService;
 import com.example.invoicecreatorservice.services.CustomerService;
 import com.example.invoicecreatorservice.services.FileRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,9 @@ public class FileUploadController extends BaseController {
 	@Autowired
 	private final CustomerService customerService = new CustomerService();
 
+	@Autowired
+	private final CompanyService companyService = new CompanyService();
+
 	private final StorageService storageService;
 
 	@Autowired
@@ -41,6 +45,10 @@ public class FileUploadController extends BaseController {
 		int companyId = super.getCompanyId(request);
 
 		Iterable<FileRecordDTO> records = recordService.getAllMyFileRecords(companyId);
+
+		for(FileRecordDTO record : records){
+			record.setCustomer(customerService.getCustomer(record.getCustomerId()));
+		}
 
 		if(records == null){
 			return new ResponseEntity<>(new ResponseDTO(false, "There are currently no companies available"), HttpStatus.OK);
@@ -55,6 +63,10 @@ public class FileUploadController extends BaseController {
 		List<Integer> ids = customerService.getMyCustomerIds(userId);
 
 		Iterable<FileRecordDTO> records = recordService.getAllSharedFileRecords(ids);
+
+		for(FileRecordDTO record : records){
+			record.setOwner(companyService.getCompany(record.getOwnerId()));
+		}
 
 		return new ResponseEntity<>(new ResponseDTO(true, records), HttpStatus.OK);
 	}
@@ -93,6 +105,24 @@ public class FileUploadController extends BaseController {
 		}catch (Exception ex){
 			return new ResponseEntity<>(new ResponseDTO(false, "Something went wrong while storing files"), HttpStatus.CONFLICT);
 		}
+	}
+
+	@DeleteMapping(path = "/{id}")
+	public ResponseEntity<ResponseDTO> delete(HttpServletRequest request, @PathVariable("id") int id){
+		int companyId = super.getCompanyId(request);
+
+		FileRecord record = recordService.getFileRecord(id, companyId);
+
+		if(record == null){
+			return new ResponseEntity<>(new ResponseDTO(false, "File could not be found or you dont have permissions to access this file"), HttpStatus.FORBIDDEN);
+		}
+
+		if(!storageService.deleteFile(record.getFileName())){
+			return new ResponseEntity<>(new ResponseDTO(false, "Something went wrong while deleting the file"), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		recordService.deleteRecord(record);
+		return new ResponseEntity<>(new ResponseDTO(true, "File has been deleted"), HttpStatus.OK);
 	}
 
 	@ExceptionHandler(StorageFileNotFoundException.class)

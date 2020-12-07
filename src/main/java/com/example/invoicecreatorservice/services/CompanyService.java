@@ -20,9 +20,7 @@ public class CompanyService implements ICompanyService {
 
     public CompanyDTO getCompany(int companyId){
         Company company = companyRepo.findById(companyId);
-        CompanyDTO companyDTO = new CompanyDTO(company);
-        companyDTO.setOwnerId(company.getOwnerId());
-        return companyDTO;
+        return new CompanyDTO(company);
     }
 
     public Iterable<CompanyDTO> getAllCompanies(){

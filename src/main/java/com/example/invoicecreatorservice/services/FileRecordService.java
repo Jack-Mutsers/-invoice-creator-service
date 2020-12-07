@@ -16,9 +16,8 @@ public class FileRecordService {
     @Autowired
     private FileRepo repo;
 
-    public FileRecordDTO getFileRecord(int id){
-        FileRecord record = repo.findById(id);
-        return new FileRecordDTO(record);
+    public FileRecord getFileRecord(int id, int ownerId){
+        return repo.findByIdAndOwnerId(id, ownerId);
     }
 
     public Iterable<FileRecordDTO> getAllMyFileRecords(int ownerId){
@@ -53,6 +52,20 @@ public class FileRecordService {
             return true;
         }catch (Exception ex){
              LoggerService.warn(ex.getMessage());
+            return false;
+        }
+    }
+
+    public boolean deleteRecord(FileRecord record){
+        try{
+            if(record == null){
+                return false;
+            }
+
+            repo.delete(record);
+
+            return true;
+        }catch (Exception ex){
             return false;
         }
     }
