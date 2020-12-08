@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.function.Function;
 
 import com.example.invoicecreatorservice.objects.models.JwtUserDetails;
+import com.example.invoicecreatorservice.services.JwtTokenService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -16,6 +18,10 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 @Component
 public class JwtTokenUtil implements Serializable {
+
+    @Autowired
+    private final transient JwtTokenService jwtTokenService = new JwtTokenService();
+
     private static final long serialVersionUID = -2550185165626007488L;
     public static final long JWT_TOKEN_VALIDITY = (long) 1 * (60 * 60);
 
@@ -53,15 +59,25 @@ public class JwtTokenUtil implements Serializable {
     }
 
     //check if the token has expired
-    private Boolean isTokenExpired(String token) {
+    private Boolean isTokenExpired(String token, String ip) {
         final Date expiration = getExpirationDateFromToken(token);
-        return expiration.before(new Date());
+        boolean expired = expiration.before(new Date());
+
+        if(expired){
+            jwtTokenService.setExpiredToken(token, ip);
+        }
+
+        return expired;
     }
 
     //generate token for user
-    public String generateToken(JwtUserDetails userDetails) {
+    public String generateToken(JwtUserDetails userDetails, String ip) {
         Map<String, Object> claims = new HashMap<>();
-        return doGenerateToken(claims, userDetails.getUsername(), userDetails.getCompanyId(), userDetails.getId());
+        String token = doGenerateToken(claims, userDetails.getUsername(), userDetails.getCompanyId(), userDetails.getId());
+
+        jwtTokenService.addNewToken(token, ip);
+
+        return token;
     }
 
     //while creating the token -
@@ -78,8 +94,9 @@ public class JwtTokenUtil implements Serializable {
     }
 
     //validate token
-    public Boolean validateToken(String token, UserDetails userDetails) {
+    public Boolean validateToken(String token, UserDetails userDetails, String ip) {
+        boolean exists = jwtTokenService.validateToken(token, ip);
         final String username = getUsernameFromToken(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        return (exists && username.equals(userDetails.getUsername()) && !isTokenExpired(token, ip));
     }
 }

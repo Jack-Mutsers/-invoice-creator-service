@@ -21,6 +21,8 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @CrossOrigin
 public class JwtAuthenticationController {
@@ -43,8 +45,10 @@ public class JwtAuthenticationController {
     private CompanyService companyService;
 
     @PostMapping(path="/authenticate")
-    public ResponseEntity<ResponseDTO> createAuthenticationToken(@RequestHeader Map<String, String> header) {
+    public ResponseEntity<ResponseDTO> createAuthenticationToken(HttpServletRequest request, @RequestHeader Map<String, String> header) {
         try {
+            // get client ip address
+            String ip = request.getRemoteAddr();
 
             // get the base64 string
             String authorizationHeader = header.get("authorization");
@@ -69,7 +73,7 @@ public class JwtAuthenticationController {
                 return new ResponseEntity<>(new ResponseDTO(false, "Login credentials were incorrect!"), HttpStatus.NOT_FOUND);
             }
 
-            final String token = jwtTokenUtil.generateToken(userDetails);
+            final String token = jwtTokenUtil.generateToken(userDetails, ip);
             user.setToken(token);
             user.setUser(userService.getUser(user.getUserId()));
 

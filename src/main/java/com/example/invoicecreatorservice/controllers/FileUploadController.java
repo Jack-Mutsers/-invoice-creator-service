@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.List;
 
 @CrossOrigin
@@ -108,7 +109,7 @@ public class FileUploadController extends BaseController {
 	}
 
 	@DeleteMapping(path = "/{id}")
-	public ResponseEntity<ResponseDTO> delete(HttpServletRequest request, @PathVariable("id") int id){
+	public ResponseEntity<ResponseDTO> delete(HttpServletRequest request, @PathVariable("id") int id) throws IOException {
 		int companyId = super.getCompanyId(request);
 
 		FileRecord record = recordService.getFileRecord(id, companyId);

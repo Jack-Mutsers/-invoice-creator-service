@@ -13,14 +13,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.stream.Stream;
@@ -130,9 +126,16 @@ public class FileSystemStorageService implements StorageService {
 	}
 
 	@Override
-	public boolean deleteFile(String filename) {
-		Path path = this.load(filename);
-		return path.toFile().delete();
+	public boolean deleteFile(String filename){
+		try{
+			Path path = this.load(filename);
+			Files.delete(path);
+
+			return true;
+		}catch (Exception ex){
+			return false;
+		}
+
 	}
 
 	@Override
