@@ -17,8 +17,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 @CrossOrigin
 @Controller
@@ -47,7 +50,7 @@ public class FileUploadController extends BaseController {
 
 		Iterable<FileRecordDTO> records = recordService.getAllMyFileRecords(companyId);
 
-		for(FileRecordDTO record : records){
+		for(FileRecordDTO record : emptyIfNull(records)){
 			record.setCustomer(customerService.getCustomer(record.getCustomerId()));
 		}
 
@@ -95,7 +98,9 @@ public class FileUploadController extends BaseController {
 		int companyId = super.getCompanyId(request);
 
 		try{
-			FileRecord record = storageService.store(file);
+			Future<FileRecord> asyncResponse = storageService.storeAsync(file);
+			FileRecord record = asyncResponse.get();
+
 			record.setCustomerId(customerId);
 			record.setOwnerId(companyId);
 
@@ -109,7 +114,7 @@ public class FileUploadController extends BaseController {
 	}
 
 	@DeleteMapping(path = "/{id}")
-	public ResponseEntity<ResponseDTO> delete(HttpServletRequest request, @PathVariable("id") int id) throws IOException {
+	public ResponseEntity<ResponseDTO> delete(HttpServletRequest request, @PathVariable("id") int id) throws IOException, ExecutionException, InterruptedException {
 		int companyId = super.getCompanyId(request);
 
 		FileRecord record = recordService.getFileRecord(id, companyId);
@@ -118,7 +123,10 @@ public class FileUploadController extends BaseController {
 			return new ResponseEntity<>(new ResponseDTO(false, "File could not be found or you dont have permissions to access this file"), HttpStatus.FORBIDDEN);
 		}
 
-		if(!storageService.deleteFile(record.getFileName())){
+		Future<Boolean> asyncResponse = storageService.deleteFileAsync(record.getFileName());
+		boolean fileDeleted = asyncResponse.get();
+
+		if(!fileDeleted){
 			return new ResponseEntity<>(new ResponseDTO(false, "Something went wrong while deleting the file"), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 

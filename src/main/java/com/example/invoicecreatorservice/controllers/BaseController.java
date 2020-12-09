@@ -4,6 +4,7 @@ import com.example.invoicecreatorservice.helpers.components.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 public class BaseController {
     @Autowired
@@ -19,6 +20,8 @@ public class BaseController {
         return jwtTokenUtil.getUserFromToken(requestTokenHeader);
     }
 
-
+    protected  <T> Iterable<T> emptyIfNull(Iterable<T> iterable) {
+        return iterable == null ? List.of() : iterable;
+    }
 
 }

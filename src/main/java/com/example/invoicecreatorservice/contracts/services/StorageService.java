@@ -6,15 +6,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.concurrent.Future;
 import java.util.stream.Stream;
 
 public interface StorageService {
 
 	void init();
 
-	FileRecord store(MultipartFile file);
+	Future<FileRecord> storeAsync(MultipartFile file);
 
-	Stream<Path> loadAll();
+	Future<Stream<Path>> loadAllAsync();
 
 	Path load(String filename);
 
@@ -22,5 +23,5 @@ public interface StorageService {
 
 	void deleteAll();
 
-	boolean deleteFile(String filename) throws IOException;
+	Future<Boolean> deleteFileAsync(String filename) throws IOException;
 }
