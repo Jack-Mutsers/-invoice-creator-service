@@ -21,7 +21,7 @@ public class UserAccountForAlterationDTO {
     private int companyId;
 
     public boolean validateForUpdate(){
-        return ( this.id == 0 || this.validateForCreation() || this.contactCode.isBlank() || this.role.isBlank() );
+        return ( this.id == 0 || this.username.isBlank() || this.user == null || this.contactCode.isBlank() || this.role.isBlank() );
     }
 
     public boolean validateForCreation(){

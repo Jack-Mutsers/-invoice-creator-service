@@ -23,26 +23,17 @@ public class UserAccountService implements IUserAccountService {
         return new UserAccountDTO(userAccountRepo.findById(id));
     }
 
-    public boolean deleteUser(int id, UserAccountForAlterationDTO account) {
-        if(account.validateForUpdate()){
-            return false;
-        }
-
+    public boolean deleteUser(int id, String password) {
         try{
-            UserAccount userAccount = userAccountRepo.findByUsername(account.getUsername());
-            boolean validPassword = encoder.validatePassword(account.getPassword(), userAccount.getPassword());
+            UserAccount userAccount = userAccountRepo.findById(id);
+            boolean validPassword = encoder.validatePassword(password, userAccount.getPassword());
 
-            if (validPassword) {
-                if (userAccount.getId() == id) {
-                    userAccountRepo.deleteById(id);
-
-                    return true;
-                } else {
-                    return false;
-                }
-            } else {
+            if (!validPassword) {
                 return false;
             }
+
+            userAccountRepo.deleteById(id);
+            return true;
         }
         catch (Exception ex){
             LoggerService.warn(ex.getMessage());

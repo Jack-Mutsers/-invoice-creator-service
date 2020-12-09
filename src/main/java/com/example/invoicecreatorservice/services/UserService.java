@@ -55,8 +55,9 @@ public class UserService implements IUserService {
         }
     }
 
-    public boolean updateUser(UserForAlterationDTO userDTO) {
+    public boolean updateUser(int userId, UserForAlterationDTO userDTO) {
         try{
+            userDTO.setId(userId);
             User user = new User(userDTO);
             userRepo.save(user);
             return true;

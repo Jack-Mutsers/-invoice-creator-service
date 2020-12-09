@@ -12,33 +12,45 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
+
 @CrossOrigin
 @Controller
 @RequestMapping("/useraccount")
-public class UserAccountController {
+public class UserAccountController extends BaseController {
 
     @Autowired
-    private final UserAccountService service = new UserAccountService();
+    private final UserAccountService userAccountService = new UserAccountService();
 
     @Autowired
     private final UserService userService = new UserService();
 
+    private UserAccountDTO getUserAccount(int userAccountId){
+        UserAccountDTO userAccountDTO = userAccountService.getUserAccount(userAccountId);
+        userAccountDTO.setUser(userService.getUser(userAccountDTO.getUserId()));
+
+        return userAccountDTO;
+    }
+
     @DeleteMapping(path = "/{id}")
-    public @ResponseBody ResponseEntity<ResponseDTO> deleteUser(@PathVariable int id, @RequestBody UserAccountForAlterationDTO account) {
-        boolean success = service.deleteUser(id, account);
+    public @ResponseBody ResponseEntity<ResponseDTO> deleteUser(HttpServletRequest request, @PathVariable int id, @RequestBody Map<String, String> obj) {
+        int userAccountId = super.getUserId(request);
+        String password = obj.get("password");
 
-        if (!success) {
-            if (account.getId() == id) {
-                return new ResponseEntity<>(new ResponseDTO(false, "The user you are trying to delete does not exist."), HttpStatus.BAD_REQUEST);
-            } else {
-                return new ResponseEntity<>(new ResponseDTO(false, "Please login with the account you are trying to delete."), HttpStatus.BAD_REQUEST);
-            }
-        }else{
-
-            UserDTO user = userService.getUser(account.getUser().getId());
-            userService.deleteUser(user.getId());
+        if(userAccountId != id){
+            return new ResponseEntity<>(new ResponseDTO(false, "Please provide valid account details."), HttpStatus.NOT_FOUND);
         }
 
+        UserAccountDTO accountDTO = userAccountService.getUserAccount(id);
+
+        boolean success = userAccountService.deleteUser(id, password);
+
+        if (!success) {
+            return new ResponseEntity<>(new ResponseDTO(false, "Please login with the account you are trying to delete."), HttpStatus.BAD_REQUEST);
+        }else{
+            userService.deleteUser(accountDTO.getId());
+        }
 
         return new ResponseEntity<>(new ResponseDTO(true, "Account has been deleted successfully."), HttpStatus.OK);
     }
@@ -49,12 +61,12 @@ public class UserAccountController {
             accountDTO.generateContactCode();
         }
 
-        if(accountDTO.validateForCreation() || !service.validateUsername(accountDTO.getUsername()) || accountDTO.getUser().validateForCreation()){
+        if(accountDTO.validateForCreation() || !userAccountService.validateUsername(accountDTO.getUsername()) || accountDTO.getUser().validateForCreation()){
             return new ResponseEntity<>(new ResponseDTO(false, "Incomplete data or username already exists"), HttpStatus.CONFLICT);
         }
 
         UserDTO user = userService.createUser(accountDTO.getUser());
-        UserAccountDTO newObject = service.createUserAccount(accountDTO, user.getId());
+        UserAccountDTO newObject = userAccountService.createUserAccount(accountDTO, user.getId());
 
         if (newObject == null){
             userService.deleteUser(user.getId());
@@ -66,18 +78,28 @@ public class UserAccountController {
         return new ResponseEntity<>(new ResponseDTO(true, "User account has been created"), HttpStatus.CREATED);
     }
 
-    @PutMapping(path ="")
-    public @ResponseBody ResponseEntity<ResponseDTO> updateUserAccount(@RequestBody UserAccountForAlterationDTO accountDTO) {
-        if(accountDTO.validateForUpdate() && accountDTO.getUser().validateForUpdate()){
+    @PutMapping(path ="/{id}")
+    public @ResponseBody ResponseEntity<ResponseDTO> updateUserAccount(HttpServletRequest request, @PathVariable int id, @RequestBody UserAccountForAlterationDTO accountDTO) {
+        int userAccountId = super.getUserId(request);
+
+        if(accountDTO.validateForUpdate() || accountDTO.getUser().validateForUpdate() || userAccountId != id ){
             return new ResponseEntity<>(new ResponseDTO(false, "Please provide valid account details."), HttpStatus.NOT_FOUND);
         }
 
-        boolean success = service.updateUserAccount(accountDTO);
+        boolean success = false;
+        if(accountDTO.getPassword().isBlank()){
+            int userId = userAccountService.getUserAccount(userAccountId).getUserId();
+            success = userService.updateUser(userId, accountDTO.getUser());
+        }else{
+            success = userAccountService.updateUserAccount(accountDTO);
+        }
 
         if (!success){
             return new ResponseEntity<>(new ResponseDTO(false, "Something went wrong while updating your account"), HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(new ResponseDTO(true, "Account has successfully been updated."), HttpStatus.OK);
+        UserAccountDTO userAccountDTO = this.getUserAccount(userAccountId);
+
+        return new ResponseEntity<>(new ResponseDTO(true, userAccountDTO), HttpStatus.OK);
     }
 }

@@ -5,7 +5,7 @@ import com.example.invoicecreatorservice.objects.data_transfer_objects.UserAccou
 
 public interface IUserAccountService {
     UserAccountDTO getUserAccount(int id);
-    boolean deleteUser(int id, UserAccountForAlterationDTO account);
+    boolean deleteUser(int id, String password);
     UserAccountDTO createUserAccount(UserAccountForAlterationDTO accountDTO, int userId);
     boolean updateUserAccount(UserAccountForAlterationDTO accountDTO);
     boolean validateUsername(String username);

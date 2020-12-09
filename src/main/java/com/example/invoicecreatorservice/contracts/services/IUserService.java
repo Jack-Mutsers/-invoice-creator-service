@@ -9,5 +9,5 @@ public interface IUserService {
     Iterable<User> getAllUser();
     boolean deleteUser(int id);
     UserDTO createUser(UserForAlterationDTO userDTO);
-    boolean updateUser(UserForAlterationDTO userDTO);
+    boolean updateUser(int userId, UserForAlterationDTO userDTO);
 }

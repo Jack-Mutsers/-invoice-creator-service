@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 @Controller
 @RequestMapping("/messenger")
-public class MessageController {
+public class MessageController extends BaseController {
     @Autowired
     private final MessageService service = new MessageService();
 
