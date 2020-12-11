@@ -7,6 +7,7 @@ public interface IProductService {
     ProductDTO getProduct(int id);
     Iterable<ProductDTO> getAllProducts(int companyId);
     boolean deleteProduct(int id, int companyId);
+    boolean deleteAllCompanyProducts(int companyId);
     ProductDTO createProduct(ProductForAlterationDTO productDTO);
     boolean updateProduct(ProductForAlterationDTO productDTO);
 }

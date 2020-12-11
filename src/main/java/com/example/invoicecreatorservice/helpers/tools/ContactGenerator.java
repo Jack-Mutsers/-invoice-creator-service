@@ -1,9 +1,9 @@
 package com.example.invoicecreatorservice.helpers.tools;
 
-import java.util.Random;
+import java.security.SecureRandom;
 
 public class ContactGenerator {
-    Random r = new Random();
+    SecureRandom r = new SecureRandom();
 
     public String generateCode(){
 

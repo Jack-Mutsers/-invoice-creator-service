@@ -12,4 +12,5 @@ public interface FileRepo extends CrudRepository<FileRecord, Integer> {
     FileRecord findByIdAndOwnerId(int id, int ownerId);
     List<FileRecord> findAllByOwnerId(int ownerId);
     FileRecord findByFileName(String fileName);
+    void deleteAllByOwnerId(int ownerId);
 }

@@ -1,5 +1,6 @@
 package com.example.invoicecreatorservice.services;
 
+import com.example.invoicecreatorservice.contracts.services.IFileRecordService;
 import com.example.invoicecreatorservice.helpers.logger.LoggerService;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.FileRecordDTO;
 import com.example.invoicecreatorservice.objects.models.FileRecord;
@@ -7,14 +8,19 @@ import com.example.invoicecreatorservice.repositories.FileRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class FileRecordService {
+public class FileRecordService implements IFileRecordService {
 
     @Autowired
     private FileRepo repo;
+
+    public FileRecord getFileRecord(int id){
+        return repo.findById(id);
+    }
 
     public FileRecord getFileRecord(int id, int ownerId){
         return repo.findByIdAndOwnerId(id, ownerId);
@@ -56,6 +62,7 @@ public class FileRecordService {
         }
     }
 
+    @Transactional
     public boolean deleteRecord(FileRecord record){
         try{
             if(record == null){
@@ -70,9 +77,18 @@ public class FileRecordService {
         }
     }
 
-    public boolean validateAccessPermission(String filename, int companyId, List<Integer> customerIds){
-        FileRecord record = repo.findByFileName(filename);
+    @Transactional
+    public boolean deleteCompanyRecords(int companyId){
+        try{
+            repo.deleteAllByOwnerId(companyId);
 
+            return true;
+        }catch (Exception ex){
+            return false;
+        }
+    }
+
+    public boolean validateAccessPermission(FileRecord record, int companyId, List<Integer> customerIds){
         if(record == null){
             return false;
         }

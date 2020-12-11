@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import static com.example.invoicecreatorservice.objects.models.UserAccount.USER;
+import static com.example.invoicecreatorservice.objects.models.UserAccount.USER_ROLE;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,7 +17,7 @@ public class UserAccountForAlterationDTO {
     private String password;
     private UserForAlterationDTO user;
     private String contactCode;
-    private String role = USER;
+    private String role = USER_ROLE;
     private int companyId;
 
     public boolean validateForUpdate(){

@@ -9,6 +9,7 @@ import com.example.invoicecreatorservice.repositories.CompanyRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,8 @@ public class CompanyService implements ICompanyService {
     private CompanyRepo companyRepo;
 
     public CompanyDTO getCompany(int companyId){
+        if(companyId == 0){return new CompanyDTO();}
+
         Company company = companyRepo.findById(companyId);
         return new CompanyDTO(company);
     }
@@ -31,6 +34,7 @@ public class CompanyService implements ICompanyService {
         return this.convertListToDTO(companies);
     }
 
+    @Transactional
     public boolean deleteCompany(int companyId, int userId) {
         try{
             Company company = companyRepo.findByIdAndOwnerId(companyId, userId);
@@ -63,13 +67,13 @@ public class CompanyService implements ICompanyService {
         }
     }
 
-    public boolean updateCompany(CompanyForAlterationDTO companyDTO) {
+    public CompanyDTO updateCompany(CompanyForAlterationDTO companyDTO) {
         try {
             Company company = new Company(companyDTO);
             companyRepo.save(company);
-            return true;
+            return new CompanyDTO(company);
         }catch (Exception ex){
-            return false;
+            return null;
         }
     }
 

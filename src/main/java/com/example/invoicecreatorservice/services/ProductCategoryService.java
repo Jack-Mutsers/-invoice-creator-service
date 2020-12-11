@@ -9,6 +9,7 @@ import com.example.invoicecreatorservice.repositories.ProductCategoryRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -31,6 +32,7 @@ public class ProductCategoryService implements IProductCategoryService {
         return categories;
     }
 
+    @Transactional
     public boolean deleteCategory(int id, int companyId) {
         try{
             ProductCategory category = productCategoryRepo.findById(id);
@@ -40,6 +42,18 @@ public class ProductCategoryService implements IProductCategoryService {
             }else {
                 return false;
             }
+
+            return true;
+        }catch (Exception ex){
+            LoggerService.warn(ex.getMessage());
+            return false;
+        }
+    }
+
+    @Transactional
+    public boolean deleteAllCompanyCategories(int companyId) {
+        try{
+            productCategoryRepo.deleteAllByCompanyId(companyId);
 
             return true;
         }catch (Exception ex){

@@ -9,5 +9,5 @@ public interface ICompanyService {
     Iterable<CompanyDTO> getAllCompanies();
     boolean deleteCompany(int companyId, int userId);
     Company createCompany(CompanyForAlterationDTO companyDTO, int userId);
-    boolean updateCompany(CompanyForAlterationDTO companyDTO);
+    CompanyDTO updateCompany(CompanyForAlterationDTO companyDTO);
 }

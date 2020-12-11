@@ -14,10 +14,10 @@ import javax.persistence.*;
 @Getter
 @Setter
 public class UserAccount {
-    public static final String ADMIN    = "ROLE_ADMIN";
-    public static final String OWNER    = "ROLE_OWNER";
-    public static final String EMPLOYEE = "ROLE_EMPLOYEE";
-    public static final String USER     = "ROLE_USER";
+    public static final String ADMIN_ROLE = "ROLE_ADMIN";
+    public static final String OWNER_ROLE = "ROLE_OWNER";
+    public static final String EMPLOYEE_ROLE = "ROLE_EMPLOYEE";
+    public static final String USER_ROLE = "ROLE_USER";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +30,10 @@ public class UserAccount {
 
     @Column(unique=true, nullable = false)
     private int userId;
+
+    @OneToOne
+    @JoinColumn(name = "userId", insertable = false, updatable = false)
+    User user = new User();
 
     @Column(unique=true, nullable = false)
     private String contactCode;
@@ -46,6 +50,7 @@ public class UserAccount {
         this.role = accountDTO.getRole();
 
         if(accountDTO.getUser() != null){
+            this.user = new User(accountDTO.getUser());
             this.userId = accountDTO.getUser().getId();
         }
     }

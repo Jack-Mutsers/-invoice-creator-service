@@ -187,10 +187,10 @@ class CompanyServiceTest {
         when(repo.save((Company)notNull())).thenReturn(entity);
 
         //Act
-        boolean result = service.updateCompany(entityDTO);
+        CompanyDTO result = service.updateCompany(entityDTO);
 
         //Assert
-        assertTrue(result);
+        assertNotNull(result);
     }
 
     @Test
@@ -213,9 +213,9 @@ class CompanyServiceTest {
         when(repo.save((Company)notNull())).thenThrow(new NullPointerException("zipcode cannot be empty"));
 
         //Act
-        boolean result = service.updateCompany(entityDTO);
+        CompanyDTO result = service.updateCompany(entityDTO);
 
         //Assert
-        assertFalse(result);
+        assertNotNull(result);
     }
 }

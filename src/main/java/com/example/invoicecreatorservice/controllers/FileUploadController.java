@@ -1,5 +1,8 @@
 package com.example.invoicecreatorservice.controllers;
 
+import com.example.invoicecreatorservice.contracts.services.ICompanyService;
+import com.example.invoicecreatorservice.contracts.services.ICustomerService;
+import com.example.invoicecreatorservice.contracts.services.IFileRecordService;
 import com.example.invoicecreatorservice.contracts.services.StorageService;
 import com.example.invoicecreatorservice.helpers.handlers.StorageFileNotFoundException;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.FileRecordDTO;
@@ -29,15 +32,15 @@ import java.util.concurrent.Future;
 public class FileUploadController extends BaseController {
 
 	@Autowired
-	private final FileRecordService recordService = new FileRecordService();
+	private final IFileRecordService recordService = new FileRecordService();
 
 	@Autowired
-	private final CustomerService customerService = new CustomerService();
+	private final ICustomerService customerService = new CustomerService();
 
 	@Autowired
-	private final CompanyService companyService = new CompanyService();
+	private final ICompanyService companyService = new CompanyService();
 
-	private final StorageService storageService;
+	private StorageService storageService;
 
 	@Autowired
 	public FileUploadController(StorageService storageService) {
@@ -75,21 +78,23 @@ public class FileUploadController extends BaseController {
 		return new ResponseEntity<>(new ResponseDTO(true, records), HttpStatus.OK);
 	}
 
-	@GetMapping("/files/{filename:.+}")
+	@GetMapping("/files/{id:.+}")
 	@ResponseBody
-	public ResponseEntity<Object> serveFile(HttpServletRequest request, @PathVariable String filename) {
+	public ResponseEntity<Object> serveFile(HttpServletRequest request, @PathVariable int id) {
 		int companyId = super.getCompanyId(request);
 		int userId = super.getUserId(request);
 		List<Integer> ids = customerService.getMyCustomerIds(userId);
 
+		FileRecord record = recordService.getFileRecord(id);
+
 		// validate if requested file is for or from the request user
-		boolean allowed = recordService.validateAccessPermission(filename, companyId, ids);
+		boolean allowed = recordService.validateAccessPermission(record, companyId, ids);
 
 		if(!allowed){
 			return new ResponseEntity<>(new ResponseDTO(false, "You do not have access to this file"), HttpStatus.FORBIDDEN);
 		}
 
-		Resource file = storageService.loadAsResource(filename);
+		Resource file = storageService.loadAsResource(record.getFileName());
 		return ResponseEntity.ok().body(file);
 	}
 
@@ -98,7 +103,8 @@ public class FileUploadController extends BaseController {
 		int companyId = super.getCompanyId(request);
 
 		try{
-			Future<FileRecord> asyncResponse = storageService.storeAsync(file);
+			String companyName = companyService.getCompany(companyId).getName();
+			Future<FileRecord> asyncResponse = storageService.storeAsync(file, companyName);
 			FileRecord record = asyncResponse.get();
 
 			record.setCustomerId(customerId);

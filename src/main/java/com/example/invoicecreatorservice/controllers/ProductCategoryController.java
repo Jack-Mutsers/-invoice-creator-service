@@ -1,5 +1,6 @@
 package com.example.invoicecreatorservice.controllers;
 
+import com.example.invoicecreatorservice.contracts.services.IProductCategoryService;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.ProductCategoryDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.ProductCategoryForAlterationDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.ResponseDTO;
@@ -19,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 public class ProductCategoryController extends BaseController {
 
     @Autowired
-    private final ProductCategoryService service = new ProductCategoryService();
+    private final IProductCategoryService service = new ProductCategoryService();
 
     @GetMapping(path="/{id}")
     public @ResponseBody ResponseEntity<ResponseDTO> getCategory(@PathVariable int id) {

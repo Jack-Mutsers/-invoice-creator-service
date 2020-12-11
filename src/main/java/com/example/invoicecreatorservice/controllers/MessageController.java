@@ -1,5 +1,6 @@
 package com.example.invoicecreatorservice.controllers;
 
+import com.example.invoicecreatorservice.contracts.services.IMessageService;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.*;
 import com.example.invoicecreatorservice.services.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/messenger")
 public class MessageController extends BaseController {
     @Autowired
-    private final MessageService service = new MessageService();
+    private final IMessageService service = new MessageService();
 
     @GetMapping(path="/notifications/{contactCode}")
     public @ResponseBody ResponseEntity<ResponseDTO> getNotifications(@PathVariable String contactCode) {

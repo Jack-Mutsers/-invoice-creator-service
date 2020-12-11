@@ -1,9 +1,13 @@
 package com.example.invoicecreatorservice.controllers;
 
+import com.example.invoicecreatorservice.contracts.services.ICompanyService;
+import com.example.invoicecreatorservice.contracts.services.IUserAccountService;
+import com.example.invoicecreatorservice.contracts.services.IUserService;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.ResponseDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.UserAccountDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.UserAccountForAlterationDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.UserDTO;
+import com.example.invoicecreatorservice.services.CompanyService;
 import com.example.invoicecreatorservice.services.UserAccountService;
 import com.example.invoicecreatorservice.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +25,13 @@ import java.util.Map;
 public class UserAccountController extends BaseController {
 
     @Autowired
-    private final UserAccountService userAccountService = new UserAccountService();
+    private final IUserAccountService userAccountService = new UserAccountService();
 
     @Autowired
-    private final UserService userService = new UserService();
+    private final IUserService userService = new UserService();
+
+    @Autowired
+    private final ICompanyService companyService = new CompanyService();
 
     private UserAccountDTO getUserAccount(int userAccountId){
         UserAccountDTO userAccountDTO = userAccountService.getUserAccount(userAccountId);
@@ -49,7 +56,7 @@ public class UserAccountController extends BaseController {
         if (!success) {
             return new ResponseEntity<>(new ResponseDTO(false, "Please login with the account you are trying to delete."), HttpStatus.BAD_REQUEST);
         }else{
-            userService.deleteUser(accountDTO.getId());
+            userService.deleteUser(accountDTO.getUserId());
         }
 
         return new ResponseEntity<>(new ResponseDTO(true, "Account has been deleted successfully."), HttpStatus.OK);
@@ -73,13 +80,14 @@ public class UserAccountController extends BaseController {
             return new ResponseEntity<>(new ResponseDTO(false, "something went wrong wile creating a new user account"), HttpStatus.CONFLICT);
         }
 
-        newObject.setUser(userService.getUser(user.getId()));
+        newObject.setUser(userService.getUser(newObject.getUserId()));
 
         return new ResponseEntity<>(new ResponseDTO(true, "User account has been created"), HttpStatus.CREATED);
     }
 
     @PutMapping(path ="/{id}")
     public @ResponseBody ResponseEntity<ResponseDTO> updateUserAccount(HttpServletRequest request, @PathVariable int id, @RequestBody UserAccountForAlterationDTO accountDTO) {
+        int companyId = super.getCompanyId(request);
         int userAccountId = super.getUserId(request);
 
         if(accountDTO.validateForUpdate() || accountDTO.getUser().validateForUpdate() || userAccountId != id ){
@@ -99,6 +107,7 @@ public class UserAccountController extends BaseController {
         }
 
         UserAccountDTO userAccountDTO = this.getUserAccount(userAccountId);
+        userAccountDTO.setCompany(companyService.getCompany(companyId));
 
         return new ResponseEntity<>(new ResponseDTO(true, userAccountDTO), HttpStatus.OK);
     }

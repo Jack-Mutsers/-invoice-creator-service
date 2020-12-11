@@ -13,7 +13,7 @@ public interface StorageService {
 
 	void init();
 
-	Future<FileRecord> storeAsync(MultipartFile file);
+	Future<FileRecord> storeAsync(MultipartFile file, String companyName);
 
 	Future<Stream<Path>> loadAllAsync();
 
@@ -22,6 +22,8 @@ public interface StorageService {
 	Resource loadAsResource(String filename);
 
 	void deleteAll();
+
+	void deleteAllByCompany(String companyName);
 
 	Future<Boolean> deleteFileAsync(String filename) throws IOException;
 }

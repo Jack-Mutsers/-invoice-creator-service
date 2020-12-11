@@ -26,6 +26,7 @@ class UserAccountTest {
             username,
             password,
             userId,
+            new User(),
             contactCode,
             companyId,
             role

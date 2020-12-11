@@ -1,5 +1,6 @@
 package com.example.invoicecreatorservice.controllers;
 
+import com.example.invoicecreatorservice.contracts.services.ICustomerService;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.CustomerDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.CustomerForAlterationDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.ResponseDTO;
@@ -18,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/customers")
 public class CustomerController extends BaseController {
     @Autowired
-    private final CustomerService service = new CustomerService();
+    private final ICustomerService service = new CustomerService();
 
     @GetMapping(path="/{customerId}")
     public @ResponseBody ResponseEntity<ResponseDTO> getCustomer(@PathVariable int customerId) {

@@ -9,6 +9,7 @@ import com.example.invoicecreatorservice.repositories.CustomerRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +42,7 @@ public class CustomerService implements ICustomerService {
         return ids;
     }
 
+    @Transactional
     public boolean deleteCustomer(int customerId, int companyId) {
         try{
             Customer customer = customerRepo.findById(customerId);
@@ -50,6 +52,18 @@ public class CustomerService implements ICustomerService {
             }else{
                 return false;
             }
+
+            return true;
+        }catch (Exception ex){
+            LoggerService.warn(ex.getMessage());
+            return false;
+        }
+    }
+
+    @Transactional
+    public boolean deleteAllCompanyCustomers(int companyId) {
+        try{
+            customerRepo.deleteAllByCompanyId(companyId);
 
             return true;
         }catch (Exception ex){

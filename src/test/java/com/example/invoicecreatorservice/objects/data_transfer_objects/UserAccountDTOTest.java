@@ -1,5 +1,6 @@
 package com.example.invoicecreatorservice.objects.data_transfer_objects;
 
+import com.example.invoicecreatorservice.objects.models.User;
 import com.example.invoicecreatorservice.objects.models.UserAccount;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,6 +26,7 @@ class UserAccountDTOTest {
                 username,
                 password,
                 userId,
+                new User(),
                 contactCode,
                 companyId,
                 role

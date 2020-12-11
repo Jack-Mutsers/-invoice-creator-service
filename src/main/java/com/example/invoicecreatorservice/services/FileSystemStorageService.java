@@ -5,6 +5,7 @@ import com.example.invoicecreatorservice.helpers.handlers.StorageException;
 import com.example.invoicecreatorservice.helpers.handlers.StorageFileNotFoundException;
 import com.example.invoicecreatorservice.helpers.properties.StorageProperties;
 import com.example.invoicecreatorservice.helpers.util.AsyncResponse;
+import com.example.invoicecreatorservice.objects.data_transfer_objects.FileRecordDTO;
 import com.example.invoicecreatorservice.objects.models.FileRecord;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +16,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.file.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.Future;
 import java.util.stream.Stream;
 
@@ -60,7 +63,13 @@ public class FileSystemStorageService implements StorageService {
 
 	@Override
 	public void deleteAll() {
-		FileSystemUtils.deleteRecursively(rootLocation.toFile());
+		 FileSystemUtils.deleteRecursively(rootLocation.toFile());
+	}
+
+	@Override
+	public void deleteAllByCompany(String companyName) {
+		Path fileLocation = Paths.get(this.rootLocation.toString() + "/" + companyName);
+		FileSystemUtils.deleteRecursively(fileLocation.toFile());
 	}
 
 	@Async
@@ -95,7 +104,7 @@ public class FileSystemStorageService implements StorageService {
 
 	@Async
 	@Override
-	public Future<FileRecord> storeAsync(MultipartFile file) {
+	public Future<FileRecord> storeAsync(MultipartFile file, String companyName) {
 		try {
 			if (file.isEmpty()) {
 				throw new StorageException("Failed to store empty file.");
@@ -110,21 +119,31 @@ public class FileSystemStorageService implements StorageService {
 				return null;
 			}
 
+			File theDir = new File(this.rootLocation + "/" + companyName);
+			if (!theDir.exists()){
+				theDir.mkdirs();
+			}
+
 			String filename = originalFilename.replace(file.getOriginalFilename(), FilenameUtils.getBaseName(file.getOriginalFilename()).concat(formattedDate) + "." + FilenameUtils.getExtension(file.getOriginalFilename()).toLowerCase());
-			filename = filename.replace(" ", "_");
+			filename = companyName + "/" + filename.replace(" ", "_");
 
 			Path destinationFile = this.rootLocation.resolve(
 					Paths.get(filename))
 					.normalize().toAbsolutePath();
-			if (!destinationFile.getParent().equals(this.rootLocation.toAbsolutePath())) {
+
+			var test = this.rootLocation.toAbsolutePath();
+
+			if (!destinationFile.getParent().getParent().equals(this.rootLocation.toAbsolutePath())) {
 				// This is a security check
 				throw new StorageException(
 						"Cannot store file outside current directory.");
 			}
+
 			try (InputStream inputStream = file.getInputStream()) {
 				Files.copy(inputStream, destinationFile,
 						StandardCopyOption.REPLACE_EXISTING);
 			}
+
 			AsyncResponse<FileRecord> response = new AsyncResponse<FileRecord>();
 			response.complete(new FileRecord(
 					0,

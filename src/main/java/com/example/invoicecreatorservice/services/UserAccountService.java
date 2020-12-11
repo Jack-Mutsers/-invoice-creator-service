@@ -1,6 +1,7 @@
 package com.example.invoicecreatorservice.services;
 
 import com.example.invoicecreatorservice.contracts.services.IUserAccountService;
+import com.example.invoicecreatorservice.contracts.tools.IPasswordEncoder;
 import com.example.invoicecreatorservice.helpers.logger.LoggerService;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.*;
 import com.example.invoicecreatorservice.objects.models.UserAccount;
@@ -9,7 +10,12 @@ import com.example.invoicecreatorservice.helpers.tools.BCryptEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static com.example.invoicecreatorservice.objects.models.UserAccount.OWNER;
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.example.invoicecreatorservice.objects.models.UserAccount.OWNER_ROLE;
+import static com.example.invoicecreatorservice.objects.models.UserAccount.USER_ROLE;
 
 @Service
 public class UserAccountService implements IUserAccountService {
@@ -17,12 +23,24 @@ public class UserAccountService implements IUserAccountService {
     @Autowired
     private UserAccountRepo userAccountRepo;
 
-    private BCryptEncoder encoder = BCryptEncoder.getInstance();
+    private IPasswordEncoder encoder = BCryptEncoder.getInstance();
 
     public UserAccountDTO getUserAccount(int id){
         return new UserAccountDTO(userAccountRepo.findById(id));
     }
 
+    public Iterable<UserDTO> getEmployees(int companyId){
+        List<UserAccount> accountList = userAccountRepo.findAllByCompanyId(companyId);
+        List<UserDTO> employees = new ArrayList<>();
+
+        for(UserAccount account : accountList){
+            employees.add(new UserDTO(account.getUser()));
+        }
+
+        return employees;
+    }
+
+    @Transactional
     public boolean deleteUser(int id, String password) {
         try{
             UserAccount userAccount = userAccountRepo.findById(id);
@@ -41,11 +59,27 @@ public class UserAccountService implements IUserAccountService {
         }
     }
 
+    public boolean removeAllEmployees(int companyId){
+        try{
+            List<UserAccount> accountList = userAccountRepo.findAllByCompanyId(companyId);
+            for(UserAccount account : accountList){
+                account.setCompanyId(0);
+                account.setRole(USER_ROLE);
+            }
+
+            userAccountRepo.saveAll(accountList);
+            return true;
+        } catch (Exception ex){
+            return false;
+        }
+    }
+
     public UserAccountDTO createUserAccount(UserAccountForAlterationDTO accountDTO, int userId) {
 
         try{
             UserAccount newUserAccount = new UserAccount(accountDTO);
             newUserAccount.setUserId(userId);
+            newUserAccount.getUser().setId(userId);
 
             String saltedPassword = encoder.encodePassword(newUserAccount.getPassword());
             newUserAccount.setActive(true);
@@ -54,7 +88,8 @@ public class UserAccountService implements IUserAccountService {
 
             // set id to 0 to prevent update of existing record on create
             newUserAccount.setId(0);
-            return new UserAccountDTO(userAccountRepo.save(newUserAccount));
+            UserAccount account = userAccountRepo.save(newUserAccount);
+            return new UserAccountDTO(account);
 
         }catch (Exception ex){
             LoggerService.warn(ex.getMessage());
@@ -97,7 +132,7 @@ public class UserAccountService implements IUserAccountService {
         try{
             UserAccount userAccount = userAccountRepo.findById(id);
             userAccount.setCompanyId(companyId);
-            userAccount.setRole(OWNER);
+            userAccount.setRole(OWNER_ROLE);
 
             userAccountRepo.save(userAccount);
 
