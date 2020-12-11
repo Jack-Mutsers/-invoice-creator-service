@@ -216,6 +216,6 @@ class CompanyServiceTest {
         CompanyDTO result = service.updateCompany(entityDTO);
 
         //Assert
-        assertNotNull(result);
+        assertNull(result);
     }
 }

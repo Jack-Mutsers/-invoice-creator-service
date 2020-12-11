@@ -39,7 +39,7 @@ public class CompanyController extends BaseController {
     private static final String ACCESSFORBIDDEN = "You do not have access to this element";
     private static final String ELEMENTNOTFOUND = "Company could not be found.";
     private static final String DATACONFLICT = "Supplied data does not meet the requirements";
-    private static String INTERNALERRORMESSAGE(String action){ return "Something went wrong with the " + action + " of the company."; }
+    private static String internalErrorMessage(String action){ return "Something went wrong with the " + action + " of the company."; }
 
     @Autowired
     public CompanyController(StorageService storageService) {
@@ -133,12 +133,12 @@ public class CompanyController extends BaseController {
         Company newObject = service.createCompany(companyDTO, userId);
 
         if (newObject == null){
-            return new ResponseEntity<>(new ResponseDTO(false, INTERNALERRORMESSAGE("creation")), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new ResponseDTO(false, internalErrorMessage("creation")), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         if (!userAccountService.addCompanyToUser(userId, newObject.getId())){
             service.deleteCompany(newObject.getId(), userId);
-            return new ResponseEntity<>(new ResponseDTO(false, INTERNALERRORMESSAGE("creation")), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new ResponseDTO(false, internalErrorMessage("creation")), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         return new ResponseEntity<>(new ResponseDTO(true, new CompanyDTO(newObject)), HttpStatus.CREATED);
@@ -158,7 +158,7 @@ public class CompanyController extends BaseController {
         CompanyDTO company = service.updateCompany(companyDTO);
 
         if (company == null){
-            return new ResponseEntity<>(new ResponseDTO(false, INTERNALERRORMESSAGE("update")), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new ResponseDTO(false, internalErrorMessage("update")), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         return new ResponseEntity<>(new ResponseDTO(true, company), HttpStatus.OK);

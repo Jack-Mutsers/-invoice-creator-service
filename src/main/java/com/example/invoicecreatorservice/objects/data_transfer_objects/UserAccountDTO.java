@@ -1,12 +1,8 @@
 package com.example.invoicecreatorservice.objects.data_transfer_objects;
 
-import com.example.invoicecreatorservice.objects.models.User;
 import com.example.invoicecreatorservice.objects.models.UserAccount;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
@@ -33,12 +29,4 @@ public class UserAccountDTO {
 
     public UserAccountDTO(){}
 
-    public final static List<UserAccountDTO> LoadFromList(List<UserAccount> userAccounts){
-        List<UserAccountDTO> dtoList = new ArrayList<>();
-        for(UserAccount account : userAccounts){
-            dtoList.add(new UserAccountDTO(account));
-        }
-
-        return dtoList;
-    }
 }

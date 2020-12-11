@@ -5,7 +5,6 @@ import com.example.invoicecreatorservice.helpers.handlers.StorageException;
 import com.example.invoicecreatorservice.helpers.handlers.StorageFileNotFoundException;
 import com.example.invoicecreatorservice.helpers.properties.StorageProperties;
 import com.example.invoicecreatorservice.helpers.util.AsyncResponse;
-import com.example.invoicecreatorservice.objects.data_transfer_objects.FileRecordDTO;
 import com.example.invoicecreatorservice.objects.models.FileRecord;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,6 @@ import java.net.MalformedURLException;
 import java.nio.file.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.Future;
 import java.util.stream.Stream;
 
@@ -75,7 +73,7 @@ public class FileSystemStorageService implements StorageService {
 	@Async
 	@Override
 	public Future<Boolean> deleteFileAsync(String filename) {
-		AsyncResponse<Boolean> response = new AsyncResponse<Boolean>();
+		AsyncResponse<Boolean> response = new AsyncResponse<>();
 
 		try{
 			Path path = this.load(filename);
@@ -131,8 +129,6 @@ public class FileSystemStorageService implements StorageService {
 					Paths.get(filename))
 					.normalize().toAbsolutePath();
 
-			var test = this.rootLocation.toAbsolutePath();
-
 			if (!destinationFile.getParent().getParent().equals(this.rootLocation.toAbsolutePath())) {
 				// This is a security check
 				throw new StorageException(
@@ -144,7 +140,7 @@ public class FileSystemStorageService implements StorageService {
 						StandardCopyOption.REPLACE_EXISTING);
 			}
 
-			AsyncResponse<FileRecord> response = new AsyncResponse<FileRecord>();
+			AsyncResponse<FileRecord> response = new AsyncResponse<>();
 			response.complete(new FileRecord(
 					0,
 					originalFilename,
@@ -170,7 +166,7 @@ public class FileSystemStorageService implements StorageService {
 	@Override
 	public Future<Stream<Path>> loadAllAsync() {
 		try {
-			AsyncResponse<Stream<Path>> response = new AsyncResponse<Stream<Path>>();
+			AsyncResponse<Stream<Path>> response = new AsyncResponse<>();
 
 			response.complete(Files.walk(this.rootLocation, 1)
 					.filter(path -> !path.equals(this.rootLocation))
