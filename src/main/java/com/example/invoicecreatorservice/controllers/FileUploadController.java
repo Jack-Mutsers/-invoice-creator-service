@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-@CrossOrigin
 @Controller
 @RequestMapping("/upload")
 public class FileUploadController extends BaseController {

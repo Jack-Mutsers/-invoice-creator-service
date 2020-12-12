@@ -14,8 +14,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.invoicecreatorservice.objects.models.UserAccount.OWNER_ROLE;
-import static com.example.invoicecreatorservice.objects.models.UserAccount.USER_ROLE;
+import static com.example.invoicecreatorservice.objects.models.UserAccount.*;
 
 @Service
 public class UserAccountService implements IUserAccountService {
@@ -34,7 +33,7 @@ public class UserAccountService implements IUserAccountService {
         List<UserDTO> employees = new ArrayList<>();
 
         for(UserAccount account : accountList){
-            employees.add(new UserDTO(account.getUser()));
+            employees.add(new UserDTO(account.getUser(), account.getContactCode()));
         }
 
         return employees;
@@ -68,6 +67,19 @@ public class UserAccountService implements IUserAccountService {
             }
 
             userAccountRepo.saveAll(accountList);
+            return true;
+        } catch (Exception ex){
+            return false;
+        }
+    }
+
+    public boolean removeEmployee(int id, int companyId) {
+        try{
+            UserAccount account = userAccountRepo.findByUserIdAndCompanyId(id, companyId);
+            account.setCompanyId(0);
+            account.setRole(USER_ROLE);
+
+            userAccountRepo.save(account);
             return true;
         } catch (Exception ex){
             return false;
@@ -133,6 +145,26 @@ public class UserAccountService implements IUserAccountService {
             UserAccount userAccount = userAccountRepo.findById(id);
             userAccount.setCompanyId(companyId);
             userAccount.setRole(OWNER_ROLE);
+
+            userAccountRepo.save(userAccount);
+
+            return true;
+        }catch (Exception ex){
+            LoggerService.warn(ex.getMessage());
+            return false;
+        }
+    }
+
+    public boolean addNewEmployee(String contactCode, int companyId) {
+        try{
+            UserAccount userAccount = userAccountRepo.findByContactCode(contactCode);
+
+            if(userAccount.getCompanyId() > 0){
+                return false;
+            }
+
+            userAccount.setCompanyId(companyId);
+            userAccount.setRole(EMPLOYEE_ROLE);
 
             userAccountRepo.save(userAccount);
 

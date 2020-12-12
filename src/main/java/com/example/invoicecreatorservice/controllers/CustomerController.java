@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-@CrossOrigin
 @Controller
 @RequestMapping("/customers")
 public class CustomerController extends BaseController {

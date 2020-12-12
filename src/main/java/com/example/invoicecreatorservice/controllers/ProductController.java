@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-@CrossOrigin
 @Controller
 @RequestMapping("/products")
 public class ProductController extends BaseController {

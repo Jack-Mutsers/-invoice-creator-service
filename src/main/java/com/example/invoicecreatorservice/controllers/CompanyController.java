@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-@CrossOrigin
 @Controller
 @RequestMapping("/company")
 public class CompanyController extends BaseController {
@@ -118,6 +117,25 @@ public class CompanyController extends BaseController {
         return new ResponseEntity<>(new ResponseDTO(true, "Company has been deleted successfully."), HttpStatus.OK);
     }
 
+    @DeleteMapping(path = "/employee/{id}")
+    public @ResponseBody ResponseEntity<ResponseDTO> deleteEmployee(HttpServletRequest request, @PathVariable int id) {
+        int companyId = super.getCompanyId(request);
+        int userId = super.getUserId(request);
+
+        if(companyId == 0){ return new ResponseEntity<>(new ResponseDTO(false, ACCESSFORBIDDEN), HttpStatus.FORBIDDEN); }
+
+        CompanyDTO company = service.getCompany(companyId);
+
+        if(company == null){ return new ResponseEntity<>(new ResponseDTO(false, ELEMENTNOTFOUND), HttpStatus.NOT_FOUND); }
+        if(company.getOwnerId() != userId){ return new ResponseEntity<>(new ResponseDTO(false, ACCESSFORBIDDEN), HttpStatus.FORBIDDEN); }
+
+        boolean succes = userAccountService.removeEmployee(id, companyId);
+
+        if(!succes){ return new ResponseEntity<>(new ResponseDTO(false, ELEMENTNOTFOUND), HttpStatus.NOT_FOUND); }
+
+        return new ResponseEntity<>(new ResponseDTO(true, "Employee has been deleted successfully."), HttpStatus.OK);
+    }
+
     @PostMapping(path="")
     public @ResponseBody ResponseEntity<ResponseDTO> createCompany(HttpServletRequest request, @RequestBody CompanyForAlterationDTO companyDTO) {
         if(companyDTO.validateForCreation()){
@@ -143,6 +161,28 @@ public class CompanyController extends BaseController {
 
         return new ResponseEntity<>(new ResponseDTO(true, new CompanyDTO(newObject)), HttpStatus.CREATED);
     }
+
+    @PostMapping(path="employee")
+    public @ResponseBody ResponseEntity<ResponseDTO> addEmployee(HttpServletRequest request, @RequestBody String contactCode) {
+        if(contactCode == null){
+            return new ResponseEntity<>(new ResponseDTO(false, DATACONFLICT), HttpStatus.CONFLICT);
+        }
+
+        int companyId = super.getCompanyId(request);
+        if(companyId == 0){
+            return new ResponseEntity<>(new ResponseDTO(false, ACCESSFORBIDDEN), HttpStatus.FORBIDDEN);
+        }
+
+        boolean added = userAccountService.addNewEmployee(contactCode, companyId);
+
+        if (!added){
+            return new ResponseEntity<>(new ResponseDTO(false, "Something went wrong or the user already belongs to a company"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(new ResponseDTO(true, "Employee has been added"), HttpStatus.CREATED);
+    }
+
+
 
     @PutMapping(path ="")
     public @ResponseBody ResponseEntity<ResponseDTO> updateCompany(HttpServletRequest request, @RequestBody CompanyForAlterationDTO companyDTO) {

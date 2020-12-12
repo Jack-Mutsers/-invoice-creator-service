@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
-@CrossOrigin
 @Controller
 @RequestMapping("/useraccount")
 public class UserAccountController extends BaseController {

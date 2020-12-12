@@ -9,8 +9,10 @@ public interface IUserAccountService {
     Iterable<UserDTO> getEmployees(int companyId);
     boolean deleteUser(int id, String password);
     boolean removeAllEmployees(int companyId);
+    boolean removeEmployee(int id, int companyId);
     UserAccountDTO createUserAccount(UserAccountForAlterationDTO accountDTO, int userId);
     boolean updateUserAccount(UserAccountForAlterationDTO accountDTO);
     boolean validateUsername(String username);
     boolean addCompanyToUser(int id, int companyId);
+    boolean addNewEmployee(String contactCode, int companyId);
 }
