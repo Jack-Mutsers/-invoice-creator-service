@@ -41,10 +41,6 @@ public class ProductController extends BaseController {
 
         Iterable<ProductDTO> products = service.getAllProducts(companyId);
 
-        if(products == null){
-            return new ResponseEntity<>(new ResponseDTO(true, "There are currently no products availible"), HttpStatus.OK);
-        }
-
         return new ResponseEntity<>(new ResponseDTO(true, products), HttpStatus.OK);
     }
 

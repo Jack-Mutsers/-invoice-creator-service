@@ -34,6 +34,33 @@ class UserDTOTest {
         assertEquals(city, DTOentity.getCity());
     }
 
+    @Test
+    void instantiateEntityWithContactCode(){
+        int id = 2;
+        String name = "henk";
+        String address = "testlane 64";
+        String zipcode = "1234 AB";
+        String city = "Testvile";
+        String contactCode = "Df2dd55EFD";
+
+        User entity = new User(
+                id,
+                name,
+                address,
+                zipcode,
+                city
+        );
+
+        UserDTO DTOentity = new UserDTO(entity, contactCode);
+
+        assertEquals(id, DTOentity.getId());
+        assertEquals(name, DTOentity.getName());
+        assertEquals(address, DTOentity.getAddress());
+        assertEquals(zipcode, DTOentity.getZipcode());
+        assertEquals(city, DTOentity.getCity());
+        assertEquals(contactCode, DTOentity.getContactCode());
+    }
+
 
     @Test
     void instantiateEmptyEntity(){
@@ -59,6 +86,7 @@ class UserDTOTest {
         String address = "testlane 64";
         String zipcode = "1234 AB";
         String city = "Testvile";
+        String contactCode = "Df2dd55EFD";
 
         UserDTO DTOentity = new UserDTO();
 
@@ -67,6 +95,7 @@ class UserDTOTest {
         DTOentity.setAddress(address);
         DTOentity.setZipcode(zipcode);
         DTOentity.setCity(city);
+        DTOentity.setContactCode(contactCode);
 
         assertEquals(id, DTOentity.getId());
         assertEquals(name, DTOentity.getName());

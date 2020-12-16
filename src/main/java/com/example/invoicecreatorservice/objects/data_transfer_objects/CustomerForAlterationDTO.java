@@ -29,8 +29,7 @@ public class CustomerForAlterationDTO {
     }
 
     public boolean validateForCreation(){
-        return (this.name == null || this.address == null || this.zipcode == null || this.city == null ||
-                this.name.isBlank() || this.address.isBlank() || this.zipcode.isBlank() || this.city.isBlank());
+        return (this.companyId == 0 || this.validateValue(this.name) || this.validateValue(this.address) || this.validateValue(this.zipcode) || this.validateValue(this.city));
     }
 
     public void setId(int id) {
@@ -39,5 +38,9 @@ public class CustomerForAlterationDTO {
 
     public void setCompanyId(int companyId) {
         this.companyId = companyId;
+    }
+
+    private boolean validateValue(String value){
+        return value == null || value.isBlank();
     }
 }

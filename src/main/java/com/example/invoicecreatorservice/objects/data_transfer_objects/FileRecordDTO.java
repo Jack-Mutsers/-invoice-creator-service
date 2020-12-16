@@ -1,8 +1,11 @@
 package com.example.invoicecreatorservice.objects.data_transfer_objects;
 
-
 import com.example.invoicecreatorservice.objects.models.FileRecord;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class FileRecordDTO {
     private int id = 0;
     private String name;
@@ -14,17 +17,6 @@ public class FileRecordDTO {
     private CustomerDTO customer = new CustomerDTO();
     private int ownerId;
     private CompanyDTO owner = new CompanyDTO();
-
-    public FileRecordDTO(int id, String name, String fileName, String url, String fileType, String creationDate, int customerId, int ownerId) {
-        this.id = id;
-        this.name = name;
-        this.fileName = fileName;
-        this.url = url;
-        this.fileType = fileType;
-        this.creationDate = creationDate;
-        this.customerId = customerId;
-        this.ownerId = ownerId;
-    }
 
     public FileRecordDTO(FileRecord record) {
         this.id = record.getId();
@@ -39,51 +31,4 @@ public class FileRecordDTO {
 
     public FileRecordDTO(){}
 
-    public int getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public String getFileType() {
-        return fileType;
-    }
-
-    public String getCreationDate() {
-        return creationDate;
-    }
-
-    public int getCustomerId() {
-        return customerId;
-    }
-
-    public int getOwnerId() {
-        return ownerId;
-    }
-
-    public CustomerDTO getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(CustomerDTO customer) {
-        this.customer = customer;
-    }
-
-    public CompanyDTO getOwner() {
-        return owner;
-    }
-
-    public void setOwner(CompanyDTO owner) {
-        this.owner = owner;
-    }
 }

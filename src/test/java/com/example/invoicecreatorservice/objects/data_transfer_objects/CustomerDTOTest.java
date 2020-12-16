@@ -62,6 +62,7 @@ class CustomerDTOTest {
         String address = "testlane 64";
         String zipcode = "1234 AB";
         String city = "Testvile";
+        int companyId = 1;
 
         CustomerDTO DTOentity = new CustomerDTO();
 
@@ -70,12 +71,14 @@ class CustomerDTOTest {
         DTOentity.setAddress(address);
         DTOentity.setZipcode(zipcode);
         DTOentity.setCity(city);
+        DTOentity.setCompanyId(companyId);
 
         assertEquals(id, DTOentity.getId());
         assertEquals(name, DTOentity.getName());
         assertEquals(address, DTOentity.getAddress());
         assertEquals(zipcode, DTOentity.getZipcode());
         assertEquals(city, DTOentity.getCity());
+        assertEquals(companyId, DTOentity.getCompanyId());
     }
 
 }

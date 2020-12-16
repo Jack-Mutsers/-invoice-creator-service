@@ -42,10 +42,6 @@ public class ProductCategoryController extends BaseController {
 
         Iterable<ProductCategory> categories = service.getAllCategory(companyId);
 
-        if(categories == null){
-            return new ResponseEntity<>(new ResponseDTO(true, "There are currently no product categories availible"), HttpStatus.OK);
-        }
-
         return new ResponseEntity<>(new ResponseDTO(true, categories), HttpStatus.OK);
     }
 

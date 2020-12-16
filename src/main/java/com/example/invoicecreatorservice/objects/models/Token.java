@@ -13,7 +13,7 @@ public class Token {
     private int id;
     private String jwtToken;
     private String ip;
-    private boolean valid;
+    private boolean valid = false;
 
     public Token(int id, String token, String ip, boolean valid) {
         this.id = id;

@@ -24,18 +24,14 @@ public class CustomerService implements ICustomerService {
     }
 
     public Iterable<Customer> getAllCustomers(int id) {
-        List<Customer> customers = customerRepo.findAllByCompanyId(id);
-
-        if(customers.isEmpty()){ return null; }
-
-        return customers;
+        return customerRepo.findAllByCompanyId(id);
     }
 
-    public List<Integer> getMyCustomerIds(int userId){
-        List<Customer> customers = customerRepo.findAllByUserId(userId);
+    public List<Integer> getMyCustomerIds(int companyId){
+        List<Customer> customers = customerRepo.findAllByCompanyId(companyId);
         List<Integer> ids = new ArrayList<>();
 
-        for(Customer customer : emptyIfNull(customers)){
+        for(Customer customer : customers){
             ids.add(customer.getId());
         }
 
@@ -47,11 +43,11 @@ public class CustomerService implements ICustomerService {
         try{
             Customer customer = customerRepo.findById(customerId);
 
-            if(customer.getCompanyId() == companyId){
-                customerRepo.deleteById(customerId);
-            }else{
+            if(customer.getCompanyId() != companyId){
                 return false;
             }
+
+            customerRepo.deleteById(customerId);
 
             return true;
         }catch (Exception ex){
@@ -97,9 +93,5 @@ public class CustomerService implements ICustomerService {
             LoggerService.warn(ex.getMessage());
             return false;
         }
-    }
-
-    private <T> Iterable<T> emptyIfNull(Iterable<T> iterable) {
-        return iterable == null ? List.of() : iterable;
     }
 }

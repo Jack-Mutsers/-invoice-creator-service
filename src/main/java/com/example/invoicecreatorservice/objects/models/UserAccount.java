@@ -56,5 +56,4 @@ public class UserAccount {
     }
 
     public UserAccount(){}
-
 }

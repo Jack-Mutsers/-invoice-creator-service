@@ -37,10 +37,6 @@ public class CustomerController extends BaseController {
 
         Iterable<Customer> customers = service.getAllCustomers(companyId);
 
-        if(customers == null){
-            return new ResponseEntity<>(new ResponseDTO(true, "There are currently no customers availible"), HttpStatus.OK);
-        }
-
         return new ResponseEntity<>(new ResponseDTO(true, customers), HttpStatus.OK);
     }
 

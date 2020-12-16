@@ -39,12 +39,12 @@ public class CompanyForAlterationDTO {
     }
 
     public boolean validateForUpdate(){
-        return ( this.validateForCreation() || this.contactCode == null || this.contactCode.isBlank());
+        return ( this.validateForCreation() || this.ownerId == 0 || this.id == 0 || this.validateValue(this.contactCode));
     }
 
     public boolean validateForCreation(){
-        return (this.name == null || this.address == null || this.zipcode == null || this.city == null || this.telephoneNumber == null ||
-                this.name.isBlank() || this.address.isBlank() || this.zipcode.isBlank() || this.city.isBlank() || this.telephoneNumber.isBlank());
+        return (this.validateValue(this.name) || this.validateValue(this.address) || this.validateValue(this.zipcode)
+                || this.validateValue(this.city) || this.validateValue(this.telephoneNumber));
     }
 
     public void setId(int id) {
@@ -58,5 +58,9 @@ public class CompanyForAlterationDTO {
 
     public void setOwnerId(int ownerId) {
         this.ownerId = ownerId;
+    }
+
+    private boolean validateValue(String value){
+        return value == null || value.isBlank();
     }
 }

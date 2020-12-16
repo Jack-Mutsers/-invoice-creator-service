@@ -38,8 +38,6 @@ public class ProductService implements IProductService {
             product.setCategory(categoryService.getCategory(product.getCategoryId()));
         }
 
-        if(products.isEmpty()){ return null; }
-
         return products;
     }
 

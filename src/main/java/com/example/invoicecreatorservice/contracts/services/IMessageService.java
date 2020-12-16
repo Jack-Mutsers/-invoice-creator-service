@@ -4,9 +4,8 @@ import com.example.invoicecreatorservice.objects.data_transfer_objects.MessageDT
 import com.example.invoicecreatorservice.objects.data_transfer_objects.MessageForAlterationDTO;
 
 public interface IMessageService {
-    Iterable<MessageDTO> getNotifications(String contactCode);
-    Iterable<MessageDTO> getOutgoingRequests(int userId);
-    Iterable<MessageDTO> getIncomingRequests(String contactCode);
+    Iterable<MessageDTO> getMessagesForMe(String contactCode, String type);
+    Iterable<MessageDTO> getOutgoingRequests(int userId, String type);
     boolean createMessage(MessageForAlterationDTO messageDTO);
     boolean updateRequest(MessageForAlterationDTO messageDTO);
 }

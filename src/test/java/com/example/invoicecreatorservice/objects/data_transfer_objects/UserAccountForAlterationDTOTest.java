@@ -1,5 +1,7 @@
 package com.example.invoicecreatorservice.objects.data_transfer_objects;
 
+import com.example.invoicecreatorservice.objects.models.User;
+import com.example.invoicecreatorservice.objects.models.UserAccount;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -7,55 +9,45 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class UserAccountForAlterationDTOTest {
+
+    private final User userEntity = new User(2, "henk", "testlane 64", "1234 AB", "Testvile");
+    private final UserAccount userAccountEntity = new UserAccount(2, true, "henk", "Password1!",2, userEntity, "123456", 1, "ROLE_OWNER");
+
     @Test
     void instantiateEntity(){
-        int id = 2;
-        boolean active = true;
-        String username = "henk";
-        String password = "Password1!";
-        String contactCode = "123456";
-        int companyId = 1;
-        String role = "ROLE_OWNER";
-
-        int userId = 2;
-        String name = "henk";
-        String address = "testlane 64";
-        String zipcode = "1234 AB";
-        String city = "Testvile";
-
-
         UserForAlterationDTO userDTO = new UserForAlterationDTO(
-            userId,
-            name,
-            address,
-            zipcode,
-            city
+            userEntity.getId(),
+            userEntity.getName(),
+            userEntity.getAddress(),
+            userEntity.getZipcode(),
+            userEntity.getCity()
         );
-
 
         UserAccountForAlterationDTO DTOentity = new UserAccountForAlterationDTO(
-            id,
-            active,
-            username,
-            password,
+            userAccountEntity.getId(),
+            userAccountEntity.isActive(),
+            userAccountEntity.getUsername(),
+            userAccountEntity.getPassword(),
             userDTO,
-            contactCode,
-            role,
-            companyId
+            userAccountEntity.getContactCode(),
+            userAccountEntity.getRole(),
+            userAccountEntity.getCompanyId()
         );
 
-        assertEquals(id, DTOentity.getId());
-        assertEquals(username, DTOentity.getUsername());
-        assertEquals(password, DTOentity.getPassword());
+        assertEquals(userAccountEntity.getId(), DTOentity.getId());
+        assertTrue(DTOentity.getActive());
+        assertEquals(userAccountEntity.getUsername(), DTOentity.getUsername());
+        assertEquals(userAccountEntity.getPassword(), DTOentity.getPassword());
         assertEquals(userDTO, DTOentity.getUser());
-        assertEquals(contactCode, DTOentity.getContactCode());
+        assertEquals(userAccountEntity.getContactCode(), DTOentity.getContactCode());
+        assertEquals(userAccountEntity.getRole(), DTOentity.getRole());
+        assertEquals(userAccountEntity.getCompanyId(), DTOentity.getCompanyId());
     }
 
 
     @Test
     void instantiateEmptyEntity(){
         int id = 0;
-        boolean active = true;
         String username = null;
         String password = null;
         String contactCode = null;
@@ -70,82 +62,214 @@ class UserAccountForAlterationDTOTest {
         assertEquals(contactCode, DTOentity.getContactCode());
     }
 
+    @Test
+    void setVariablesTest(){
+        UserForAlterationDTO userDTO = new UserForAlterationDTO(
+                userEntity.getId(),
+                userEntity.getName(),
+                userEntity.getAddress(),
+                userEntity.getZipcode(),
+                userEntity.getCity()
+        );
+
+        UserAccountForAlterationDTO DTOentity = new UserAccountForAlterationDTO();
+        DTOentity.setId(userAccountEntity.getId());
+        DTOentity.setUser(userDTO);
+
+        assertEquals(userAccountEntity.getId(), DTOentity.getId());
+        assertNotNull(DTOentity.getUser());
+    }
+
+    @Test
+    void generateContactCodeTest(){
+        UserForAlterationDTO userDTO = new UserForAlterationDTO(
+                userEntity.getId(),
+                userEntity.getName(),
+                userEntity.getAddress(),
+                userEntity.getZipcode(),
+                userEntity.getCity()
+        );
+
+        UserAccountForAlterationDTO DTOentity = new UserAccountForAlterationDTO(
+                userAccountEntity.getId(),
+                userAccountEntity.isActive(),
+                userAccountEntity.getUsername(),
+                userAccountEntity.getPassword(),
+                userDTO,
+                null,
+                userAccountEntity.getRole(),
+                userAccountEntity.getCompanyId()
+        );
+
+        DTOentity.generateContactCode();
+
+        assertNotNull(DTOentity.getContactCode());
+    }
 
     @Test
     void entityValidationTestForUpdateSuccess(){
-        int id = 2;
-        boolean active = true;
-        String username = "henk";
-        String password = "Password1!";
-        String contactCode = "123456";
-        int companyId = 1;
-        String role = "ROLE_OWNER";
-
-        int userId = 2;
-        String name = "henk";
-        String address = "testlane 64";
-        String zipcode = "1234 AB";
-        String city = "Testvile";
-
 
         UserForAlterationDTO userDTO = new UserForAlterationDTO(
-                userId,
-                name,
-                address,
-                zipcode,
-                city
+                userEntity.getId(),
+                userEntity.getName(),
+                userEntity.getAddress(),
+                userEntity.getZipcode(),
+                userEntity.getCity()
         );
 
-
         UserAccountForAlterationDTO DTOentity = new UserAccountForAlterationDTO(
-                id,
-                active,
-                username,
-                password,
+                userAccountEntity.getId(),
+                userAccountEntity.isActive(),
+                userAccountEntity.getUsername(),
+                userAccountEntity.getPassword(),
                 userDTO,
-                contactCode,
-                role,
-                companyId
+                userAccountEntity.getContactCode(),
+                userAccountEntity.getRole(),
+                userAccountEntity.getCompanyId()
         );
 
         assertFalse(DTOentity.validateForUpdate());
     }
 
     @Test
-    void entityValidationTestForUpdateFailure(){
-        int id = 0;
-        boolean active = true;
-        String username = "henk";
-        String password = "Password1!";
-        String contactCode = "";
-        int companyId = 1;
-        String role = "ROLE_OWNER";
-
-        int userId = 2;
-        String name = "henk";
-        String address = "testlane 64";
-        String zipcode = "1234 AB";
-        String city = "Testvile";
-
+    void entityValidationTestForUpdateFailureOne(){
 
         UserForAlterationDTO userDTO = new UserForAlterationDTO(
-                userId,
-                name,
-                address,
-                zipcode,
-                city
+                userEntity.getId(),
+                userEntity.getName(),
+                userEntity.getAddress(),
+                userEntity.getZipcode(),
+                userEntity.getCity()
         );
 
+        UserAccountForAlterationDTO DTOentity = new UserAccountForAlterationDTO(
+                0,
+                userAccountEntity.isActive(),
+                userAccountEntity.getUsername(),
+                userAccountEntity.getPassword(),
+                userDTO,
+                userAccountEntity.getContactCode(),
+                userAccountEntity.getRole(),
+                userAccountEntity.getCompanyId()
+        );
+
+        assertTrue(DTOentity.validateForUpdate());
+    }
+
+    @Test
+    void entityValidationTestForUpdateFailureTwo(){
+
+        UserForAlterationDTO userDTO = new UserForAlterationDTO(
+                userEntity.getId(),
+                userEntity.getName(),
+                userEntity.getAddress(),
+                userEntity.getZipcode(),
+                userEntity.getCity()
+        );
 
         UserAccountForAlterationDTO DTOentity = new UserAccountForAlterationDTO(
-                id,
-                active,
-                username,
-                password,
+                userAccountEntity.getId(),
+                userAccountEntity.isActive(),
+                null,
+                userAccountEntity.getPassword(),
                 userDTO,
-                contactCode,
-                role,
-                companyId
+                userAccountEntity.getContactCode(),
+                userAccountEntity.getRole(),
+                userAccountEntity.getCompanyId()
+        );
+
+        assertTrue(DTOentity.validateForUpdate());
+    }
+
+    @Test
+    void entityValidationTestForUpdateFailureThree(){
+
+        UserForAlterationDTO userDTO = new UserForAlterationDTO(
+                userEntity.getId(),
+                userEntity.getName(),
+                userEntity.getAddress(),
+                userEntity.getZipcode(),
+                userEntity.getCity()
+        );
+
+        UserAccountForAlterationDTO DTOentity = new UserAccountForAlterationDTO(
+                userAccountEntity.getId(),
+                userAccountEntity.isActive(),
+                userAccountEntity.getUsername(),
+                userAccountEntity.getPassword(),
+                userDTO,
+                "   ",
+                userAccountEntity.getRole(),
+                userAccountEntity.getCompanyId()
+        );
+
+        assertTrue(DTOentity.validateForUpdate());
+    }
+
+    @Test
+    void entityValidationTestForUpdateFailureFour(){
+
+        UserForAlterationDTO userDTO = null;
+
+        UserAccountForAlterationDTO DTOentity = new UserAccountForAlterationDTO(
+                userAccountEntity.getId(),
+                userAccountEntity.isActive(),
+                userAccountEntity.getUsername(),
+                userAccountEntity.getPassword(),
+                userDTO,
+                userAccountEntity.getContactCode(),
+                userAccountEntity.getRole(),
+                userAccountEntity.getCompanyId()
+        );
+
+        assertTrue(DTOentity.validateForUpdate());
+    }
+
+    @Test
+    void entityValidationTestForUpdateFailureFive(){
+
+        UserForAlterationDTO userDTO = new UserForAlterationDTO(
+                0,
+                userEntity.getName(),
+                userEntity.getAddress(),
+                userEntity.getZipcode(),
+                userEntity.getCity()
+        );
+
+        UserAccountForAlterationDTO DTOentity = new UserAccountForAlterationDTO(
+                userAccountEntity.getId(),
+                userAccountEntity.isActive(),
+                userAccountEntity.getUsername(),
+                userAccountEntity.getPassword(),
+                userDTO,
+                userAccountEntity.getContactCode(),
+                userAccountEntity.getRole(),
+                userAccountEntity.getCompanyId()
+        );
+
+        assertTrue(DTOentity.validateForUpdate());
+    }
+
+    @Test
+    void entityValidationTestForUpdateFailureSix(){
+
+        UserForAlterationDTO userDTO = new UserForAlterationDTO(
+                userEntity.getId(),
+                userEntity.getName(),
+                userEntity.getAddress(),
+                userEntity.getZipcode(),
+                userEntity.getCity()
+        );
+
+        UserAccountForAlterationDTO DTOentity = new UserAccountForAlterationDTO(
+                userAccountEntity.getId(),
+                userAccountEntity.isActive(),
+                userAccountEntity.getUsername(),
+                userAccountEntity.getPassword(),
+                userDTO,
+                userAccountEntity.getContactCode(),
+                null,
+                userAccountEntity.getCompanyId()
         );
 
         assertTrue(DTOentity.validateForUpdate());
@@ -153,79 +277,116 @@ class UserAccountForAlterationDTOTest {
 
     @Test
     void entityValidationTestForCreationSuccess(){
-        int id = 0;
-        boolean active = true;
-        String username = "henk";
-        String password = "Password1!";
-        String contactCode = "123456";
-        int companyId = 1;
-        String role = "ROLE_OWNER";
-
-        int userId = 0;
-        String name = "henk";
-        String address = "testlane 64";
-        String zipcode = "1234 AB";
-        String city = "Testvile";
-
 
         UserForAlterationDTO userDTO = new UserForAlterationDTO(
-                userId,
-                name,
-                address,
-                zipcode,
-                city
+                userEntity.getId(),
+                userEntity.getName(),
+                userEntity.getAddress(),
+                userEntity.getZipcode(),
+                userEntity.getCity()
         );
 
-
         UserAccountForAlterationDTO DTOentity = new UserAccountForAlterationDTO(
-                id,
-                active,
-                username,
-                password,
+                userAccountEntity.getId(),
+                userAccountEntity.isActive(),
+                userAccountEntity.getUsername(),
+                userAccountEntity.getPassword(),
                 userDTO,
-                contactCode,
-                role,
-                companyId
+                userAccountEntity.getContactCode(),
+                userAccountEntity.getRole(),
+                userAccountEntity.getCompanyId()
         );
 
         assertFalse(DTOentity.validateForCreation());
     }
 
     @Test
-    void entityValidationTestForCreationFailure(){
-        int id = 0;
-        boolean active = true;
-        String username = "henk";
-        String password = "";
-        String contactCode = "123456";
-        int companyId = 1;
-        String role = "ROLE_OWNER";
-
-        int userId = 0;
-        String name = "henk";
-        String address = "testlane 64";
-        String zipcode = "1234 AB";
-        String city = "Testvile";
-
+    void entityValidationTestForCreationFailureOne(){
 
         UserForAlterationDTO userDTO = new UserForAlterationDTO(
-                userId,
-                name,
-                address,
-                zipcode,
-                city
+                userEntity.getId(),
+                userEntity.getName(),
+                userEntity.getAddress(),
+                userEntity.getZipcode(),
+                userEntity.getCity()
         );
 
+        UserAccountForAlterationDTO DTOentity = new UserAccountForAlterationDTO(
+                userAccountEntity.getId(),
+                userAccountEntity.isActive(),
+                null,
+                userAccountEntity.getPassword(),
+                userDTO,
+                userAccountEntity.getContactCode(),
+                userAccountEntity.getRole(),
+                userAccountEntity.getCompanyId()
+        );
+
+        assertTrue(DTOentity.validateForCreation());
+    }
+
+    @Test
+    void entityValidationTestForCreationFailureTwo(){
+
+        UserForAlterationDTO userDTO = new UserForAlterationDTO(
+                userEntity.getId(),
+                userEntity.getName(),
+                userEntity.getAddress(),
+                userEntity.getZipcode(),
+                userEntity.getCity()
+        );
 
         UserAccountForAlterationDTO DTOentity = new UserAccountForAlterationDTO(
-                id,
-                active,
-                username,
-                password,
+                userAccountEntity.getId(),
+                userAccountEntity.isActive(),
+                userAccountEntity.getUsername(),
+                "  ",
                 userDTO,
-                contactCode,
-                role,
-                companyId
+                userAccountEntity.getContactCode(),
+                userAccountEntity.getRole(),
+                userAccountEntity.getCompanyId()
+        );
+
+        assertTrue(DTOentity.validateForCreation());
+    }
+
+    @Test
+    void entityValidationTestForCreationFailureThree(){
+
+        UserAccountForAlterationDTO DTOentity = new UserAccountForAlterationDTO(
+                userAccountEntity.getId(),
+                userAccountEntity.isActive(),
+                userAccountEntity.getUsername(),
+                userAccountEntity.getPassword(),
+                null,
+                userAccountEntity.getContactCode(),
+                userAccountEntity.getRole(),
+                userAccountEntity.getCompanyId()
+        );
+
+        assertTrue(DTOentity.validateForCreation());
+    }
+
+    @Test
+    void entityValidationTestForCreationFailureFour(){
+
+        UserForAlterationDTO userDTO = new UserForAlterationDTO(
+                userEntity.getId(),
+                null,
+                userEntity.getAddress(),
+                userEntity.getZipcode(),
+                userEntity.getCity()
+        );
+
+        UserAccountForAlterationDTO DTOentity = new UserAccountForAlterationDTO(
+                userAccountEntity.getId(),
+                userAccountEntity.isActive(),
+                userAccountEntity.getUsername(),
+                userAccountEntity.getPassword(),
+                userDTO,
+                userAccountEntity.getContactCode(),
+                userAccountEntity.getRole(),
+                userAccountEntity.getCompanyId()
         );
 
         assertTrue(DTOentity.validateForCreation());

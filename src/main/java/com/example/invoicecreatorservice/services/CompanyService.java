@@ -28,9 +28,6 @@ public class CompanyService implements ICompanyService {
 
     public Iterable<CompanyDTO> getAllCompanies(){
         List<Company> companies = (List) companyRepo.findAll();
-
-        if(companies.isEmpty()){ return null; }
-
         return this.convertListToDTO(companies);
     }
 

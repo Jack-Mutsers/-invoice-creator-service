@@ -27,12 +27,14 @@ public class MessageForAlterationDTO {
     }
 
     public boolean validateForCreation(){
-        return (this.userId == 0 || this.contactCode == null || this.messageBody == null || this.type == null ||
-                this.contactCode.isBlank() || this.messageBody.isBlank() || this.type.isBlank());
+        return (this.userId == 0 || this.validateValue(this.contactCode) || validateValue(this.messageBody) || this.validateValue(this.type));
     }
 
     public void setId(int id) {
         this.id = id;
     }
 
+    private boolean validateValue(String value){
+        return value == null || value.isBlank();
+    }
 }

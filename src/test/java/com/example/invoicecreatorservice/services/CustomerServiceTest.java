@@ -37,6 +37,36 @@ class CustomerServiceTest {
         entityList.add(new Customer(5, "henk jansen", "testlane 64", "1234 AB", "Testvile", 5, 1));
     }
 
+    private List<Customer> findByCompany(int companyId){
+        List<Customer> result = new ArrayList<>();
+        for(Customer customer : entityList){
+            if(customer.getCompanyId() == companyId){
+                result.add(customer);
+            }
+        }
+
+        return result;
+    }
+
+    @Test
+    void findByCompanyTest(){
+        //Prepare
+        int companyId = 1;
+        List<Customer> expected = new ArrayList<>();
+        expected.add(entityList.get(0));
+        expected.add(entityList.get(1));
+        expected.add(entityList.get(4));
+
+        //Act
+        List<Customer> resultEntity = this.findByCompany(companyId);
+
+        //Assert
+        assertEquals(expected.get(0), resultEntity.get(0));
+        assertEquals(expected.get(1), resultEntity.get(1));
+        assertEquals(expected.get(2), resultEntity.get(2));
+    }
+
+
     @Test
     void getCustomerTest(){
         //Arrange
@@ -72,6 +102,25 @@ class CustomerServiceTest {
     }
 
     @Test
+    void getMyCustomersIds(){
+        //Prepare
+        int companyId = 1;
+        List<Customer> customerList = findByCompany(companyId);
+        List<Integer> expected = new ArrayList<>();
+        expected.add(1);
+        expected.add(2);
+        expected.add(5);
+
+        when(repo.findAllByCompanyId(companyId)).thenReturn(customerList);
+
+        //Act
+        List<Customer> resultEntity = (List) service.getMyCustomerIds(companyId);
+
+        //Assert
+        assertEquals(expected.size(), resultEntity.size());
+    }
+
+    @Test
     void deleteCustomerTestSuccess(){
         //Arrange
         Customer entity = entityList.get(2);
@@ -87,6 +136,22 @@ class CustomerServiceTest {
     }
 
     @Test
+    void deleteCustomerIncorrectCompanyTest(){
+        //Arrange
+        int companyId = 6;
+        Customer entity = entityList.get(2);
+
+        //Prepare overwrites
+        when(repo.findById(entity.getId())).thenReturn(entity);
+
+        //Act
+        boolean result = service.deleteCustomer(entity.getId(), companyId);
+
+        //Assert
+        assertFalse(result);
+    }
+
+    @Test
     void deleteCustomerTestExceptionFailure(){
         //Arrange
         Customer entity = entityList.get(2);
@@ -97,6 +162,33 @@ class CustomerServiceTest {
 
         //Act
         Boolean result = service.deleteCustomer(entity.getId(), entity.getCompanyId());
+
+        //Assert
+        assertFalse(result);
+    }
+
+    @Test
+    void deleteAllCompanyCustomersTest(){
+        //Arrange
+        int companyId = 1;
+
+        //Act
+        boolean result = service.deleteAllCompanyCustomers(companyId);
+
+        //Assert
+        assertTrue(result);
+    }
+
+    @Test
+    void deleteAllCompanyCustomersTestExceptionFailure(){
+        //Arrange
+        int companyId = 0;
+
+        //Prepare overwrites
+        doThrow(new EmptyResultDataAccessException(1000)).when(repo).deleteAllByCompanyId(companyId);
+
+        //Act
+        boolean result = service.deleteAllCompanyCustomers(companyId);
 
         //Assert
         assertFalse(result);

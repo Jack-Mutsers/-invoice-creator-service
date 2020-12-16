@@ -21,16 +21,15 @@ public class UserAccountForAlterationDTO {
     private int companyId;
 
     public boolean validateForUpdate(){
-        return ( this.id == 0 || this.username.isBlank() || this.user == null || this.contactCode.isBlank() || this.role.isBlank() );
+        return ( this.id == 0 || this.validateValue(this.username) || this.user == null || this.user.validateForUpdate() || this.validateValue(this.contactCode) || this.validateValue(this.role) );
     }
 
     public boolean validateForCreation(){
-        return ( this.validateLoginData() || this.user == null );
+        return ( this.validateLoginData() || this.user == null || this.user.validateForCreation() );
     }
 
     public boolean validateLoginData(){
-        return ( this.username == null || this.password == null ||
-                this.username.isBlank() || this.password.isBlank());
+        return ( this.validateValue(this.username) || this.validateValue(this.password));
     }
 
     public void setId(int id) {
@@ -44,6 +43,10 @@ public class UserAccountForAlterationDTO {
     public void generateContactCode(){
         ContactGenerator generator = new ContactGenerator();
         this.contactCode = generator.generateCode();
+    }
+
+    private boolean validateValue(String value){
+        return value == null || value.isBlank();
     }
 
 }

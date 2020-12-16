@@ -29,20 +29,14 @@ public class FileRecordService implements IFileRecordService {
     public Iterable<FileRecordDTO> getAllMyFileRecords(int ownerId){
         List<FileRecord> records = repo.findAllByOwnerId(ownerId);
 
-        if(records.isEmpty()){ return null; }
-
         return this.convertListToDTO(records);
     }
 
     public Iterable<FileRecordDTO> getAllSharedFileRecords(List<Integer> ids){
-        List<FileRecord> records = null;
+        List<FileRecord> records = new ArrayList<>();
 
         if(!ids.isEmpty()){
             records = repo.findAllByCustomerIdIn(ids);
-        }
-
-        if(records == null){
-            records = new ArrayList<>();
         }
 
         return this.convertListToDTO(records);

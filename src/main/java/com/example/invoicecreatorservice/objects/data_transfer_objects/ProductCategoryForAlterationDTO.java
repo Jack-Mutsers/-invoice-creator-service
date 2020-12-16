@@ -23,7 +23,7 @@ public class ProductCategoryForAlterationDTO {
     }
 
     public boolean validateForCreation(){
-        return ( this.name == null || this.name.isBlank() || this.btw == 0 || this.companyId == 0 );
+        return ( this.validateValue(this.name) || this.btw == 0 || this.companyId == 0 );
     }
 
     public void setId(int id) {
@@ -32,5 +32,9 @@ public class ProductCategoryForAlterationDTO {
 
     public void setCompanyId(int companyId) {
         this.companyId = companyId;
+    }
+
+    private boolean validateValue(String value){
+        return value == null || value.isBlank();
     }
 }

@@ -55,10 +55,6 @@ public class FileUploadController extends BaseController {
 			record.setCustomer(customerService.getCustomer(record.getCustomerId()));
 		}
 
-		if(records == null){
-			return new ResponseEntity<>(new ResponseDTO(false, "There are currently no companies available"), HttpStatus.OK);
-		}
-
 		return new ResponseEntity<>(new ResponseDTO(true, records), HttpStatus.OK);
 	}
 
@@ -69,7 +65,7 @@ public class FileUploadController extends BaseController {
 
 		Iterable<FileRecordDTO> records = recordService.getAllSharedFileRecords(ids);
 
-		for(FileRecordDTO record : records){
+		for(FileRecordDTO record : emptyIfNull(records)){
 			record.setOwner(companyService.getCompany(record.getOwnerId()));
 		}
 

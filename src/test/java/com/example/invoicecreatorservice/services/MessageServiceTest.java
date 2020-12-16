@@ -57,7 +57,7 @@ class MessageServiceTest {
         when(repo.findByContactCodeAndTypeAndDone(entity.getContactCode(), "notification", false)).thenReturn(entityList);
 
         //Act
-        List<MessageDTO> resultEntity = (List) service.getNotifications(entity.getContactCode());
+        List<MessageDTO> resultEntity = (List) service.getMessagesForMe(entity.getContactCode(), entity.getType());
 
         //Assert
         assertEquals(resultEntity.size(), entityList.size());
@@ -73,10 +73,10 @@ class MessageServiceTest {
         when(repo.findByContactCodeAndTypeAndDone(entity.getContactCode(), "notification", false)).thenReturn(entityList);
 
         //Act
-        List<MessageDTO> resultEntity = (List) service.getNotifications(entity.getContactCode());
+        List<MessageDTO> resultEntity = (List) service.getMessagesForMe(entity.getContactCode(), entity.getType());
 
         //Assert
-        assertNull(resultEntity);
+        assertEquals(0, resultEntity.size());
     }
 
     @Test
@@ -92,7 +92,7 @@ class MessageServiceTest {
         when(repo.findByUserIdAndTypeAndDone(entity.getUserId(), "request", false)).thenReturn(entityList);
 
         //Act
-        List<MessageDTO> resultEntity = (List) service.getOutgoingRequests(entity.getUserId());
+        List<MessageDTO> resultEntity = (List) service.getOutgoingRequests(entity.getUserId(), entity.getType());
 
         //Assert
         assertEquals(resultEntity.size(), entityList.size());
@@ -109,10 +109,10 @@ class MessageServiceTest {
         when(repo.findByContactCodeAndTypeAndDone(entity.getContactCode(), "request", false)).thenReturn(entityList);
 
         //Act
-        List<MessageDTO> resultEntity = (List) service.getOutgoingRequests(entity.getUserId());
+        List<MessageDTO> resultEntity = (List) service.getOutgoingRequests(entity.getUserId(), entity.getType());
 
         //Assert
-        assertNull(resultEntity);
+        assertEquals(0, resultEntity.size());
     }
 
     @Test
@@ -127,7 +127,7 @@ class MessageServiceTest {
         when(repo.findByContactCodeAndTypeAndDone(entity.getContactCode(), "request", false)).thenReturn(entityList);
 
         //Act
-        List<MessageDTO> resultEntity = (List) service.getIncomingRequests(entity.getContactCode());
+        List<MessageDTO> resultEntity = (List) service.getMessagesForMe(entity.getContactCode(), entity.getType());
 
         //Assert
         assertEquals(resultEntity.size(), entityList.size());
@@ -144,10 +144,10 @@ class MessageServiceTest {
         when(repo.findByContactCodeAndTypeAndDone(entity.getContactCode(), "request", false)).thenReturn(entityList);
 
         //Act
-        List<MessageDTO> resultEntity = (List) service.getIncomingRequests(entity.getContactCode());
+        List<MessageDTO> resultEntity = (List) service.getMessagesForMe(entity.getContactCode(), entity.getType());
 
         //Assert
-        assertNull(resultEntity);
+        assertEquals(0, resultEntity.size());
     }
 
     @Test

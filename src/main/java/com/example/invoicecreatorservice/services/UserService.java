@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 @Service
 public class UserService implements IUserService {
@@ -24,11 +23,7 @@ public class UserService implements IUserService {
     }
 
     public Iterable<User> getAllUser() {
-        List<User> users = (List<User>) userRepo.findAll();
-
-        if(users.isEmpty()){ return null; }
-
-        return users;
+        return userRepo.findAll();
     }
 
     @Transactional

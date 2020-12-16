@@ -66,10 +66,6 @@ public class CompanyController extends BaseController {
     public  @ResponseBody ResponseEntity<ResponseDTO> getAllCompanies() {
         Iterable<CompanyDTO> companies = service.getAllCompanies();
 
-        if(companies == null){
-            return new ResponseEntity<>(new ResponseDTO(false, "There are currently no companies available"), HttpStatus.OK);
-        }
-
         return new ResponseEntity<>(new ResponseDTO(true, companies), HttpStatus.OK);
     }
 

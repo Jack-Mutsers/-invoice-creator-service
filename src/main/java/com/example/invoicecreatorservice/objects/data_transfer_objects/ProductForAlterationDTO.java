@@ -28,7 +28,7 @@ public class ProductForAlterationDTO {
     }
 
     public boolean validateForCreation(){
-        return ( this.name == null || this.name.isBlank() || this.price == 0 || this.categoryId == 0 || this.productCode == null || this.productCode.isBlank() );
+        return ( this.companyId == 0 || this.validateValue(this.name) || this.price == 0 || this.categoryId == 0 || this.validateValue(this.productCode) );
     }
 
     public void setId(int id) {
@@ -41,5 +41,9 @@ public class ProductForAlterationDTO {
 
     public void setCompanyId(int companyId) {
         this.companyId = companyId;
+    }
+
+    private boolean validateValue(String value){
+        return value == null || value.isBlank();
     }
 }

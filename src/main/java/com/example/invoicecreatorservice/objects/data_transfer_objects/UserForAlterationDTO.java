@@ -15,8 +15,11 @@ public class UserForAlterationDTO extends Person {
     }
 
     public boolean validateForCreation(){
-        return ( this.name == null || this.address == null || this.zipcode == null || this.city == null ||
-                this.name.isBlank() || this.address.isBlank() || this.zipcode.isBlank() || this.city.isBlank());
+        return ( this.validateValue(this.name) || this.validateValue(this.address) || this.validateValue(this.zipcode) || this.validateValue(this.city));
+    }
+
+    private boolean validateValue(String value){
+        return value == null || value.isBlank();
     }
 
 }

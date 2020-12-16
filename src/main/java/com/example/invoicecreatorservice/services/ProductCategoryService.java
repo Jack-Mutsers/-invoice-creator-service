@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 @Service
 public class ProductCategoryService implements IProductCategoryService {
@@ -25,11 +24,7 @@ public class ProductCategoryService implements IProductCategoryService {
     }
 
     public Iterable<ProductCategory> getAllCategory(int id) {
-        List<ProductCategory> categories = productCategoryRepo.findAllByCompanyId(id);
-
-        if(categories.isEmpty()){ return null; }
-
-        return categories;
+        return productCategoryRepo.findAllByCompanyId(id);
     }
 
     @Transactional

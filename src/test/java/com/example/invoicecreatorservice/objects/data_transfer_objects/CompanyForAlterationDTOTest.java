@@ -9,6 +9,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class CompanyForAlterationDTOTest {
 
+    private final Company entity = new Company(5, "henk", "testlane 64", "1234 AB", "Testvile", "1Dfr23AS2d", "0612345678", 16);
+
     @Test
     void instantiateEntityForCreate(){
         int id = 0;
@@ -83,7 +85,7 @@ class CompanyForAlterationDTOTest {
         String contactCode = null;
         int ownerId = 0;
 
-        Company entity = new Company();
+        CompanyForAlterationDTO entity = new CompanyForAlterationDTO();
 
         assertEquals(id, entity.getId());
         assertEquals(name, entity.getName());
@@ -96,50 +98,165 @@ class CompanyForAlterationDTOTest {
     }
 
     @Test
-    void entityValidationTestForUpdateSuccess(){
+    void FillEmptyEntityTest(){
         int id = 5;
-        String name = "henk";
-        String address = "testlane 64";
-        String zipcode = "1234 AB";
-        String city = "Testvile";
-        String contactCode = "1Dfr23AS2d";
-        String telephoneNumber = "0612345678";
         int ownerId = 16;
 
+        CompanyForAlterationDTO entity = new CompanyForAlterationDTO();
+        entity.setId(id);
+        entity.setOwnerId(ownerId);
+
+        assertEquals(id, entity.getId());
+        assertEquals(ownerId, entity.getOwnerId());
+    }
+
+    @Test
+    void entityValidationTestForUpdateSuccess(){
         CompanyForAlterationDTO DTOentity = new CompanyForAlterationDTO(
-                id,
-                name,
-                address,
-                zipcode,
-                city,
-                telephoneNumber,
-                contactCode,
-                ownerId
+                this.entity.getId(),
+                this.entity.getName(),
+                this.entity.getAddress(),
+                this.entity.getZipcode(),
+                this.entity.getCity(),
+                this.entity.getTelephoneNumber(),
+                this.entity.getContactCode(),
+                this.entity.getOwnerId()
         );
 
         assertFalse(DTOentity.validateForUpdate());
     }
 
     @Test
-    void entityValidationTestForUpdateFailure(){
-        int id = 0;
-        String name = "henk";
-        String address = "testlane 64";
-        String zipcode = "1234 AB";
-        String city = "";
-        String contactCode = "1Dfr23AS2d";
-        String telephoneNumber = "0612345678";
-        int ownerId = 16;
+    void entityValidationTestForUpdateFailureOne(){
 
         CompanyForAlterationDTO DTOentity = new CompanyForAlterationDTO(
-                id,
-                name,
-                address,
-                zipcode,
-                city,
-                telephoneNumber,
-                contactCode,
-                ownerId
+                0,
+                this.entity.getName(),
+                this.entity.getAddress(),
+                this.entity.getZipcode(),
+                this.entity.getCity(),
+                this.entity.getTelephoneNumber(),
+                this.entity.getContactCode(),
+                this.entity.getOwnerId()
+        );
+
+        assertTrue(DTOentity.validateForUpdate());
+    }
+
+    @Test
+    void entityValidationTestForUpdateFailureTwo(){
+
+        CompanyForAlterationDTO DTOentity = new CompanyForAlterationDTO(
+                this.entity.getId(),
+                null,
+                this.entity.getAddress(),
+                this.entity.getZipcode(),
+                this.entity.getCity(),
+                this.entity.getTelephoneNumber(),
+                this.entity.getContactCode(),
+                this.entity.getOwnerId()
+        );
+
+        assertTrue(DTOentity.validateForUpdate());
+    }
+
+    @Test
+    void entityValidationTestForUpdateFailureThree(){
+
+        CompanyForAlterationDTO DTOentity = new CompanyForAlterationDTO(
+                this.entity.getId(),
+                this.entity.getName(),
+                "",
+                this.entity.getZipcode(),
+                this.entity.getCity(),
+                this.entity.getTelephoneNumber(),
+                this.entity.getContactCode(),
+                this.entity.getOwnerId()
+        );
+
+        assertTrue(DTOentity.validateForUpdate());
+    }
+
+    @Test
+    void entityValidationTestForUpdateFailureFour(){
+
+        CompanyForAlterationDTO DTOentity = new CompanyForAlterationDTO(
+                this.entity.getId(),
+                this.entity.getName(),
+                this.entity.getAddress(),
+                "  ",
+                this.entity.getCity(),
+                this.entity.getTelephoneNumber(),
+                this.entity.getContactCode(),
+                this.entity.getOwnerId()
+        );
+
+        assertTrue(DTOentity.validateForUpdate());
+    }
+
+    @Test
+    void entityValidationTestForUpdateFailureFive(){
+
+        CompanyForAlterationDTO DTOentity = new CompanyForAlterationDTO(
+                this.entity.getId(),
+                this.entity.getName(),
+                this.entity.getAddress(),
+                this.entity.getZipcode(),
+                null,
+                this.entity.getTelephoneNumber(),
+                this.entity.getContactCode(),
+                this.entity.getOwnerId()
+        );
+
+        assertTrue(DTOentity.validateForUpdate());
+    }
+
+    @Test
+    void entityValidationTestForUpdateFailureSix(){
+
+        CompanyForAlterationDTO DTOentity = new CompanyForAlterationDTO(
+                this.entity.getId(),
+                this.entity.getName(),
+                this.entity.getAddress(),
+                this.entity.getZipcode(),
+                this.entity.getCity(),
+                null,
+                this.entity.getContactCode(),
+                this.entity.getOwnerId()
+        );
+
+        assertTrue(DTOentity.validateForUpdate());
+    }
+
+    @Test
+    void entityValidationTestForUpdateFailureSeven(){
+
+        CompanyForAlterationDTO DTOentity = new CompanyForAlterationDTO(
+                this.entity.getId(),
+                this.entity.getName(),
+                this.entity.getAddress(),
+                this.entity.getZipcode(),
+                this.entity.getCity(),
+                this.entity.getTelephoneNumber(),
+                null,
+                this.entity.getOwnerId()
+        );
+
+        assertTrue(DTOentity.validateForUpdate());
+    }
+
+    @Test
+    void entityValidationTestForUpdateFailureEight(){
+
+        CompanyForAlterationDTO DTOentity = new CompanyForAlterationDTO(
+                this.entity.getId(),
+                this.entity.getName(),
+                this.entity.getAddress(),
+                this.entity.getZipcode(),
+                this.entity.getCity(),
+                this.entity.getTelephoneNumber(),
+                this.entity.getContactCode(),
+                0
         );
 
         assertTrue(DTOentity.validateForUpdate());
@@ -147,50 +264,17 @@ class CompanyForAlterationDTOTest {
 
     @Test
     void entityValidationTestForCreationSuccess(){
-        int id = 0;
-        String name = "henk";
-        String address = "testlane 64";
-        String zipcode = "1234 AB";
-        String city = "Testvile";
-        String contactCode = null;
-        String telephoneNumber = "0612345678";
-
-        int ownerId = 16;
 
         CompanyForAlterationDTO DTOentity = new CompanyForAlterationDTO(
-                name,
-                address,
-                zipcode,
-                city,
-                telephoneNumber,
-                ownerId
+                entity.getName(),
+                entity.getAddress(),
+                entity.getZipcode(),
+                entity.getCity(),
+                entity.getTelephoneNumber(),
+                entity.getOwnerId()
         );
 
         assertFalse(DTOentity.validateForCreation());
-    }
-
-    @Test
-    void entityValidationTestForCreationFailure(){
-        int id = 0;
-        String name = "henk";
-        String address = "testlane 64";
-        String zipcode = null;
-        String city = "";
-        String contactCode = null;
-        String telephoneNumber = "0612345678";
-
-        int ownerId = 16;
-
-        CompanyForAlterationDTO DTOentity = new CompanyForAlterationDTO(
-                name,
-                address,
-                zipcode,
-                city,
-                telephoneNumber,
-                ownerId
-        );
-
-        assertTrue(DTOentity.validateForCreation());
     }
 
 }
