@@ -150,7 +150,7 @@ public class CompanyController extends BaseController {
             return new ResponseEntity<>(new ResponseDTO(false, internalErrorMessage("creation")), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        if (!userAccountService.addCompanyToUser(userId, newObject.getId())){
+        if (!userAccountService.setCompanyOwner(userId, newObject.getId())){
             service.deleteCompany(newObject.getId(), userId);
             return new ResponseEntity<>(new ResponseDTO(false, internalErrorMessage("creation")), HttpStatus.INTERNAL_SERVER_ERROR);
         }

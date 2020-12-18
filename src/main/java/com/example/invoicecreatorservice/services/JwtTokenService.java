@@ -5,7 +5,7 @@ import com.example.invoicecreatorservice.repositories.TokenRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static com.example.invoicecreatorservice.helpers.tools.InputValidator.validateStringValue;
+import static com.example.invoicecreatorservice.helpers.tools.Helper.validateStringValue;
 
 @Service
 public class JwtTokenService {

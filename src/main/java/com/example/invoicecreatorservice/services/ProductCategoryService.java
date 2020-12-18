@@ -20,6 +20,10 @@ public class ProductCategoryService implements IProductCategoryService {
     public ProductCategoryDTO getCategory(int id) {
         ProductCategory category = productCategoryRepo.findById(id);
 
+        if(category == null){
+            return new ProductCategoryDTO();
+        }
+
         return new ProductCategoryDTO(category);
     }
 
@@ -32,7 +36,7 @@ public class ProductCategoryService implements IProductCategoryService {
         try{
             ProductCategory category = productCategoryRepo.findById(id);
 
-            if(category.getCompanyId() == companyId){
+            if(category != null && category.getCompanyId() == companyId){
                 productCategoryRepo.deleteById(id);
             }else {
                 return false;

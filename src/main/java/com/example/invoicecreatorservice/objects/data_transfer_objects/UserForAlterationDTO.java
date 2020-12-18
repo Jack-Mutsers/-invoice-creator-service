@@ -2,7 +2,7 @@ package com.example.invoicecreatorservice.objects.data_transfer_objects;
 
 import com.example.invoicecreatorservice.objects.base.Person;
 
-import static com.example.invoicecreatorservice.helpers.tools.InputValidator.validateStringValue;
+import static com.example.invoicecreatorservice.helpers.tools.Helper.validateStringValue;
 
 public class UserForAlterationDTO extends Person {
 

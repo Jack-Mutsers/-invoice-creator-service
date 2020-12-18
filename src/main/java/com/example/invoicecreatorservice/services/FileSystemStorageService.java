@@ -42,7 +42,7 @@ public class FileSystemStorageService implements StorageService {
 		try {
 			Path file = load(filename);
 			Resource resource = new UrlResource(file.toUri());
-			if (resource.exists() || resource.isReadable()) {
+			if (resource.exists() && resource.isReadable()) {
 				return resource;
 			}
 			else {

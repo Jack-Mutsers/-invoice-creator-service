@@ -24,6 +24,10 @@ public class ProductService implements IProductService {
     public ProductDTO getProduct(int id) {
         Product product = productRepo.findById(id);
 
+        if(product == null){
+            return new ProductDTO();
+        }
+
         ProductDTO newProductDTO = new ProductDTO(product);
         newProductDTO.setCategory(categoryService.getCategory(product.getCategoryId()));
         return newProductDTO;

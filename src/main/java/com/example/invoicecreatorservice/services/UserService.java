@@ -19,11 +19,9 @@ public class UserService implements IUserService {
     public UserDTO getUser(int id) {
         User user = userRepo.findById(id);
 
-        return new UserDTO(user);
-    }
+        if(user == null){return new UserDTO();}
 
-    public Iterable<User> getAllUser() {
-        return userRepo.findAll();
+        return new UserDTO(user);
     }
 
     @Transactional

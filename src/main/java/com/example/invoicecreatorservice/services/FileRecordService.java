@@ -12,6 +12,8 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.invoicecreatorservice.helpers.tools.Helper.emptyIfNull;
+
 @Service
 public class FileRecordService implements IFileRecordService {
 
@@ -91,7 +93,7 @@ public class FileRecordService implements IFileRecordService {
             return true;
         }
 
-        for(int id : customerIds){
+        for(int id : emptyIfNull(customerIds)){
             if(record.getCustomerId() == id){
                 return true;
             }
@@ -108,9 +110,5 @@ public class FileRecordService implements IFileRecordService {
         }
 
         return recordDTOS;
-    }
-
-    protected  <T> Iterable<T> emptyIfNull(Iterable<T> iterable) {
-        return iterable == null ? List.of() : iterable;
     }
 }

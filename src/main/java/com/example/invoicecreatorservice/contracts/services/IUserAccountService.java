@@ -13,6 +13,6 @@ public interface IUserAccountService {
     UserAccountDTO createUserAccount(UserAccountForAlterationDTO accountDTO, int userId);
     boolean updateUserAccount(UserAccountForAlterationDTO accountDTO);
     boolean validateUsername(String username);
-    boolean addCompanyToUser(int id, int companyId);
+    boolean setCompanyOwner(int id, int companyId);
     boolean addNewEmployee(String contactCode, int companyId);
 }

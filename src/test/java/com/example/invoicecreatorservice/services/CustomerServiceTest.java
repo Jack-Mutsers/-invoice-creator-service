@@ -13,6 +13,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.invoicecreatorservice.helpers.tools.Helper.emptyIfNull;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doThrow;
@@ -39,7 +40,7 @@ class CustomerServiceTest {
 
     private List<Customer> findByCompany(int companyId){
         List<Customer> result = new ArrayList<>();
-        for(Customer customer : entityList){
+        for(Customer customer : emptyIfNull(entityList)){
             if(customer.getCompanyId() == companyId){
                 result.add(customer);
             }

@@ -2,7 +2,7 @@ package com.example.invoicecreatorservice.objects.data_transfer_objects;
 
 import lombok.Getter;
 
-import static com.example.invoicecreatorservice.helpers.tools.InputValidator.validateStringValue;
+import static com.example.invoicecreatorservice.helpers.tools.Helper.validateStringValue;
 
 @Getter
 public class ProductForAlterationDTO {

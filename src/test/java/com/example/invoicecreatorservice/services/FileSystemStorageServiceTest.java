@@ -4,35 +4,32 @@ import com.example.invoicecreatorservice.helpers.handlers.StorageFileNotFoundExc
 import com.example.invoicecreatorservice.helpers.properties.StorageProperties;
 import com.example.invoicecreatorservice.objects.models.FileRecord;
 import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
-public class FileSystemStorageServiceTest {
+class FileSystemStorageServiceTest {
 
     @Rule
-    public TemporaryFolder folder = new TemporaryFolder();
-
+    private TemporaryFolder folder = new TemporaryFolder();
     private FileSystemStorageService service;
 
     private String filePath = "";
 
-    public FileSystemStorageServiceTest() throws IOException {
+    private FileSystemStorageServiceTest() throws IOException {
         folder.create();
         filePath = folder.getRoot().getAbsolutePath() + "/upload-dir";
 
@@ -56,13 +53,13 @@ public class FileSystemStorageServiceTest {
     }
 
     @Test
-    public void initTest(){
+    void initTest(){
         service.init();
         assertTrue(new File(filePath).exists());
     }
 
     @Test
-    public void storeAsyncTest() throws ExecutionException, InterruptedException {
+    void storeAsyncTest() throws ExecutionException, InterruptedException {
 
         FileRecord record = this.storeFile();
 
@@ -74,7 +71,19 @@ public class FileSystemStorageServiceTest {
     }
 
     @Test
-    public void loadTest() throws ExecutionException, InterruptedException {
+    void storeAsyncEmptyTest() throws ExecutionException, InterruptedException {
+
+        FileRecord record = this.storeFile();
+
+        assertEquals("hello.pdf", record.getName());
+        assertNotNull(record.getFileName());
+        assertNotNull(record.getUrl());
+        assertEquals("pdf", record.getFileType());
+        assertNotNull(record.getCreationDate());
+    }
+
+    @Test
+    void loadTest() throws ExecutionException, InterruptedException {
         FileRecord record = this.storeFile();
         Path path = service.load(record.getFileName());
 
@@ -82,7 +91,7 @@ public class FileSystemStorageServiceTest {
     }
 
     @Test
-    public void loadAsResourceSuccessTest() throws ExecutionException, InterruptedException {
+    void loadAsResourceSuccessTest() throws ExecutionException, InterruptedException, MalformedURLException {
         FileRecord record = this.storeFile();
 
         Resource resource = service.loadAsResource(record.getFileName());
@@ -91,7 +100,8 @@ public class FileSystemStorageServiceTest {
     }
 
     @Test
-    public void loadAsResourceFailureTest() {
+    void loadAsResourceFailureTest() {
+
         String filename = "blablabla.txt";
 
         Exception exception = assertThrows(StorageFileNotFoundException.class, () -> {
@@ -105,7 +115,7 @@ public class FileSystemStorageServiceTest {
     }
 
     @Test
-    public void deleteAllByCompanyTest() throws ExecutionException, InterruptedException {
+    void deleteAllByCompanyTest() throws ExecutionException, InterruptedException {
         FileRecord record = this.storeFile();
         String companyName = "demoCompany";
 
@@ -117,7 +127,7 @@ public class FileSystemStorageServiceTest {
     }
 
     @Test
-    public void deleteFileAsyncTest() throws ExecutionException, InterruptedException {
+    void deleteFileAsyncTest() throws ExecutionException, InterruptedException {
         FileRecord record = this.storeFile();
 
         service.deleteFileAsync(record.getFileName());

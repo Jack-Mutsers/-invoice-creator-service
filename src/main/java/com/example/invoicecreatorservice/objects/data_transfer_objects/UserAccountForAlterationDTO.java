@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import static com.example.invoicecreatorservice.helpers.tools.InputValidator.validateStringValue;
+import static com.example.invoicecreatorservice.helpers.tools.Helper.validateStringValue;
 import static com.example.invoicecreatorservice.objects.models.UserAccount.USER_ROLE;
 
 @NoArgsConstructor

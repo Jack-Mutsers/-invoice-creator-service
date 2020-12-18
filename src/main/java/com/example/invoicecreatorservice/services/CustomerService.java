@@ -13,6 +13,8 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.invoicecreatorservice.helpers.tools.Helper.emptyIfNull;
+
 @Service
 public class CustomerService implements ICustomerService {
     @Autowired
@@ -31,7 +33,7 @@ public class CustomerService implements ICustomerService {
         List<Customer> customers = customerRepo.findAllByCompanyId(companyId);
         List<Integer> ids = new ArrayList<>();
 
-        for(Customer customer : customers){
+        for(Customer customer : emptyIfNull(customers)){
             ids.add(customer.getId());
         }
 

@@ -14,6 +14,8 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.invoicecreatorservice.helpers.tools.Helper.emptyIfNull;
+import static com.example.invoicecreatorservice.helpers.tools.Helper.validateStringValue;
 import static com.example.invoicecreatorservice.objects.models.UserAccount.*;
 
 @Service
@@ -32,7 +34,7 @@ public class UserAccountService implements IUserAccountService {
         List<UserAccount> accountList = userAccountRepo.findAllByCompanyId(companyId);
         List<UserDTO> employees = new ArrayList<>();
 
-        for(UserAccount account : accountList){
+        for(UserAccount account : emptyIfNull(accountList)){
             employees.add(new UserDTO(account.getUser(), account.getContactCode()));
         }
 
@@ -43,6 +45,9 @@ public class UserAccountService implements IUserAccountService {
     public boolean deleteUser(int id, String password) {
         try{
             UserAccount userAccount = userAccountRepo.findById(id);
+
+            if(userAccount == null){ return false; }
+
             boolean validPassword = encoder.validatePassword(password, userAccount.getPassword());
 
             if (!validPassword) {
@@ -61,7 +66,7 @@ public class UserAccountService implements IUserAccountService {
     public boolean removeAllEmployees(int companyId){
         try{
             List<UserAccount> accountList = userAccountRepo.findAllByCompanyId(companyId);
-            for(UserAccount account : accountList){
+            for(UserAccount account : emptyIfNull(accountList)){
                 account.setCompanyId(0);
                 account.setRole(USER_ROLE);
             }
@@ -76,6 +81,9 @@ public class UserAccountService implements IUserAccountService {
     public boolean removeEmployee(int id, int companyId) {
         try{
             UserAccount account = userAccountRepo.findByUserIdAndCompanyId(id, companyId);
+
+            if(account == null){return false;}
+
             account.setCompanyId(0);
             account.setRole(USER_ROLE);
 
@@ -120,7 +128,7 @@ public class UserAccountService implements IUserAccountService {
 
             account.setRole(existingAccount.getRole());
 
-            if(account.getPassword().isBlank()){
+            if(validateStringValue(account.getPassword())){
                 account.setPassword(existingAccount.getPassword());
             }else{
                 String saltedPassword = encoder.encodePassword(account.getPassword());
@@ -140,9 +148,12 @@ public class UserAccountService implements IUserAccountService {
         return userAccount == null;
     }
 
-    public boolean addCompanyToUser(int id, int companyId) {
+    public boolean setCompanyOwner(int id, int companyId) {
         try{
             UserAccount userAccount = userAccountRepo.findById(id);
+
+            if(userAccount == null){ return false; }
+
             userAccount.setCompanyId(companyId);
             userAccount.setRole(OWNER_ROLE);
 
@@ -159,9 +170,7 @@ public class UserAccountService implements IUserAccountService {
         try{
             UserAccount userAccount = userAccountRepo.findByContactCode(contactCode);
 
-            if(userAccount.getCompanyId() > 0){
-                return false;
-            }
+            if(userAccount == null){ return false; }
 
             userAccount.setCompanyId(companyId);
             userAccount.setRole(EMPLOYEE_ROLE);

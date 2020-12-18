@@ -21,9 +21,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+
+import static com.example.invoicecreatorservice.helpers.tools.Helper.emptyIfNull;
 
 @Controller
 @RequestMapping("/upload")
@@ -74,7 +77,7 @@ public class FileUploadController extends BaseController {
 
 	@GetMapping("/files/{id:.+}")
 	@ResponseBody
-	public ResponseEntity<Object> serveFile(HttpServletRequest request, @PathVariable int id) {
+	public ResponseEntity<Object> serveFile(HttpServletRequest request, @PathVariable int id) throws MalformedURLException {
 		int companyId = super.getCompanyId(request);
 		int userId = super.getUserId(request);
 		List<Integer> ids = customerService.getMyCustomerIds(userId);

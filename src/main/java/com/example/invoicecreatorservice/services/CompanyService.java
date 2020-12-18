@@ -13,6 +13,8 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.invoicecreatorservice.helpers.tools.Helper.emptyIfNull;
+
 @Service
 public class CompanyService implements ICompanyService {
 
@@ -77,7 +79,7 @@ public class CompanyService implements ICompanyService {
     private List<CompanyDTO> convertListToDTO(List<Company> list){
         List<CompanyDTO> companyDTOS = new ArrayList<>();
 
-        for(Company company : list){
+        for(Company company : emptyIfNull(list)){
             companyDTOS.add(new CompanyDTO(company));
         }
 
