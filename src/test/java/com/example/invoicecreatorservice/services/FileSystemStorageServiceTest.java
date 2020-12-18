@@ -1,5 +1,6 @@
 package com.example.invoicecreatorservice.services;
 
+import com.example.invoicecreatorservice.helpers.handlers.StorageException;
 import com.example.invoicecreatorservice.helpers.handlers.StorageFileNotFoundException;
 import com.example.invoicecreatorservice.helpers.properties.StorageProperties;
 import com.example.invoicecreatorservice.objects.models.FileRecord;
@@ -72,14 +73,97 @@ class FileSystemStorageServiceTest {
 
     @Test
     void storeAsyncEmptyTest() throws ExecutionException, InterruptedException {
+        String companyName = "demoCompany";
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "hello.pdf",
+                MediaType.TEXT_PLAIN_VALUE,
+                new byte[0]
+        );
 
-        FileRecord record = this.storeFile();
+        Exception exception = assertThrows(StorageException.class, () -> {
+            service.storeAsync(file, companyName);
+        });
+
+        String expectedMessage = "Failed to store empty file.";
+        String actualMessage = exception.getMessage();
+
+        assertEquals(expectedMessage, actualMessage);
+    }
+
+    @Test
+    void storeAsyncNullTest() throws ExecutionException, InterruptedException {
+        String companyName = "demoCompany";
+
+        Exception exception = assertThrows(StorageException.class, () -> {
+            service.storeAsync(null, companyName);
+        });
+
+        String expectedMessage = "Failed to store file.";
+        String actualMessage = exception.getMessage();
+
+        assertEquals(expectedMessage, actualMessage);
+    }
+
+    @Test
+    void storeAsyncFolderExistsTest() throws ExecutionException, InterruptedException {
+        String companyName = "demoCompany";
+
+        File theDir = new File(this.filePath + "/" + companyName);
+        if (!theDir.exists()){
+            theDir.mkdirs();
+        }
+
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "hello.pdf",
+                MediaType.TEXT_PLAIN_VALUE,
+                "Hello, World!".getBytes()
+        );
+
+        Future<FileRecord> asyncResponse = service.storeAsync(file, companyName);
+        FileRecord record = asyncResponse.get();
 
         assertEquals("hello.pdf", record.getName());
         assertNotNull(record.getFileName());
         assertNotNull(record.getUrl());
         assertEquals("pdf", record.getFileType());
         assertNotNull(record.getCreationDate());
+    }
+
+    @Test
+    void storeAsyncFilenameNullTest() throws ExecutionException, InterruptedException {
+        String companyName = "demoCompany";
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                null,
+                MediaType.TEXT_PLAIN_VALUE,
+                "Hello, World!".getBytes()
+        );
+
+        Future<FileRecord> asyncResponse = service.storeAsync(file, companyName);
+
+        assertNull(asyncResponse);
+    }
+
+    @Test
+    void storeAsyncIncorrectDirectoryTest() throws ExecutionException, InterruptedException {
+        String companyName = "demoCompany/test";
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "hello.pdf",
+                MediaType.TEXT_PLAIN_VALUE,
+                "Hello, World!".getBytes()
+        );
+
+        Exception exception = assertThrows(StorageException.class, () -> {
+            service.storeAsync(file, companyName);
+        });
+
+        String expectedMessage = "Cannot store file outside current directory.";
+        String actualMessage = exception.getMessage();
+
+        assertEquals(expectedMessage, actualMessage);
     }
 
     @Test

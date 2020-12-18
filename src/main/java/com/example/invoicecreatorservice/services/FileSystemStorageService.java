@@ -24,6 +24,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.Future;
 
+import static com.example.invoicecreatorservice.helpers.tools.Helper.validateStringValue;
+
 @Service
 public class FileSystemStorageService implements StorageService {
 
@@ -99,7 +101,7 @@ public class FileSystemStorageService implements StorageService {
 
 			String originalFilename = file.getOriginalFilename();
 
-			if(originalFilename == null){
+			if(validateStringValue(originalFilename)){
 				return null;
 			}
 
@@ -140,11 +142,11 @@ public class FileSystemStorageService implements StorageService {
 
 			return response;
 		}
-		catch (IOException e) {
-			throw new StorageException("Failed to store file.", e);
+		catch (StorageException ex){
+			throw new StorageException(ex.getMessage());
 		}
-		catch (NullPointerException ex){
-			throw new StorageException("Failed to store file.", ex);
+		catch (Exception e) {
+			throw new StorageException("Failed to store file.", e);
 		}
 	}
 
