@@ -2,6 +2,8 @@ package com.example.invoicecreatorservice.objects.data_transfer_objects;
 
 import com.example.invoicecreatorservice.objects.base.Person;
 
+import static com.example.invoicecreatorservice.helpers.tools.InputValidator.validateStringValue;
+
 public class UserForAlterationDTO extends Person {
 
     public UserForAlterationDTO(int id, String name, String address, String zipcode, String city) {
@@ -15,11 +17,8 @@ public class UserForAlterationDTO extends Person {
     }
 
     public boolean validateForCreation(){
-        return ( this.validateValue(this.name) || this.validateValue(this.address) || this.validateValue(this.zipcode) || this.validateValue(this.city));
+        return ( validateStringValue(this.name) || validateStringValue(this.address) || validateStringValue(this.zipcode) || validateStringValue(this.city));
     }
 
-    private boolean validateValue(String value){
-        return value == null || value.isBlank();
-    }
 
 }

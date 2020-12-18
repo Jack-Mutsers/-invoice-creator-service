@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import static com.example.invoicecreatorservice.helpers.tools.InputValidator.validateStringValue;
 import static com.example.invoicecreatorservice.objects.models.UserAccount.USER_ROLE;
 
 @NoArgsConstructor
@@ -21,7 +22,7 @@ public class UserAccountForAlterationDTO {
     private int companyId;
 
     public boolean validateForUpdate(){
-        return ( this.id == 0 || this.validateValue(this.username) || this.user == null || this.user.validateForUpdate() || this.validateValue(this.contactCode) || this.validateValue(this.role) );
+        return ( this.id == 0 || validateStringValue(this.username) || this.user == null || this.user.validateForUpdate() || validateStringValue(this.contactCode) || validateStringValue(this.role) );
     }
 
     public boolean validateForCreation(){
@@ -29,7 +30,7 @@ public class UserAccountForAlterationDTO {
     }
 
     public boolean validateLoginData(){
-        return ( this.validateValue(this.username) || this.validateValue(this.password));
+        return ( validateStringValue(this.username) || validateStringValue(this.password));
     }
 
     public void setId(int id) {
@@ -45,8 +46,5 @@ public class UserAccountForAlterationDTO {
         this.contactCode = generator.generateCode();
     }
 
-    private boolean validateValue(String value){
-        return value == null || value.isBlank();
-    }
 
 }

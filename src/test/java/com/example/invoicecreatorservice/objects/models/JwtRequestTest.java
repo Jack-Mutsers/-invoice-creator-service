@@ -1,6 +1,5 @@
 package com.example.invoicecreatorservice.objects.models;
 
-import com.example.invoicecreatorservice.objects.data_transfer_objects.CustomerForAlterationDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 

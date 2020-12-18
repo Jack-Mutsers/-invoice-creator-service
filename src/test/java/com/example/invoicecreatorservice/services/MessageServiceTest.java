@@ -1,25 +1,19 @@
 package com.example.invoicecreatorservice.services;
 
-import com.example.invoicecreatorservice.objects.data_transfer_objects.CustomerDTO;
-import com.example.invoicecreatorservice.objects.data_transfer_objects.CustomerForAlterationDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.MessageDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.MessageForAlterationDTO;
-import com.example.invoicecreatorservice.objects.models.Customer;
 import com.example.invoicecreatorservice.objects.models.Message;
-import com.example.invoicecreatorservice.repositories.CustomerRepo;
 import com.example.invoicecreatorservice.repositories.MessageRepo;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.EmptyResultDataAccessException;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest

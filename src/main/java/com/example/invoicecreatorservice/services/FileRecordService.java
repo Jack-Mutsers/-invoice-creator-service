@@ -4,7 +4,7 @@ import com.example.invoicecreatorservice.contracts.services.IFileRecordService;
 import com.example.invoicecreatorservice.helpers.logger.LoggerService;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.FileRecordDTO;
 import com.example.invoicecreatorservice.objects.models.FileRecord;
-import com.example.invoicecreatorservice.repositories.FileRepo;
+import com.example.invoicecreatorservice.repositories.FileRecordRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +16,7 @@ import java.util.List;
 public class FileRecordService implements IFileRecordService {
 
     @Autowired
-    private FileRepo repo;
+    private FileRecordRepo repo;
 
     public FileRecord getFileRecord(int id){
         return repo.findById(id);
@@ -103,10 +103,14 @@ public class FileRecordService implements IFileRecordService {
     private List<FileRecordDTO> convertListToDTO(List<FileRecord> list){
         List<FileRecordDTO> recordDTOS = new ArrayList<>();
 
-        for(FileRecord record : list){
+        for(FileRecord record : emptyIfNull(list)){
             recordDTOS.add(new FileRecordDTO(record));
         }
 
         return recordDTOS;
+    }
+
+    protected  <T> Iterable<T> emptyIfNull(Iterable<T> iterable) {
+        return iterable == null ? List.of() : iterable;
     }
 }

@@ -1,14 +1,13 @@
 package com.example.invoicecreatorservice.objects.data_transfer_objects;
 
 import com.example.invoicecreatorservice.objects.models.FileRecord;
-import com.example.invoicecreatorservice.objects.models.Product;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-public class FileRecordDTOTest {
+class FileRecordDTOTest {
 
     private final FileRecord entity = new FileRecord(1,"testfile.pdf", "testfile-16122020134026.pdf","company1/testfile-16122020134026.pdf","PDF","16-12-2020",1, 5);
 

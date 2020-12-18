@@ -23,7 +23,6 @@ import java.nio.file.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.Future;
-import java.util.stream.Stream;
 
 @Service
 public class FileSystemStorageService implements StorageService {
@@ -35,12 +34,10 @@ public class FileSystemStorageService implements StorageService {
 		this.rootLocation = Paths.get(properties.getLocation());
 	}
 
-	@Override
 	public Path load(String filename) {
 		return rootLocation.resolve(filename);
 	}
 
-	@Override
 	public Resource loadAsResource(String filename) {
 		try {
 			Path file = load(filename);
@@ -49,9 +46,7 @@ public class FileSystemStorageService implements StorageService {
 				return resource;
 			}
 			else {
-				throw new StorageFileNotFoundException(
-						"Could not read file: " + filename);
-
+				throw new StorageFileNotFoundException("Could not read file: " + filename);
 			}
 		}
 		catch (MalformedURLException e) {
@@ -59,19 +54,12 @@ public class FileSystemStorageService implements StorageService {
 		}
 	}
 
-	@Override
-	public void deleteAll() {
-		 FileSystemUtils.deleteRecursively(rootLocation.toFile());
-	}
-
-	@Override
 	public void deleteAllByCompany(String companyName) {
 		Path fileLocation = Paths.get(this.rootLocation.toString() + "/" + companyName);
 		FileSystemUtils.deleteRecursively(fileLocation.toFile());
 	}
 
 	@Async
-	@Override
 	public Future<Boolean> deleteFileAsync(String filename) {
 		AsyncResponse<Boolean> response = new AsyncResponse<>();
 
@@ -88,7 +76,6 @@ public class FileSystemStorageService implements StorageService {
 
 	}
 
-	@Override
 	public void init() {
 		try {
 			if (!Files.exists(rootLocation)) {
@@ -101,7 +88,6 @@ public class FileSystemStorageService implements StorageService {
 	}
 
 	@Async
-	@Override
 	public Future<FileRecord> storeAsync(MultipartFile file, String companyName) {
 		try {
 			if (file.isEmpty()) {
@@ -162,20 +148,4 @@ public class FileSystemStorageService implements StorageService {
 		}
 	}
 
-	@Async
-	@Override
-	public Future<Stream<Path>> loadAllAsync() {
-		try {
-			AsyncResponse<Stream<Path>> response = new AsyncResponse<>();
-
-			response.complete(Files.walk(this.rootLocation, 1)
-					.filter(path -> !path.equals(this.rootLocation))
-					.map(this.rootLocation::relativize));
-
-			return response;
-		}
-		catch (IOException e) {
-			throw new StorageException("Failed to read stored files", e);
-		}
-	}
 }

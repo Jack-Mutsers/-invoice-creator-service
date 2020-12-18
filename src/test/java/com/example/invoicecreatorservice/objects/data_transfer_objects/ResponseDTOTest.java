@@ -4,13 +4,10 @@ import com.example.invoicecreatorservice.objects.models.Product;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-public class ResponseDTOTest {
+class ResponseDTOTest {
 
     @Test
     void instantiateMessageEntity(){

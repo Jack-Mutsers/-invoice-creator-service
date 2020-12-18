@@ -5,7 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-public interface FileRepo extends CrudRepository<FileRecord, Integer> {
+public interface FileRecordRepo extends CrudRepository<FileRecord, Integer> {
     FileRecord findById(int id);
     List<FileRecord> findAllByCustomerIdIn(List<Integer> inventoryIdList);
     List<FileRecord> findAllByCustomerId(int customerId);

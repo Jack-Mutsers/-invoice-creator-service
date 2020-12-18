@@ -5,6 +5,8 @@ import com.example.invoicecreatorservice.repositories.TokenRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import static com.example.invoicecreatorservice.helpers.tools.InputValidator.validateStringValue;
+
 @Service
 public class JwtTokenService {
 
@@ -17,16 +19,28 @@ public class JwtTokenService {
         return token != null && token.isValid();
     }
 
-    public void addNewToken(String jwtToken, String ip){
+    public boolean addNewToken(String jwtToken, String ip){
+        if(validateStringValue(jwtToken) || validateStringValue(ip)){
+            return false;
+        }
+
         Token token = new Token(jwtToken, ip, true);
         tokenRepo.save(token);
+
+        return true;
     }
 
-    public void setExpiredToken(String jwtToken, String ip){
+    public boolean setExpiredToken(String jwtToken, String ip){
+        if(validateStringValue(jwtToken) || validateStringValue(ip)){
+            return false;
+        }
+
         Token token = tokenRepo.findByJwtTokenAndIp(jwtToken, ip);
         token.setValid(false);
 
         tokenRepo.save(token);
+
+        return true;
     }
 
 }
