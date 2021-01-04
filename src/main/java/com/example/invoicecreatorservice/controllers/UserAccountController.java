@@ -1,13 +1,12 @@
 package com.example.invoicecreatorservice.controllers;
 
 import com.example.invoicecreatorservice.contracts.services.ICompanyService;
+import com.example.invoicecreatorservice.contracts.services.ICustomerService;
 import com.example.invoicecreatorservice.contracts.services.IUserAccountService;
 import com.example.invoicecreatorservice.contracts.services.IUserService;
-import com.example.invoicecreatorservice.objects.data_transfer_objects.ResponseDTO;
-import com.example.invoicecreatorservice.objects.data_transfer_objects.UserAccountDTO;
-import com.example.invoicecreatorservice.objects.data_transfer_objects.UserAccountForAlterationDTO;
-import com.example.invoicecreatorservice.objects.data_transfer_objects.UserDTO;
+import com.example.invoicecreatorservice.objects.data_transfer_objects.*;
 import com.example.invoicecreatorservice.services.CompanyService;
+import com.example.invoicecreatorservice.services.CustomerService;
 import com.example.invoicecreatorservice.services.UserAccountService;
 import com.example.invoicecreatorservice.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +30,9 @@ public class UserAccountController extends BaseController {
 
     @Autowired
     private final ICompanyService companyService = new CompanyService();
+
+    @Autowired
+    private final ICustomerService customerService = new CustomerService();
 
     private UserAccountDTO getUserAccount(int userAccountId){
         UserAccountDTO userAccountDTO = userAccountService.getUserAccount(userAccountId);
@@ -104,6 +106,8 @@ public class UserAccountController extends BaseController {
         if (!success){
             return new ResponseEntity<>(new ResponseDTO(false, "Something went wrong while updating your account"), HttpStatus.NOT_FOUND);
         }
+
+        customerService.updateCustomerByUser(accountDTO.getUser(), accountDTO.getContactCode());
 
         UserAccountDTO userAccountDTO = this.getUserAccount(userAccountId);
         userAccountDTO.setCompany(companyService.getCompany(companyId));

@@ -4,6 +4,7 @@ import com.example.invoicecreatorservice.contracts.services.ICustomerService;
 import com.example.invoicecreatorservice.helpers.logger.LoggerService;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.CustomerDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.CustomerForAlterationDTO;
+import com.example.invoicecreatorservice.objects.data_transfer_objects.UserForAlterationDTO;
 import com.example.invoicecreatorservice.objects.models.Customer;
 import com.example.invoicecreatorservice.repositories.CustomerRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,6 +91,25 @@ public class CustomerService implements ICustomerService {
             Customer customer = new Customer(customerDTO);
 
             customerRepo.save(customer);
+            return true;
+        }catch (Exception ex){
+            LoggerService.warn(ex.getMessage());
+            return false;
+        }
+    }
+
+    public boolean updateCustomerByUser(UserForAlterationDTO userDTO, String contactCode) {
+        try {
+            List<Customer> customerList = customerRepo.findAllByContactCode(contactCode);
+
+            for(Customer customer : customerList){
+                customer.setAddress(userDTO.getAddress());
+                customer.setCity(userDTO.getCity());
+                customer.setName(userDTO.getName());
+                customer.setZipcode(userDTO.getZipcode());
+                customerRepo.save(customer);
+            }
+
             return true;
         }catch (Exception ex){
             LoggerService.warn(ex.getMessage());

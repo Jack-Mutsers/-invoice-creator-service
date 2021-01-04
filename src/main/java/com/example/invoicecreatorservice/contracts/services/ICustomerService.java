@@ -2,6 +2,7 @@ package com.example.invoicecreatorservice.contracts.services;
 
 import com.example.invoicecreatorservice.objects.data_transfer_objects.CustomerDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.CustomerForAlterationDTO;
+import com.example.invoicecreatorservice.objects.data_transfer_objects.UserForAlterationDTO;
 import com.example.invoicecreatorservice.objects.models.Customer;
 
 import java.util.List;
@@ -14,4 +15,5 @@ public interface ICustomerService {
     boolean deleteAllCompanyCustomers(int companyId);
     CustomerDTO createCustomer(CustomerForAlterationDTO customerDTO);
     boolean updateCustomer(CustomerForAlterationDTO customerDTO);
+    boolean updateCustomerByUser(UserForAlterationDTO userDTO, String contactCode);
 }

@@ -135,7 +135,7 @@ public class FileSystemStorageService implements StorageService {
 					filename,
 					"http://localhost:9090/upload/files/" + filename,
 					FilenameUtils.getExtension(file.getOriginalFilename()),
-					new SimpleDateFormat("dd-MM-yyyy").format(currentDate),
+					new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(currentDate),
 					0,
 					0
 			));
