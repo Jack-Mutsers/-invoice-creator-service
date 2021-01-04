@@ -9,7 +9,7 @@ import java.util.List;
 public interface ICustomerService {
     CustomerDTO getCustomer(int id);
     Iterable<Customer> getAllCustomers(int id);
-    List<Integer> getMyCustomerIds(int userId);
+    List<Integer> getMyCustomerIds(String contactCode);
     boolean deleteCustomer(int customerId, int companyId);
     boolean deleteAllCompanyCustomers(int companyId);
     CustomerDTO createCustomer(CustomerForAlterationDTO customerDTO);

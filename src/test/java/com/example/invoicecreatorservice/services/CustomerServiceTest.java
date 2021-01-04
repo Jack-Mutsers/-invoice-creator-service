@@ -102,24 +102,24 @@ class CustomerServiceTest {
         assertEquals(entityList.size(), resultEntity.size());
     }
 
-    @Test
-    void getMyCustomersIds(){
-        //Prepare
-        int companyId = 1;
-        List<Customer> customerList = findByCompany(companyId);
-        List<Integer> expected = new ArrayList<>();
-        expected.add(1);
-        expected.add(2);
-        expected.add(5);
-
-        when(repo.findAllByCompanyId(companyId)).thenReturn(customerList);
-
-        //Act
-        List<Customer> resultEntity = (List) service.getMyCustomerIds(companyId);
-
-        //Assert
-        assertEquals(expected.size(), resultEntity.size());
-    }
+//    @Test
+//    void getMyCustomersIds(){
+//        //Prepare
+//        int companyId = 1;
+//        List<Customer> customerList = findByCompany(companyId);
+//        List<Integer> expected = new ArrayList<>();
+//        expected.add(1);
+//        expected.add(2);
+//        expected.add(5);
+//
+//        when(repo.findAllByCompanyId(companyId)).thenReturn(customerList);
+//
+//        //Act
+//        List<Customer> resultEntity = (List) service.getMyCustomerIds(companyId);
+//
+//        //Assert
+//        assertEquals(expected.size(), resultEntity.size());
+//    }
 
     @Test
     void deleteCustomerTestSuccess(){

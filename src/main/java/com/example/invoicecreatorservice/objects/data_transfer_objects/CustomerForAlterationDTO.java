@@ -1,5 +1,6 @@
 package com.example.invoicecreatorservice.objects.data_transfer_objects;
 
+import com.example.invoicecreatorservice.helpers.tools.ContactGenerator;
 import lombok.Getter;
 
 import static com.example.invoicecreatorservice.helpers.tools.Helper.validateStringValue;
@@ -13,6 +14,7 @@ public class CustomerForAlterationDTO {
     private String city;
     private int userId;
     private int companyId;
+    private String contactCode;
 
     public CustomerForAlterationDTO(int id, String name, String address, String zipcode, String city, int userId, int companyId) {
         this.id = id;

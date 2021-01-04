@@ -13,6 +13,7 @@ public class CustomerDTO {
     private String zipcode;
     private String city;
     private int companyId;
+    private String contactCode;
 
     public CustomerDTO(Customer customer) {
         this.id = customer.getId();
@@ -21,6 +22,7 @@ public class CustomerDTO {
         this.zipcode = customer.getZipcode();
         this.city = customer.getCity();
         this.companyId = customer.getCompanyId();
+        this.contactCode = customer.getContactCode();
     }
 
     public CustomerDTO(){}

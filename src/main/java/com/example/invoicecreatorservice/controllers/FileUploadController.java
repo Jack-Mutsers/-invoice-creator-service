@@ -1,16 +1,16 @@
 package com.example.invoicecreatorservice.controllers;
 
-import com.example.invoicecreatorservice.contracts.services.ICompanyService;
-import com.example.invoicecreatorservice.contracts.services.ICustomerService;
-import com.example.invoicecreatorservice.contracts.services.IFileRecordService;
-import com.example.invoicecreatorservice.contracts.services.StorageService;
+import com.example.invoicecreatorservice.contracts.services.*;
 import com.example.invoicecreatorservice.helpers.handlers.StorageFileNotFoundException;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.FileRecordDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.ResponseDTO;
+import com.example.invoicecreatorservice.objects.data_transfer_objects.UserAccountDTO;
 import com.example.invoicecreatorservice.objects.models.FileRecord;
+import com.example.invoicecreatorservice.objects.models.UserAccount;
 import com.example.invoicecreatorservice.services.CompanyService;
 import com.example.invoicecreatorservice.services.CustomerService;
 import com.example.invoicecreatorservice.services.FileRecordService;
+import com.example.invoicecreatorservice.services.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
@@ -40,6 +40,9 @@ public class FileUploadController extends BaseController {
 	@Autowired
 	private final ICompanyService companyService = new CompanyService();
 
+	@Autowired
+	private final IUserAccountService userAccountService = new UserAccountService();
+
 	private StorageService storageService;
 
 	@Autowired
@@ -63,7 +66,12 @@ public class FileUploadController extends BaseController {
 	@GetMapping("/received")
 	public ResponseEntity<ResponseDTO> listUploadedFilesForMe(HttpServletRequest request) {
 		int userId = super.getUserId(request);
-		List<Integer> ids = customerService.getMyCustomerIds(userId);
+		int companyId = super.getCompanyId(request);
+
+		UserAccountDTO account = userAccountService.getUserAccount(userId);
+		String contactCode = account.getContactCode();
+
+		List<Integer> ids = customerService.getMyCustomerIds(contactCode);
 
 		Iterable<FileRecordDTO> records = recordService.getAllSharedFileRecords(ids);
 
@@ -79,7 +87,11 @@ public class FileUploadController extends BaseController {
 	public ResponseEntity<Object> serveFile(HttpServletRequest request, @PathVariable int id) {
 		int companyId = super.getCompanyId(request);
 		int userId = super.getUserId(request);
-		List<Integer> ids = customerService.getMyCustomerIds(userId);
+
+		UserAccountDTO account = userAccountService.getUserAccount(userId);
+		String contactCode = account.getContactCode();
+
+		List<Integer> ids = customerService.getMyCustomerIds(contactCode);
 
 		FileRecord record = recordService.getFileRecord(id);
 

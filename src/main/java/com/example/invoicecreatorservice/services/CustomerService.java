@@ -29,8 +29,8 @@ public class CustomerService implements ICustomerService {
         return customerRepo.findAllByCompanyId(id);
     }
 
-    public List<Integer> getMyCustomerIds(int companyId){
-        List<Customer> customers = customerRepo.findAllByCompanyId(companyId);
+    public List<Integer> getMyCustomerIds(String contactCode){
+        List<Customer> customers = customerRepo.findAllByContactCode(contactCode);
         List<Integer> ids = new ArrayList<>();
 
         for(Customer customer : emptyIfNull(customers)){
