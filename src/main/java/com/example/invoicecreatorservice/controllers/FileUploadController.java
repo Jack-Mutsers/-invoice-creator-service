@@ -66,7 +66,6 @@ public class FileUploadController extends BaseController {
 	@GetMapping("/received")
 	public ResponseEntity<ResponseDTO> listUploadedFilesForMe(HttpServletRequest request) {
 		int userId = super.getUserId(request);
-		int companyId = super.getCompanyId(request);
 
 		UserAccountDTO account = userAccountService.getUserAccount(userId);
 		String contactCode = account.getContactCode();

@@ -16,6 +16,13 @@ public class Customer extends Person {
     private int companyId;
     private String contactCode;
 
+    public Customer(int id, String name, String address, String zipcode, String city, int userId, int companyId, String contactCode) {
+        super(id, name, address, zipcode, city);
+        this.userId = userId;
+        this.companyId = companyId;
+        this.contactCode = contactCode;
+    }
+
     public Customer(int id, String name, String address, String zipcode, String city, int userId, int companyId) {
         super(id, name, address, zipcode, city);
         this.userId = userId;
