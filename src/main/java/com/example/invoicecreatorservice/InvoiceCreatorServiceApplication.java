@@ -25,7 +25,12 @@ public class InvoiceCreatorServiceApplication {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("http://localhost:4200");
+                registry.addMapping("/**").allowedOrigins(
+                        "http://localhost:4200",
+                        "http://localhost:4201",
+                        "http://localhost:9090",
+                        "http://localhost:9091"
+                );
             }
         };
     }
