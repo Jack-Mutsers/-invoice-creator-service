@@ -9,7 +9,7 @@ import com.example.invoicecreatorservice.repositories.ProductCategoryRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import javax.transaction.Transactional;
 
 @Service
 public class ProductCategoryService implements IProductCategoryService {
@@ -20,26 +20,39 @@ public class ProductCategoryService implements IProductCategoryService {
     public ProductCategoryDTO getCategory(int id) {
         ProductCategory category = productCategoryRepo.findById(id);
 
+        if(category == null){
+            return new ProductCategoryDTO();
+        }
+
         return new ProductCategoryDTO(category);
     }
 
     public Iterable<ProductCategory> getAllCategory(int id) {
-        List<ProductCategory> categories = (List) productCategoryRepo.findAllByCompanyId(id);
-
-        if(categories.isEmpty()){ return null; }
-
-        return categories;
+        return productCategoryRepo.findAllByCompanyId(id);
     }
 
+    @Transactional
     public boolean deleteCategory(int id, int companyId) {
         try{
             ProductCategory category = productCategoryRepo.findById(id);
 
-            if(category.getCompanyId() == companyId){
+            if(category != null && category.getCompanyId() == companyId){
                 productCategoryRepo.deleteById(id);
             }else {
                 return false;
             }
+
+            return true;
+        }catch (Exception ex){
+            LoggerService.warn(ex.getMessage());
+            return false;
+        }
+    }
+
+    @Transactional
+    public boolean deleteAllCompanyCategories(int companyId) {
+        try{
+            productCategoryRepo.deleteAllByCompanyId(companyId);
 
             return true;
         }catch (Exception ex){

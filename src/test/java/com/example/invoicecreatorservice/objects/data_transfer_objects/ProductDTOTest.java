@@ -4,7 +4,10 @@ import com.example.invoicecreatorservice.objects.models.Product;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class ProductDTOTest {
@@ -61,18 +64,33 @@ class ProductDTOTest {
         int categoryId = 5;
         String productCode = "hlth002";
 
-        Product DTOentity = new Product();
+        ProductDTO DTOentity = new ProductDTO();
 
         DTOentity.setId(id);
         DTOentity.setName(name);
         DTOentity.setPrice(price);
         DTOentity.setCategoryId(categoryId);
+        DTOentity.setCategory(new ProductCategoryDTO());
         DTOentity.setProductCode(productCode);
 
         assertEquals(id, DTOentity.getId());
         assertEquals(name, DTOentity.getName());
         assertEquals(price, DTOentity.getPrice());
         assertEquals(categoryId, DTOentity.getCategoryId());
+        assertNotNull(DTOentity.getCategory());
         assertEquals(productCode, DTOentity.getProductCode());
+    }
+
+    @Test
+    void getProductListTest(){
+        List<Product> productList = new ArrayList<>();
+        productList.add(new Product(1,"toothbrush",19.5,5,"hlth_001",2));
+        productList.add(new Product(1,"toothpaste",7.5,5,"hlth_002",2));
+
+        ProductDTO dto = new ProductDTO();
+
+        List<ProductDTO> result = dto.getProductList(productList);
+
+        assertEquals(productList.size(), result.size());
     }
 }

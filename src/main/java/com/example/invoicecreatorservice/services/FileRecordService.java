@@ -1,43 +1,44 @@
 package com.example.invoicecreatorservice.services;
 
+import com.example.invoicecreatorservice.contracts.services.IFileRecordService;
+import com.example.invoicecreatorservice.helpers.logger.LoggerService;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.FileRecordDTO;
 import com.example.invoicecreatorservice.objects.models.FileRecord;
-import com.example.invoicecreatorservice.repositories.FileRepo;
+import com.example.invoicecreatorservice.repositories.FileRecordRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static com.example.invoicecreatorservice.helpers.tools.Helper.emptyIfNull;
 
 @Service
-public class FileRecordService {
+public class FileRecordService implements IFileRecordService {
 
     @Autowired
-    private FileRepo repo;
+    private FileRecordRepo repo;
 
-    public FileRecordDTO getFileRecord(int id){
-        FileRecord record = repo.findById(id);
-        return new FileRecordDTO(record);
+    public FileRecord getFileRecord(int id){
+        return repo.findById(id);
+    }
+
+    public FileRecord getFileRecord(int id, int ownerId){
+        return repo.findByIdAndOwnerId(id, ownerId);
     }
 
     public Iterable<FileRecordDTO> getAllMyFileRecords(int ownerId){
-        List<FileRecord> records = (List) repo.findAllByOwnerId(ownerId);
-
-        if(records.isEmpty()){ return null; }
+        List<FileRecord> records = repo.findAllByOwnerId(ownerId);
 
         return this.convertListToDTO(records);
     }
 
     public Iterable<FileRecordDTO> getAllSharedFileRecords(List<Integer> ids){
-        List<FileRecord> records = null;
+        List<FileRecord> records = new ArrayList<>();
 
-        if(ids.size() > 0){
+        if(!ids.isEmpty()){
             records = repo.findAllByCustomerIdIn(ids);
-        }
-
-        if(records == null){
-            records = new ArrayList<>();
         }
 
         return this.convertListToDTO(records);
@@ -52,14 +53,38 @@ public class FileRecordService {
 
             return true;
         }catch (Exception ex){
-            // LoggerService.warn(ex.getMessage());
+             LoggerService.warn(ex.getMessage());
             return false;
         }
     }
 
-    public boolean validateAccessPermission(String filename, int companyId, List<Integer> customerIds){
-        FileRecord record = repo.findByFileName(filename);
+    @Transactional
+    public boolean deleteRecord(FileRecord record){
+        try{
+            if(record == null){
+                return false;
+            }
 
+            repo.delete(record);
+
+            return true;
+        }catch (Exception ex){
+            return false;
+        }
+    }
+
+    @Transactional
+    public boolean deleteCompanyRecords(int companyId){
+        try{
+            repo.deleteAllByOwnerId(companyId);
+
+            return true;
+        }catch (Exception ex){
+            return false;
+        }
+    }
+
+    public boolean validateAccessPermission(FileRecord record, int companyId, List<Integer> customerIds){
         if(record == null){
             return false;
         }
@@ -68,7 +93,7 @@ public class FileRecordService {
             return true;
         }
 
-        for(int id : customerIds){
+        for(int id : emptyIfNull(customerIds)){
             if(record.getCustomerId() == id){
                 return true;
             }
@@ -80,7 +105,7 @@ public class FileRecordService {
     private List<FileRecordDTO> convertListToDTO(List<FileRecord> list){
         List<FileRecordDTO> recordDTOS = new ArrayList<>();
 
-        for(FileRecord record : list){
+        for(FileRecord record : emptyIfNull(list)){
             recordDTOS.add(new FileRecordDTO(record));
         }
 

@@ -60,6 +60,28 @@ class CompanyServiceTest {
     }
 
     @Test
+    void getCompanyIdZeroTest(){
+        //Arrange
+        int id = 0;
+
+        //Prepare overwrites
+        when(repo.findById(id)).thenReturn(null);
+
+        //Act
+        CompanyDTO resultEntity = service.getCompany(id);
+        CompanyDTO expectedEntity = new CompanyDTO();
+
+        //Assert
+        assertEquals(expectedEntity.getName(), resultEntity.getName());
+        assertEquals(expectedEntity.getAddress(), resultEntity.getAddress());
+        assertEquals(expectedEntity.getZipcode(), resultEntity.getZipcode());
+        assertEquals(expectedEntity.getCity(), resultEntity.getCity());
+        assertEquals(expectedEntity.getTelephoneNumber(), resultEntity.getTelephoneNumber());
+        assertEquals(expectedEntity.getContactCode(), resultEntity.getContactCode());
+        assertEquals(expectedEntity.getOwnerId(), resultEntity.getOwnerId());
+    }
+
+    @Test
     void getAllCompaniesTest(){
         //Arrange
 
@@ -71,6 +93,20 @@ class CompanyServiceTest {
 
         //Assert
         assertEquals(entityList.size(), resultEntity.size());
+    }
+
+    @Test
+    void getAllCompaniesEmptyTest(){
+        //Arrange
+
+        //Prepare overwrites
+        when(repo.findAll()).thenReturn(new ArrayList<>());
+
+        //Act
+        List<CompanyDTO> resultEntity = (List) service.getAllCompanies();
+
+        //Assert
+        assertEquals(0, resultEntity.size());
     }
 
     @Test
@@ -187,10 +223,10 @@ class CompanyServiceTest {
         when(repo.save((Company)notNull())).thenReturn(entity);
 
         //Act
-        boolean result = service.updateCompany(entityDTO);
+        CompanyDTO result = service.updateCompany(entityDTO);
 
         //Assert
-        assertTrue(result);
+        assertNotNull(result);
     }
 
     @Test
@@ -213,9 +249,9 @@ class CompanyServiceTest {
         when(repo.save((Company)notNull())).thenThrow(new NullPointerException("zipcode cannot be empty"));
 
         //Act
-        boolean result = service.updateCompany(entityDTO);
+        CompanyDTO result = service.updateCompany(entityDTO);
 
         //Assert
-        assertFalse(result);
+        assertNull(result);
     }
 }

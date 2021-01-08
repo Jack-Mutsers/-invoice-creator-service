@@ -51,7 +51,7 @@ class ProductCategoryDTOTest {
         int btw = 23;
         int companyId = 1;
 
-        ProductCategory DTOentity = new ProductCategory();
+        ProductCategoryDTO DTOentity = new ProductCategoryDTO();
 
         DTOentity.setId(id);
         DTOentity.setName(name);

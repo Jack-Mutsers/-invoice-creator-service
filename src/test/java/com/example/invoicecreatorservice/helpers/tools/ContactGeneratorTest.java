@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @SpringBootTest
 class ContactGeneratorTest {
@@ -12,8 +13,11 @@ class ContactGeneratorTest {
     void codeGenerationTest() {
         ContactGenerator generator = new ContactGenerator();
 
-        String newCode = generator.generateCode();
+        String firstCode = generator.generateCode();
+        String secondCode = generator.generateCode();
 
-        assertEquals(10, newCode.length());
+        assertEquals(10, firstCode.length());
+        assertEquals(10, secondCode.length());
+        assertNotEquals(firstCode, secondCode);
     }
 }

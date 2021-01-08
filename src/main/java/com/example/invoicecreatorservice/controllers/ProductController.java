@@ -1,5 +1,6 @@
 package com.example.invoicecreatorservice.controllers;
 
+import com.example.invoicecreatorservice.contracts.services.IProductService;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.ProductDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.ProductForAlterationDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.ResponseDTO;
@@ -12,13 +13,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-@CrossOrigin
 @Controller
 @RequestMapping("/products")
 public class ProductController extends BaseController {
 
     @Autowired
-    private final ProductService service = new ProductService();
+    private final IProductService service = new ProductService();
 
     @GetMapping(path="/{id}")
     public @ResponseBody ResponseEntity<ResponseDTO> getProduct(@PathVariable int id) {
@@ -36,14 +36,10 @@ public class ProductController extends BaseController {
         int companyId = super.getCompanyId(request);
 
         if(companyId == 0){
-            return new ResponseEntity<>(new ResponseDTO(false, "There are currently no products availible"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponseDTO(false, "permission denied"), HttpStatus.FORBIDDEN);
         }
 
         Iterable<ProductDTO> products = service.getAllProducts(companyId);
-
-        if(products == null){
-            return new ResponseEntity<>(new ResponseDTO(true, "There are currently no products availible"), HttpStatus.OK);
-        }
 
         return new ResponseEntity<>(new ResponseDTO(true, products), HttpStatus.OK);
     }
@@ -53,7 +49,7 @@ public class ProductController extends BaseController {
         int companyId = super.getCompanyId(request);
 
         if(companyId == 0){
-            return new ResponseEntity<>(new ResponseDTO(false, "There are currently no products availible"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponseDTO(false, "permission denied"), HttpStatus.FORBIDDEN);
         }
 
         boolean success = service.deleteProduct(id, companyId);

@@ -9,7 +9,7 @@ import com.example.invoicecreatorservice.repositories.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import javax.transaction.Transactional;
 
 @Service
 public class UserService implements IUserService {
@@ -19,17 +19,12 @@ public class UserService implements IUserService {
     public UserDTO getUser(int id) {
         User user = userRepo.findById(id);
 
+        if(user == null){return new UserDTO();}
+
         return new UserDTO(user);
     }
 
-    public Iterable<User> getAllUser() {
-        List<User> users = (List<User>) userRepo.findAll();
-
-        if(users.isEmpty()){ return null; }
-
-        return users;
-    }
-
+    @Transactional
     public boolean deleteUser(int id) {
         try{
             userRepo.deleteById(id);
@@ -55,8 +50,9 @@ public class UserService implements IUserService {
         }
     }
 
-    public boolean updateUser(UserForAlterationDTO userDTO) {
+    public boolean updateUser(int userId, UserForAlterationDTO userDTO) {
         try{
+            userDTO.setId(userId);
             User user = new User(userDTO);
             userRepo.save(user);
             return true;

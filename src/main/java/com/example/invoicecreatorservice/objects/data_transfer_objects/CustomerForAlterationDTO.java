@@ -1,6 +1,9 @@
 package com.example.invoicecreatorservice.objects.data_transfer_objects;
 
+import com.example.invoicecreatorservice.helpers.tools.ContactGenerator;
 import lombok.Getter;
+
+import static com.example.invoicecreatorservice.helpers.tools.Helper.validateStringValue;
 
 @Getter
 public class CustomerForAlterationDTO {
@@ -11,6 +14,7 @@ public class CustomerForAlterationDTO {
     private String city;
     private int userId;
     private int companyId;
+    private String contactCode;
 
     public CustomerForAlterationDTO(int id, String name, String address, String zipcode, String city, int userId, int companyId) {
         this.id = id;
@@ -29,8 +33,7 @@ public class CustomerForAlterationDTO {
     }
 
     public boolean validateForCreation(){
-        return (this.name == null || this.address == null || this.zipcode == null || this.city == null ||
-                this.name.isBlank() || this.address.isBlank() || this.zipcode.isBlank() || this.city.isBlank());
+        return (this.companyId == 0 || validateStringValue(this.name) || validateStringValue(this.address) || validateStringValue(this.zipcode) || validateStringValue(this.city));
     }
 
     public void setId(int id) {
@@ -40,4 +43,5 @@ public class CustomerForAlterationDTO {
     public void setCompanyId(int companyId) {
         this.companyId = companyId;
     }
+
 }

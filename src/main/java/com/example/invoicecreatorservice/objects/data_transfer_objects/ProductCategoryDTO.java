@@ -1,11 +1,9 @@
 package com.example.invoicecreatorservice.objects.data_transfer_objects;
 
 import com.example.invoicecreatorservice.objects.models.ProductCategory;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-@AllArgsConstructor
 @Getter
 @Setter
 public class ProductCategoryDTO {

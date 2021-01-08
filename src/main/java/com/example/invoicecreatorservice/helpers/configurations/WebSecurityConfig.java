@@ -94,8 +94,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/useraccount").hasAnyRole(ADMIN, OWNER, EMPLOYEE, USER)
         .antMatchers("/useraccount/*").hasAnyRole(ADMIN, OWNER, EMPLOYEE, USER)
 
-        .antMatchers("/upload").permitAll()
-        .antMatchers("/upload/*").permitAll()
+        .antMatchers("/upload").hasAnyRole(ADMIN, OWNER, EMPLOYEE, USER)
+        .antMatchers("/upload/*").hasAnyRole(ADMIN, OWNER, EMPLOYEE, USER)
 
         // all other requests need to be authenticated
         .anyRequest().authenticated().and()

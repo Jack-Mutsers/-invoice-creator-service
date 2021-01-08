@@ -26,6 +26,7 @@ class UserAccountTest {
             username,
             password,
             userId,
+            new User(),
             contactCode,
             companyId,
             role
@@ -37,7 +38,6 @@ class UserAccountTest {
         assertEquals(userId, entity.getUserId());
         assertEquals(contactCode, entity.getContactCode());
     }
-
 
     @Test
     void instantiateEmptyEntity(){
@@ -54,9 +54,38 @@ class UserAccountTest {
         assertEquals(userId, entity.getUserId());
     }
 
+    @Test
+    void instantiateEntityByDTOWithoutUser(){
+        int id = 2;
+        boolean active = true;
+        String username = "henk";
+        String password = "Password1!";
+        int userId = 0;
+        String contactCode = "123456";
+        int companyId = 1;
+        String role = "ROLE_OWNER";
+
+        UserAccountForAlterationDTO entityDTO = new UserAccountForAlterationDTO(
+            id,
+            active,
+            username,
+            password,
+            null,
+            contactCode,
+            role,
+            companyId
+        );
+
+        UserAccount entity = new UserAccount(entityDTO);
+
+        assertEquals(id, entity.getId());
+        assertEquals(username, entity.getUsername());
+        assertEquals(password, entity.getPassword());
+        assertEquals(userId, entity.getUserId());
+    }
 
     @Test
-    void instantiateEntityByDTO(){
+    void instantiateEntityByDTOWithUser(){
         int id = 2;
         boolean active = true;
         String username = "henk";

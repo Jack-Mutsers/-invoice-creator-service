@@ -3,6 +3,9 @@ package com.example.invoicecreatorservice.controllers;
 import java.util.Base64;
 import java.util.Map;
 
+import com.example.invoicecreatorservice.contracts.services.ICompanyService;
+import com.example.invoicecreatorservice.contracts.services.IUserAccountService;
+import com.example.invoicecreatorservice.contracts.services.IUserService;
 import com.example.invoicecreatorservice.helpers.components.JwtTokenUtil;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.ResponseDTO;
 import com.example.invoicecreatorservice.objects.models.JwtRequest;
@@ -21,6 +24,8 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @CrossOrigin
 public class JwtAuthenticationController {
@@ -28,23 +33,25 @@ public class JwtAuthenticationController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private JwtTokenUtil jwtTokenUtil = new JwtTokenUtil();
 
     @Autowired
-    private JwtUserDetailsService userDetailsService;
+    private JwtUserDetailsService userDetailsService = new JwtUserDetailsService();
 
     @Autowired
-    private UserAccountService userAccountService;
+    private IUserAccountService userAccountService = new UserAccountService();
 
     @Autowired
-    private UserService userService;
+    private IUserService userService = new UserService();
 
     @Autowired
-    private CompanyService companyService;
+    private ICompanyService companyService = new CompanyService();
 
     @PostMapping(path="/authenticate")
-    public ResponseEntity<ResponseDTO> createAuthenticationToken(@RequestHeader Map<String, String> header) {
+    public ResponseEntity<ResponseDTO> createAuthenticationToken(HttpServletRequest request, @RequestHeader Map<String, String> header) {
         try {
+            // get client ip address
+            String ip = request.getRemoteAddr();
 
             // get the base64 string
             String authorizationHeader = header.get("authorization");
@@ -69,14 +76,14 @@ public class JwtAuthenticationController {
                 return new ResponseEntity<>(new ResponseDTO(false, "Login credentials were incorrect!"), HttpStatus.NOT_FOUND);
             }
 
-            final String token = jwtTokenUtil.generateToken(userDetails);
+            final String token = jwtTokenUtil.generateToken(userDetails, ip);
             user.setToken(token);
-            user.setUser(userService.getUser(user.getUserId()));
+            user.setCompany(companyService.getCompany(user.getCompanyId()));
 
             return new ResponseEntity<>(new ResponseDTO(true, user), HttpStatus.OK);
 
         } catch (Exception ex){
-            return new ResponseEntity<>(new ResponseDTO(false, "Login credentials were incorrect!"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ResponseDTO(false, "Something went wrong while login in"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

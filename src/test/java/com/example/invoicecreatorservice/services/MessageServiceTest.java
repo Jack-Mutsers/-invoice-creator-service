@@ -1,25 +1,19 @@
 package com.example.invoicecreatorservice.services;
 
-import com.example.invoicecreatorservice.objects.data_transfer_objects.CustomerDTO;
-import com.example.invoicecreatorservice.objects.data_transfer_objects.CustomerForAlterationDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.MessageDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.MessageForAlterationDTO;
-import com.example.invoicecreatorservice.objects.models.Customer;
 import com.example.invoicecreatorservice.objects.models.Message;
-import com.example.invoicecreatorservice.repositories.CustomerRepo;
 import com.example.invoicecreatorservice.repositories.MessageRepo;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.EmptyResultDataAccessException;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -57,7 +51,7 @@ class MessageServiceTest {
         when(repo.findByContactCodeAndTypeAndDone(entity.getContactCode(), "notification", false)).thenReturn(entityList);
 
         //Act
-        List<MessageDTO> resultEntity = (List) service.getNotifications(entity.getContactCode());
+        List<MessageDTO> resultEntity = (List) service.getMessagesForMe(entity.getContactCode(), entity.getType());
 
         //Assert
         assertEquals(resultEntity.size(), entityList.size());
@@ -73,10 +67,10 @@ class MessageServiceTest {
         when(repo.findByContactCodeAndTypeAndDone(entity.getContactCode(), "notification", false)).thenReturn(entityList);
 
         //Act
-        List<MessageDTO> resultEntity = (List) service.getNotifications(entity.getContactCode());
+        List<MessageDTO> resultEntity = (List) service.getMessagesForMe(entity.getContactCode(), entity.getType());
 
         //Assert
-        assertNull(resultEntity);
+        assertEquals(0, resultEntity.size());
     }
 
     @Test
@@ -92,7 +86,7 @@ class MessageServiceTest {
         when(repo.findByUserIdAndTypeAndDone(entity.getUserId(), "request", false)).thenReturn(entityList);
 
         //Act
-        List<MessageDTO> resultEntity = (List) service.getOutgoingRequests(entity.getUserId());
+        List<MessageDTO> resultEntity = (List) service.getOutgoingRequests(entity.getUserId(), entity.getType());
 
         //Assert
         assertEquals(resultEntity.size(), entityList.size());
@@ -109,10 +103,10 @@ class MessageServiceTest {
         when(repo.findByContactCodeAndTypeAndDone(entity.getContactCode(), "request", false)).thenReturn(entityList);
 
         //Act
-        List<MessageDTO> resultEntity = (List) service.getOutgoingRequests(entity.getUserId());
+        List<MessageDTO> resultEntity = (List) service.getOutgoingRequests(entity.getUserId(), entity.getType());
 
         //Assert
-        assertNull(resultEntity);
+        assertEquals(0, resultEntity.size());
     }
 
     @Test
@@ -127,7 +121,7 @@ class MessageServiceTest {
         when(repo.findByContactCodeAndTypeAndDone(entity.getContactCode(), "request", false)).thenReturn(entityList);
 
         //Act
-        List<MessageDTO> resultEntity = (List) service.getIncomingRequests(entity.getContactCode());
+        List<MessageDTO> resultEntity = (List) service.getMessagesForMe(entity.getContactCode(), entity.getType());
 
         //Assert
         assertEquals(resultEntity.size(), entityList.size());
@@ -144,10 +138,10 @@ class MessageServiceTest {
         when(repo.findByContactCodeAndTypeAndDone(entity.getContactCode(), "request", false)).thenReturn(entityList);
 
         //Act
-        List<MessageDTO> resultEntity = (List) service.getIncomingRequests(entity.getContactCode());
+        List<MessageDTO> resultEntity = (List) service.getMessagesForMe(entity.getContactCode(), entity.getType());
 
         //Assert
-        assertNull(resultEntity);
+        assertEquals(0, resultEntity.size());
     }
 
     @Test

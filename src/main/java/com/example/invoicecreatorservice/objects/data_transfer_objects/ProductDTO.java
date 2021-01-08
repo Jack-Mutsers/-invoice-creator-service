@@ -17,15 +17,6 @@ public class ProductDTO {
     private ProductCategoryDTO category;
     private String productCode;
 
-    public ProductDTO(int id, String name, double price, int categoryId, String productCode){
-
-        this.id = id;
-        this.name = name;
-        this.categoryId = categoryId;
-        this.price = (double)Math.round(price * 100.0);
-        this.productCode = productCode;
-    }
-
     public ProductDTO(Product product){
 
         this.id = product.getId();

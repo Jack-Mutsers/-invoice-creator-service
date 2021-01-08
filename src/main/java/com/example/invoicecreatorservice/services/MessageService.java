@@ -9,41 +9,17 @@ import com.example.invoicecreatorservice.repositories.MessageRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class MessageService implements IMessageService {
     @Autowired
     private MessageRepo messageRepo;
 
-    public Iterable<MessageDTO> getNotifications(String contactCode) {
-        String type = "notification";
-
-        List<MessageDTO> messages = messageRepo.findByContactCodeAndTypeAndDone(contactCode, type, false);
-
-        if(messages.isEmpty()){ return null; }
-
-        return messages;
+    public Iterable<MessageDTO> getMessagesForMe(String contactCode, String type) {
+        return messageRepo.findByContactCodeAndTypeAndDone(contactCode, type, false);
     }
 
-    public Iterable<MessageDTO> getOutgoingRequests(int userId) {
-        String type = "request";
-
-        List<MessageDTO> messages = messageRepo.findByUserIdAndTypeAndDone(userId, type, false);
-
-        if(messages.isEmpty()){ return null; }
-
-        return messages;
-    }
-
-    public Iterable<MessageDTO> getIncomingRequests(String contactCode) {
-        String type = "request";
-
-        List<MessageDTO> messages = messageRepo.findByContactCodeAndTypeAndDone(contactCode, type, false);
-
-        if(messages.isEmpty()){ return null; }
-
-        return messages;
+    public Iterable<MessageDTO> getOutgoingRequests(int userId, String type) {
+        return messageRepo.findByUserIdAndTypeAndDone(userId, type, false);
     }
 
     public boolean createMessage(MessageForAlterationDTO messageDTO) {

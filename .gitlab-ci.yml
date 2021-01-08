@@ -2,12 +2,26 @@ stages:
   - build
   - test
   - sonarqube
+  - deploy
+
 build:
-  script: "mvn compile"
+  script:
+    - "mvn clean install -DskipTests"
   stage: build
+
 test:
-  script: "mvn test"
+  script:
+    - "mvn test"
   stage: test
+
 sonarqube:
-  script: "mvn verify sonar:sonar"
+  script:
+    - "mvn verify sonar:sonar"
   stage: sonarqube
+
+deploy:
+  # Build Docker container and push to Docker Hub
+  stage: deploy
+  script:
+    - "mvn clean install -DskipTests"
+    - sh deploy.sh

@@ -89,6 +89,8 @@ class CustomerTest {
         String address = "testlane 64";
         String zipcode = "1234 AB";
         String city = "Testvile";
+        int userId = 51;
+        int companyId = 3;
 
         Customer entity = new Customer();
 
@@ -97,12 +99,16 @@ class CustomerTest {
         entity.setAddress(address);
         entity.setZipcode(zipcode);
         entity.setCity(city);
+        entity.setUserId(userId);
+        entity.setCompanyId(companyId);
 
         assertEquals(id, entity.getId());
         assertEquals(name, entity.getName());
         assertEquals(address, entity.getAddress());
         assertEquals(zipcode, entity.getZipcode());
         assertEquals(city, entity.getCity());
+        assertEquals(userId, entity.getUserId());
+        assertEquals(companyId, entity.getCompanyId());
     }
 
 }

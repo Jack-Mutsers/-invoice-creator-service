@@ -1,11 +1,9 @@
 package com.example.invoicecreatorservice.controllers;
 
-import com.example.invoicecreatorservice.objects.data_transfer_objects.CompanyDTO;
-import com.example.invoicecreatorservice.objects.data_transfer_objects.CompanyForAlterationDTO;
-import com.example.invoicecreatorservice.objects.data_transfer_objects.ResponseDTO;
+import com.example.invoicecreatorservice.contracts.services.*;
+import com.example.invoicecreatorservice.objects.data_transfer_objects.*;
 import com.example.invoicecreatorservice.objects.models.Company;
-import com.example.invoicecreatorservice.services.CompanyService;
-import com.example.invoicecreatorservice.services.UserAccountService;
+import com.example.invoicecreatorservice.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,28 +12,51 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-@CrossOrigin
 @Controller
 @RequestMapping("/company")
 public class CompanyController extends BaseController {
     @Autowired
-    private final CompanyService service = new CompanyService();
+    private final ICompanyService service = new CompanyService();
 
     @Autowired
-    private UserAccountService userAccountService = new UserAccountService();
+    private final IUserAccountService userAccountService = new UserAccountService();
+
+    @Autowired
+    private final IProductCategoryService productCategoryService = new ProductCategoryService();
+
+    @Autowired
+    private final IProductService productService = new ProductService();
+
+    @Autowired
+    private final ICustomerService customerService = new CustomerService();
+
+    @Autowired
+    private final IFileRecordService fileRecordService = new FileRecordService();
+
+    private StorageService storageService;
+
+    private static final String ACCESSFORBIDDEN = "You do not have access to this element";
+    private static final String ELEMENTNOTFOUND = "Company could not be found.";
+    private static final String DATACONFLICT = "Supplied data does not meet the requirements";
+    private static String internalErrorMessage(String action){ return "Something went wrong with the " + action + " of the company."; }
+
+    @Autowired
+    public CompanyController(StorageService storageService) {
+        this.storageService = storageService;
+    }
 
     @GetMapping(path="")
     public @ResponseBody ResponseEntity<ResponseDTO> getCompany(HttpServletRequest request) {
         int companyId = super.getCompanyId(request);
 
         if(companyId == 0){
-            return new ResponseEntity<>(new ResponseDTO(false, "Please provide a valid User."), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(new ResponseDTO(false, ACCESSFORBIDDEN), HttpStatus.FORBIDDEN);
         }
 
         CompanyDTO company = service.getCompany(companyId);
 
         if (company == null) {
-            return new ResponseEntity<>(new ResponseDTO(false, "Please provide a valid customer identifier."), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponseDTO(false, ELEMENTNOTFOUND), HttpStatus.NOT_FOUND);
         }
 
         return new ResponseEntity<>(new ResponseDTO(true, company), HttpStatus.OK);
@@ -45,35 +66,79 @@ public class CompanyController extends BaseController {
     public  @ResponseBody ResponseEntity<ResponseDTO> getAllCompanies() {
         Iterable<CompanyDTO> companies = service.getAllCompanies();
 
-        if(companies == null){
-            return new ResponseEntity<>(new ResponseDTO(false, "There are currently no companies available"), HttpStatus.OK);
-        }
-
         return new ResponseEntity<>(new ResponseDTO(true, companies), HttpStatus.OK);
     }
 
-    @DeleteMapping(path = "/{userId}")
-    public @ResponseBody ResponseEntity<ResponseDTO> deleteCompany(HttpServletRequest request, @PathVariable int userId) {
+    @GetMapping(path="/employees")
+    public @ResponseBody ResponseEntity<ResponseDTO> getAllEmployees(HttpServletRequest request){
         int companyId = super.getCompanyId(request);
 
         if(companyId == 0){
-            return new ResponseEntity<>(new ResponseDTO(false, "Please provide a valid User."), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(new ResponseDTO(false, ACCESSFORBIDDEN), HttpStatus.FORBIDDEN);
         }
 
-        boolean success = service.deleteCompany(companyId, userId);
+        Iterable<UserDTO> employees = userAccountService.getEmployees(companyId);
 
-        if(!success){
-            return new ResponseEntity<>(new ResponseDTO(false, "Company could not be found."), HttpStatus.NOT_FOUND);
+        if (employees == null) {
+            return new ResponseEntity<>(new ResponseDTO(false, "No employees have been found for the specified company."), HttpStatus.NOT_FOUND);
         }
+
+        return new ResponseEntity<>(new ResponseDTO(true, employees), HttpStatus.OK);
+    }
+
+    @DeleteMapping(path = "")
+    public @ResponseBody ResponseEntity<ResponseDTO> deleteCompany(HttpServletRequest request) {
+        int companyId = super.getCompanyId(request);
+        int userId = super.getUserId(request);
+
+        if(companyId == 0){
+            return new ResponseEntity<>(new ResponseDTO(false, ACCESSFORBIDDEN), HttpStatus.FORBIDDEN);
+        }
+
+        String companyName = service.getCompany(companyId).getName();
+        boolean companyDeleted = service.deleteCompany(companyId, userId);
+
+        if(!companyDeleted){
+            return new ResponseEntity<>(new ResponseDTO(false, ELEMENTNOTFOUND), HttpStatus.NOT_FOUND);
+        }
+
+        // delete all company information
+        customerService.deleteAllCompanyCustomers(companyId);
+        productCategoryService.deleteAllCompanyCategories(companyId);
+        productService.deleteAllCompanyProducts(companyId);
+        userAccountService.removeAllEmployees(companyId);
+        storageService.deleteAllByCompany(companyName);
+        fileRecordService.deleteCompanyRecords(companyId);
 
         return new ResponseEntity<>(new ResponseDTO(true, "Company has been deleted successfully."), HttpStatus.OK);
     }
 
-    @PostMapping(path="/{userId}")
-    public @ResponseBody ResponseEntity<ResponseDTO> createCompany(@PathVariable int userId, @RequestBody CompanyForAlterationDTO companyDTO) {
+    @DeleteMapping(path = "/employee/{id}")
+    public @ResponseBody ResponseEntity<ResponseDTO> deleteEmployee(HttpServletRequest request, @PathVariable int id) {
+        int companyId = super.getCompanyId(request);
+        int userId = super.getUserId(request);
+
+        if(companyId == 0){ return new ResponseEntity<>(new ResponseDTO(false, ACCESSFORBIDDEN), HttpStatus.FORBIDDEN); }
+
+        CompanyDTO company = service.getCompany(companyId);
+
+        if(company == null){ return new ResponseEntity<>(new ResponseDTO(false, ELEMENTNOTFOUND), HttpStatus.NOT_FOUND); }
+        if(company.getOwnerId() != userId){ return new ResponseEntity<>(new ResponseDTO(false, ACCESSFORBIDDEN), HttpStatus.FORBIDDEN); }
+
+        boolean succes = userAccountService.removeEmployee(id, companyId);
+
+        if(!succes){ return new ResponseEntity<>(new ResponseDTO(false, ELEMENTNOTFOUND), HttpStatus.NOT_FOUND); }
+
+        return new ResponseEntity<>(new ResponseDTO(true, "Employee has been deleted successfully."), HttpStatus.OK);
+    }
+
+    @PostMapping(path="")
+    public @ResponseBody ResponseEntity<ResponseDTO> createCompany(HttpServletRequest request, @RequestBody CompanyForAlterationDTO companyDTO) {
         if(companyDTO.validateForCreation()){
-            return new ResponseEntity<>(new ResponseDTO(false, "Please provide valid data for the creation"), HttpStatus.CONFLICT);
+            return new ResponseEntity<>(new ResponseDTO(false, DATACONFLICT), HttpStatus.CONFLICT);
         }
+
+        int userId = super.getUserId(request);
 
         if(companyDTO.getContactCode() == null){
             companyDTO.generateContactCode();
@@ -82,31 +147,56 @@ public class CompanyController extends BaseController {
         Company newObject = service.createCompany(companyDTO, userId);
 
         if (newObject == null){
-            return new ResponseEntity<>(new ResponseDTO(false, "Something went wrong with the creation of the company."), HttpStatus.CONFLICT);
+            return new ResponseEntity<>(new ResponseDTO(false, internalErrorMessage("creation")), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        if (!userAccountService.addCompanyToUser(userId, newObject.getId())){
+        if (!userAccountService.setCompanyOwner(userId, newObject.getId())){
             service.deleteCompany(newObject.getId(), userId);
-            return new ResponseEntity<>(new ResponseDTO(false, "Something went wrong with the creation of the company."), HttpStatus.CONFLICT);
+            return new ResponseEntity<>(new ResponseDTO(false, internalErrorMessage("creation")), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         return new ResponseEntity<>(new ResponseDTO(true, new CompanyDTO(newObject)), HttpStatus.CREATED);
     }
 
+    @PostMapping(path="employee")
+    public @ResponseBody ResponseEntity<ResponseDTO> addEmployee(HttpServletRequest request, @RequestBody String contactCode) {
+        if(contactCode == null){
+            return new ResponseEntity<>(new ResponseDTO(false, DATACONFLICT), HttpStatus.CONFLICT);
+        }
+
+        int companyId = super.getCompanyId(request);
+        if(companyId == 0){
+            return new ResponseEntity<>(new ResponseDTO(false, ACCESSFORBIDDEN), HttpStatus.FORBIDDEN);
+        }
+
+        boolean added = userAccountService.addNewEmployee(contactCode, companyId);
+
+        if (!added){
+            return new ResponseEntity<>(new ResponseDTO(false, "Something went wrong or the user already belongs to a company"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(new ResponseDTO(true, "Employee has been added"), HttpStatus.CREATED);
+    }
+
+
+
     @PutMapping(path ="")
     public @ResponseBody ResponseEntity<ResponseDTO> updateCompany(HttpServletRequest request, @RequestBody CompanyForAlterationDTO companyDTO) {
         int companyId = super.getCompanyId(request);
 
-        if(companyDTO.validateForUpdate() || companyId != companyDTO.getId()){
-            return new ResponseEntity<>(new ResponseDTO(false, "Data is invalid or you dont have permissions to perform this action"), HttpStatus.CONFLICT);
+        if(companyId != companyDTO.getId()){
+            return new ResponseEntity<>(new ResponseDTO(false, ACCESSFORBIDDEN), HttpStatus.FORBIDDEN);
+        }
+        if(companyDTO.validateForUpdate()){
+            return new ResponseEntity<>(new ResponseDTO(false, DATACONFLICT), HttpStatus.CONFLICT);
         }
 
-        Boolean success = service.updateCompany(companyDTO);
+        CompanyDTO company = service.updateCompany(companyDTO);
 
-        if (Boolean.FALSE.equals(success)){
-            return new ResponseEntity<>(new ResponseDTO(false, "Something went wrong with the update of the company."), HttpStatus.CONFLICT);
+        if (company == null){
+            return new ResponseEntity<>(new ResponseDTO(false, internalErrorMessage("update")), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return new ResponseEntity<>(new ResponseDTO(true, "Company has successfully been updated."), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDTO(true, company), HttpStatus.OK);
     }
 }

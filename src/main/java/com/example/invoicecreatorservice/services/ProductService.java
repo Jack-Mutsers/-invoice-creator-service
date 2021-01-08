@@ -9,6 +9,7 @@ import com.example.invoicecreatorservice.repositories.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -23,6 +24,10 @@ public class ProductService implements IProductService {
     public ProductDTO getProduct(int id) {
         Product product = productRepo.findById(id);
 
+        if(product == null){
+            return new ProductDTO();
+        }
+
         ProductDTO newProductDTO = new ProductDTO(product);
         newProductDTO.setCategory(categoryService.getCategory(product.getCategoryId()));
         return newProductDTO;
@@ -30,18 +35,17 @@ public class ProductService implements IProductService {
 
     public Iterable<ProductDTO> getAllProducts(int companyId) {
         ProductDTO productDTO = new ProductDTO();
-        List<ProductDTO> products = productDTO.getProductList((List<Product>) productRepo.findAllByCompanyId(companyId));
+        List<ProductDTO> products = productDTO.getProductList(productRepo.findAllByCompanyId(companyId));
 
         for (ProductDTO product : products)
         {
             product.setCategory(categoryService.getCategory(product.getCategoryId()));
         }
 
-        if(products.isEmpty()){ return null; }
-
         return products;
     }
 
+    @Transactional
     public boolean deleteProduct(int id, int companyId) {
         try{
             Product product = productRepo.findById(id);
@@ -51,6 +55,18 @@ public class ProductService implements IProductService {
             }else{
                 return false;
             }
+
+            return true;
+        }catch (Exception ex){
+            LoggerService.warn(ex.getMessage());
+            return false;
+        }
+    }
+
+    @Transactional
+    public boolean deleteAllCompanyProducts(int companyId) {
+        try{
+            productRepo.deleteAllByCompanyId(companyId);
 
             return true;
         }catch (Exception ex){

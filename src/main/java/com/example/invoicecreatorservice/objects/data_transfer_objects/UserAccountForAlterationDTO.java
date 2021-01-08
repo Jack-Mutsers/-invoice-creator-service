@@ -5,7 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import static com.example.invoicecreatorservice.objects.models.UserAccount.USER;
+import static com.example.invoicecreatorservice.helpers.tools.Helper.validateStringValue;
+import static com.example.invoicecreatorservice.objects.models.UserAccount.USER_ROLE;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,20 +18,19 @@ public class UserAccountForAlterationDTO {
     private String password;
     private UserForAlterationDTO user;
     private String contactCode;
-    private String role = USER;
+    private String role = USER_ROLE;
     private int companyId;
 
     public boolean validateForUpdate(){
-        return ( this.id == 0 || this.validateForCreation() || this.contactCode.isBlank() || this.role.isBlank() );
+        return ( this.id == 0 || validateStringValue(this.username) || this.user == null || this.user.validateForUpdate() || validateStringValue(this.contactCode) || validateStringValue(this.role) );
     }
 
     public boolean validateForCreation(){
-        return ( this.validateLoginData() || this.user == null );
+        return ( this.validateLoginData() || this.user == null || this.user.validateForCreation() );
     }
 
     public boolean validateLoginData(){
-        return ( this.username == null || this.password == null ||
-                this.username.isBlank() || this.password.isBlank());
+        return ( validateStringValue(this.username) || validateStringValue(this.password));
     }
 
     public void setId(int id) {
@@ -45,5 +45,6 @@ public class UserAccountForAlterationDTO {
         ContactGenerator generator = new ContactGenerator();
         this.contactCode = generator.generateCode();
     }
+
 
 }

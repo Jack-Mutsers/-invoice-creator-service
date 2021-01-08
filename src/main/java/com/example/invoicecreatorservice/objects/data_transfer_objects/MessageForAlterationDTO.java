@@ -2,6 +2,8 @@ package com.example.invoicecreatorservice.objects.data_transfer_objects;
 
 import lombok.Getter;
 
+import static com.example.invoicecreatorservice.helpers.tools.Helper.validateStringValue;
+
 @Getter
 public class MessageForAlterationDTO {
     private int id;
@@ -27,8 +29,7 @@ public class MessageForAlterationDTO {
     }
 
     public boolean validateForCreation(){
-        return (this.userId == 0 || this.contactCode == null || this.messageBody == null || this.type == null ||
-                this.contactCode.isBlank() || this.messageBody.isBlank() || this.type.isBlank());
+        return (this.userId == 0 || validateStringValue(this.contactCode) || validateStringValue(this.messageBody) || validateStringValue(this.type));
     }
 
     public void setId(int id) {

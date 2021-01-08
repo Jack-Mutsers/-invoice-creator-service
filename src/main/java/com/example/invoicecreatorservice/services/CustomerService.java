@@ -4,15 +4,17 @@ import com.example.invoicecreatorservice.contracts.services.ICustomerService;
 import com.example.invoicecreatorservice.helpers.logger.LoggerService;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.CustomerDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.CustomerForAlterationDTO;
+import com.example.invoicecreatorservice.objects.data_transfer_objects.UserForAlterationDTO;
 import com.example.invoicecreatorservice.objects.models.Customer;
 import com.example.invoicecreatorservice.repositories.CustomerRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.invoicecreatorservice.helpers.tools.Helper.emptyIfNull;
 
 @Service
 public class CustomerService implements ICustomerService {
@@ -25,15 +27,11 @@ public class CustomerService implements ICustomerService {
     }
 
     public Iterable<Customer> getAllCustomers(int id) {
-        List<Customer> customers = (List) customerRepo.findAllByCompanyId(id);
-
-        if(customers.isEmpty()){ return null; }
-
-        return customers;
+        return customerRepo.findAllByCompanyId(id);
     }
 
-    public List<Integer> getMyCustomerIds(int userId){
-        List<Customer> customers = (List) customerRepo.findAllByUserId(userId);
+    public List<Integer> getMyCustomerIds(String contactCode){
+        List<Customer> customers = customerRepo.findAllByContactCode(contactCode);
         List<Integer> ids = new ArrayList<>();
 
         for(Customer customer : emptyIfNull(customers)){
@@ -43,15 +41,28 @@ public class CustomerService implements ICustomerService {
         return ids;
     }
 
+    @Transactional
     public boolean deleteCustomer(int customerId, int companyId) {
         try{
             Customer customer = customerRepo.findById(customerId);
 
-            if(customer.getCompanyId() == companyId){
-                customerRepo.deleteById(customerId);
-            }else{
+            if(customer.getCompanyId() != companyId){
                 return false;
             }
+
+            customerRepo.deleteById(customerId);
+
+            return true;
+        }catch (Exception ex){
+            LoggerService.warn(ex.getMessage());
+            return false;
+        }
+    }
+
+    @Transactional
+    public boolean deleteAllCompanyCustomers(int companyId) {
+        try{
+            customerRepo.deleteAllByCompanyId(companyId);
 
             return true;
         }catch (Exception ex){
@@ -87,7 +98,22 @@ public class CustomerService implements ICustomerService {
         }
     }
 
-    private <T> Iterable<T> emptyIfNull(Iterable<T> iterable) {
-        return iterable == null ? List.of() : iterable;
+    public boolean updateCustomerByUser(UserForAlterationDTO userDTO, String contactCode) {
+        try {
+            List<Customer> customerList = customerRepo.findAllByContactCode(contactCode);
+
+            for(Customer customer : customerList){
+                customer.setAddress(userDTO.getAddress());
+                customer.setCity(userDTO.getCity());
+                customer.setName(userDTO.getName());
+                customer.setZipcode(userDTO.getZipcode());
+                customerRepo.save(customer);
+            }
+
+            return true;
+        }catch (Exception ex){
+            LoggerService.warn(ex.getMessage());
+            return false;
+        }
     }
 }

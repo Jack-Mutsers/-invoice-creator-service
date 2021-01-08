@@ -1,5 +1,6 @@
 package com.example.invoicecreatorservice.controllers;
 
+import com.example.invoicecreatorservice.contracts.services.ICustomerService;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.CustomerDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.CustomerForAlterationDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.ResponseDTO;
@@ -13,12 +14,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-@CrossOrigin
 @Controller
 @RequestMapping("/customers")
 public class CustomerController extends BaseController {
     @Autowired
-    private final CustomerService service = new CustomerService();
+    private final ICustomerService service = new CustomerService();
 
     @GetMapping(path="/{customerId}")
     public @ResponseBody ResponseEntity<ResponseDTO> getCustomer(@PathVariable int customerId) {
@@ -36,10 +36,6 @@ public class CustomerController extends BaseController {
         int companyId = super.getCompanyId(request);
 
         Iterable<Customer> customers = service.getAllCustomers(companyId);
-
-        if(customers == null){
-            return new ResponseEntity<>(new ResponseDTO(true, "There are currently no customers availible"), HttpStatus.OK);
-        }
 
         return new ResponseEntity<>(new ResponseDTO(true, customers), HttpStatus.OK);
     }

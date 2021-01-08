@@ -1,5 +1,6 @@
 package com.example.invoicecreatorservice.controllers;
 
+import com.example.invoicecreatorservice.contracts.services.IProductCategoryService;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.ProductCategoryDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.ProductCategoryForAlterationDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.ResponseDTO;
@@ -13,13 +14,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-@CrossOrigin
 @Controller
 @RequestMapping("/productcategory")
 public class ProductCategoryController extends BaseController {
 
     @Autowired
-    private final ProductCategoryService service = new ProductCategoryService();
+    private final IProductCategoryService service = new ProductCategoryService();
 
     @GetMapping(path="/{id}")
     public @ResponseBody ResponseEntity<ResponseDTO> getCategory(@PathVariable int id) {
@@ -41,10 +41,6 @@ public class ProductCategoryController extends BaseController {
         }
 
         Iterable<ProductCategory> categories = service.getAllCategory(companyId);
-
-        if(categories == null){
-            return new ResponseEntity<>(new ResponseDTO(true, "There are currently no product categories availible"), HttpStatus.OK);
-        }
 
         return new ResponseEntity<>(new ResponseDTO(true, categories), HttpStatus.OK);
     }

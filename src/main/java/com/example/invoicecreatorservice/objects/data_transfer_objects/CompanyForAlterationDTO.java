@@ -3,6 +3,8 @@ package com.example.invoicecreatorservice.objects.data_transfer_objects;
 import com.example.invoicecreatorservice.helpers.tools.ContactGenerator;
 import lombok.Getter;
 
+import static com.example.invoicecreatorservice.helpers.tools.Helper.validateStringValue;
+
 @Getter
 public class CompanyForAlterationDTO {
     private int id;
@@ -39,12 +41,12 @@ public class CompanyForAlterationDTO {
     }
 
     public boolean validateForUpdate(){
-        return ( this.validateForCreation() || this.contactCode == null || this.contactCode.isBlank());
+        return ( this.validateForCreation() || this.ownerId == 0 || this.id == 0 || validateStringValue(this.contactCode));
     }
 
     public boolean validateForCreation(){
-        return (this.name == null || this.address == null || this.zipcode == null || this.city == null || this.telephoneNumber == null ||
-                this.name.isBlank() || this.address.isBlank() || this.zipcode.isBlank() || this.city.isBlank() || this.telephoneNumber.isBlank());
+        return (validateStringValue(this.name) || validateStringValue(this.address) || validateStringValue(this.zipcode)
+                || validateStringValue(this.city) || validateStringValue(this.telephoneNumber));
     }
 
     public void setId(int id) {
@@ -59,4 +61,5 @@ public class CompanyForAlterationDTO {
     public void setOwnerId(int ownerId) {
         this.ownerId = ownerId;
     }
+
 }

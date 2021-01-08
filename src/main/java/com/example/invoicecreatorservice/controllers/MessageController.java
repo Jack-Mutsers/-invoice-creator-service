@@ -1,5 +1,6 @@
 package com.example.invoicecreatorservice.controllers;
 
+import com.example.invoicecreatorservice.contracts.services.IMessageService;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.*;
 import com.example.invoicecreatorservice.services.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,42 +9,29 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin
 @Controller
 @RequestMapping("/messenger")
-public class MessageController {
+public class MessageController extends BaseController {
     @Autowired
-    private final MessageService service = new MessageService();
+    private final IMessageService service = new MessageService();
 
     @GetMapping(path="/notifications/{contactCode}")
     public @ResponseBody ResponseEntity<ResponseDTO> getNotifications(@PathVariable String contactCode) {
-        Iterable<MessageDTO> messages = service.getNotifications(contactCode);
-
-        if(messages == null){
-            return new ResponseEntity<>(new ResponseDTO(false, "No Notifications could be found"), HttpStatus.OK);
-        }
+        Iterable<MessageDTO> messages = service.getMessagesForMe(contactCode, "notification");
 
         return new ResponseEntity<>(new ResponseDTO(true, messages), HttpStatus.OK);
     }
 
     @GetMapping(path="/outgoing/{id}")
     public @ResponseBody ResponseEntity<ResponseDTO> getOutgoingRequests(@PathVariable int id) {
-        Iterable<MessageDTO> messages = service.getOutgoingRequests(id);
-
-        if(messages == null){
-            return new ResponseEntity<>(new ResponseDTO(false, "No outgoing requests could be found"), HttpStatus.OK);
-        }
+        Iterable<MessageDTO> messages = service.getOutgoingRequests(id, "request");
 
         return new ResponseEntity<>(new ResponseDTO(true, messages), HttpStatus.OK);
     }
 
     @GetMapping(path="/incomming/{contactCode}")
     public @ResponseBody ResponseEntity<ResponseDTO> getIncomingRequests(@PathVariable String  contactCode) {
-        Iterable<MessageDTO> messages = service.getIncomingRequests(contactCode);
-
-        if(messages == null){
-            return new ResponseEntity<>(new ResponseDTO(false, "No incoming requests could be found"), HttpStatus.NOT_FOUND);
-        }
+        Iterable<MessageDTO> messages = service.getMessagesForMe(contactCode, "request");
 
         return new ResponseEntity<>(new ResponseDTO(true, messages), HttpStatus.OK);
     }

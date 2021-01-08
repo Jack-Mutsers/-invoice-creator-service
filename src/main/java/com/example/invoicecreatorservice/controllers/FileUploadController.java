@@ -1,12 +1,16 @@
 package com.example.invoicecreatorservice.controllers;
 
-import com.example.invoicecreatorservice.contracts.services.StorageService;
+import com.example.invoicecreatorservice.contracts.services.*;
 import com.example.invoicecreatorservice.helpers.handlers.StorageFileNotFoundException;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.FileRecordDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.ResponseDTO;
+import com.example.invoicecreatorservice.objects.data_transfer_objects.UserAccountDTO;
 import com.example.invoicecreatorservice.objects.models.FileRecord;
+import com.example.invoicecreatorservice.objects.models.UserAccount;
+import com.example.invoicecreatorservice.services.CompanyService;
 import com.example.invoicecreatorservice.services.CustomerService;
 import com.example.invoicecreatorservice.services.FileRecordService;
+import com.example.invoicecreatorservice.services.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
@@ -16,20 +20,30 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
-@CrossOrigin
+import static com.example.invoicecreatorservice.helpers.tools.Helper.emptyIfNull;
+
 @Controller
 @RequestMapping("/upload")
 public class FileUploadController extends BaseController {
 
 	@Autowired
-	private final FileRecordService recordService = new FileRecordService();
+	private final IFileRecordService recordService = new FileRecordService();
 
 	@Autowired
-	private final CustomerService customerService = new CustomerService();
+	private final ICustomerService customerService = new CustomerService();
 
-	private final StorageService storageService;
+	@Autowired
+	private final ICompanyService companyService = new CompanyService();
+
+	@Autowired
+	private final IUserAccountService userAccountService = new UserAccountService();
+
+	private StorageService storageService;
 
 	@Autowired
 	public FileUploadController(StorageService storageService) {
@@ -42,8 +56,8 @@ public class FileUploadController extends BaseController {
 
 		Iterable<FileRecordDTO> records = recordService.getAllMyFileRecords(companyId);
 
-		if(records == null){
-			return new ResponseEntity<>(new ResponseDTO(false, "There are currently no companies available"), HttpStatus.OK);
+		for(FileRecordDTO record : emptyIfNull(records)){
+			record.setCustomer(customerService.getCustomer(record.getCustomerId()));
 		}
 
 		return new ResponseEntity<>(new ResponseDTO(true, records), HttpStatus.OK);
@@ -52,28 +66,42 @@ public class FileUploadController extends BaseController {
 	@GetMapping("/received")
 	public ResponseEntity<ResponseDTO> listUploadedFilesForMe(HttpServletRequest request) {
 		int userId = super.getUserId(request);
-		List<Integer> ids = customerService.getMyCustomerIds(userId);
+
+		UserAccountDTO account = userAccountService.getUserAccount(userId);
+		String contactCode = account.getContactCode();
+
+		List<Integer> ids = customerService.getMyCustomerIds(contactCode);
 
 		Iterable<FileRecordDTO> records = recordService.getAllSharedFileRecords(ids);
+
+		for(FileRecordDTO record : emptyIfNull(records)){
+			record.setOwner(companyService.getCompany(record.getOwnerId()));
+		}
 
 		return new ResponseEntity<>(new ResponseDTO(true, records), HttpStatus.OK);
 	}
 
-	@GetMapping("/files/{filename:.+}")
+	@GetMapping("/files/{id:.+}")
 	@ResponseBody
-	public ResponseEntity<Object> serveFile(HttpServletRequest request, @PathVariable String filename) {
+	public ResponseEntity<Object> serveFile(HttpServletRequest request, @PathVariable int id) {
 		int companyId = super.getCompanyId(request);
 		int userId = super.getUserId(request);
-		List<Integer> ids = customerService.getMyCustomerIds(userId);
+
+		UserAccountDTO account = userAccountService.getUserAccount(userId);
+		String contactCode = account.getContactCode();
+
+		List<Integer> ids = customerService.getMyCustomerIds(contactCode);
+
+		FileRecord record = recordService.getFileRecord(id);
 
 		// validate if requested file is for or from the request user
-		boolean allowed = recordService.validateAccessPermission(filename, companyId, ids);
+		boolean allowed = recordService.validateAccessPermission(record, companyId, ids);
 
 		if(!allowed){
 			return new ResponseEntity<>(new ResponseDTO(false, "You do not have access to this file"), HttpStatus.FORBIDDEN);
 		}
 
-		Resource file = storageService.loadAsResource(filename);
+		Resource file = storageService.loadAsResource(record.getFileName());
 		return ResponseEntity.ok().body(file);
 	}
 
@@ -82,7 +110,10 @@ public class FileUploadController extends BaseController {
 		int companyId = super.getCompanyId(request);
 
 		try{
-			FileRecord record = storageService.store(file);
+			String companyName = companyService.getCompany(companyId).getName();
+			Future<FileRecord> asyncResponse = storageService.storeAsync(file, companyName);
+			FileRecord record = asyncResponse.get();
+
 			record.setCustomerId(customerId);
 			record.setOwnerId(companyId);
 
@@ -95,8 +126,29 @@ public class FileUploadController extends BaseController {
 		}
 	}
 
+	@DeleteMapping(path = "/{id}")
+	public ResponseEntity<ResponseDTO> delete(HttpServletRequest request, @PathVariable("id") int id) throws IOException, ExecutionException, InterruptedException {
+		int companyId = super.getCompanyId(request);
+
+		FileRecord record = recordService.getFileRecord(id, companyId);
+
+		if(record == null){
+			return new ResponseEntity<>(new ResponseDTO(false, "File could not be found or you dont have permissions to access this file"), HttpStatus.FORBIDDEN);
+		}
+
+		Future<Boolean> asyncResponse = storageService.deleteFileAsync(record.getFileName());
+		boolean fileDeleted = asyncResponse.get();
+
+		if(!fileDeleted){
+			return new ResponseEntity<>(new ResponseDTO(false, "Something went wrong while deleting the file"), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		recordService.deleteRecord(record);
+		return new ResponseEntity<>(new ResponseDTO(true, "File has been deleted"), HttpStatus.OK);
+	}
+
 	@ExceptionHandler(StorageFileNotFoundException.class)
-	public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
+	public ResponseEntity<ResponseDTO> handleStorageFileNotFound(StorageFileNotFoundException exc) {
 		return new ResponseEntity<>(new ResponseDTO(false, "Requested file could not be found"), HttpStatus.NOT_FOUND);
 	}
 
