@@ -17,7 +17,11 @@ echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdi
 docker push ${IMAGE}:${GIT_VERSION}
 
 # Stop, run, and clean
-docker stop ${CONTAINER}
-docker rm ${CONTAINER}
+result=$(docker ps -q -f name=${CONTAINER})
+if [[ -n "$result" ]]; then
+  docker stop ${CONTAINER}
+  docker rm ${CONTAINER}
+fi
+
 docker container run --network mysql --name=${CONTAINER} --restart unless-stopped -d -p ${PORTS} ${IMAGE}:${GIT_VERSION}
 docker system prune -a -f
