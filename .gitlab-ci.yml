@@ -25,3 +25,5 @@ deploy:
   script:
     - "mvn clean install -DskipTests"
     - sh deploy.sh
+  on:
+    branch: master
