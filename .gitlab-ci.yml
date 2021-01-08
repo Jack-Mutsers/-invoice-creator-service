@@ -22,8 +22,11 @@ sonarqube:
 deploy:
   # Build Docker container and push to Docker Hub
   stage: deploy
-  script:
+  before_script:
     - "mvn clean install -DskipTests"
+  script:
     - sh deploy.sh
-  on:
-    branch: master
+  only:
+    refs:
+      - master
+
