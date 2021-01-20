@@ -66,6 +66,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
         .antMatchers("/authenticate").permitAll()
         .antMatchers("/authenticate/*").permitAll()
+        .antMatchers(HttpMethod.GET, "/demo").permitAll()
 
         // Company permissions
         .antMatchers(HttpMethod.GET, "/company").hasAnyRole(ADMIN, OWNER, EMPLOYEE, USER)
@@ -88,6 +89,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // Product permissions
         .antMatchers("/products").hasAnyRole(ADMIN, OWNER, EMPLOYEE)
         .antMatchers("/products/*").hasAnyRole(ADMIN, OWNER, EMPLOYEE)
+
 
         // Useraccount permissions
         .antMatchers(HttpMethod.POST,"/useraccount").permitAll()

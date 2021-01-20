@@ -87,6 +87,11 @@ public class JwtAuthenticationController {
         }
     }
 
+    @GetMapping(path="/demo")
+    public ResponseEntity<String> getHello() {
+        return new ResponseEntity<>("Hello world", HttpStatus.OK);
+    }
+
     private void authenticate(String username, String password) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
