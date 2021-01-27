@@ -6,7 +6,6 @@ import com.example.invoicecreatorservice.objects.data_transfer_objects.FileRecor
 import com.example.invoicecreatorservice.objects.data_transfer_objects.ResponseDTO;
 import com.example.invoicecreatorservice.objects.data_transfer_objects.UserAccountDTO;
 import com.example.invoicecreatorservice.objects.models.FileRecord;
-import com.example.invoicecreatorservice.objects.models.UserAccount;
 import com.example.invoicecreatorservice.services.CompanyService;
 import com.example.invoicecreatorservice.services.CustomerService;
 import com.example.invoicecreatorservice.services.FileRecordService;

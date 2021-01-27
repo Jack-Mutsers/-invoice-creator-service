@@ -1,6 +1,5 @@
 package com.example.invoicecreatorservice.objects.data_transfer_objects;
 
-import com.example.invoicecreatorservice.helpers.tools.ContactGenerator;
 import lombok.Getter;
 
 import static com.example.invoicecreatorservice.helpers.tools.Helper.validateStringValue;
